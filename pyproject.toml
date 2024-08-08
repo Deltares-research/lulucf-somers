@@ -1,0 +1,29 @@
+[project]
+name = "lulucf"
+version = "0.1.0"
+description = "Add a short description here"
+authors = [{name = "smknaake", email = "bas.knaake@deltares.nl"}]
+requires-python = ">= 3.11"
+dependencies = []
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.pixi.project]
+channels = ["conda-forge"]
+platforms = ["win-64"]
+
+[tool.pixi.pypi-dependencies]
+lulucf = { path = ".", editable = true }
+
+[tool.pixi.tasks]
+
+[tool.pixi.dependencies]
+python = "3.12.*"
+pip = ">=24.2,<25"
+numpy = ">=2.0.1,<2.1"
+pandas = ">=2.2.2,<2.3"
+geopandas = ">=1.0.1,<1.1"
+xarray = ">=2024.7.0,<2024.8"
+rioxarray = ">=0.17.0,<0.18"
