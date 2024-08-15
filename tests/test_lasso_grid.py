@@ -71,6 +71,11 @@ class TestLassoGrid:
         most_lower_right_cell = cells[-1]
 
         assert len(cells) == 16
-        assert np.all([isinstance(c, Polygon) for c in cells])
-        assert most_upper_left_cell.bounds == (0, 3, 1, 4)
-        assert most_lower_right_cell.bounds == (3, 0, 4, 1)
+        assert np.all([isinstance(c[2], Polygon) for c in cells])
+        assert most_upper_left_cell[0] == 0
+        assert most_upper_left_cell[1] == 0
+        assert most_upper_left_cell[2].bounds == (0, 3, 1, 4)
+        assert most_lower_right_cell[0] == 3
+        assert most_lower_right_cell[1] == 3
+        assert most_lower_right_cell[2].bounds == (3, 0, 4, 1)
+
