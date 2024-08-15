@@ -1,8 +1,10 @@
 from pathlib import Path
 
+import numpy as np
 import pytest
 import xarray as xr
 from numpy.testing import assert_array_equal
+from shapely.geometry import Polygon
 
 from lulucf.bgt import BGT_LAYERS_FOR_LULUCF
 from lulucf.lasso import LassoGrid
@@ -60,3 +62,15 @@ class TestLassoGrid:
 
         assert isinstance(da, xr.DataArray)
         assert da.shape == (13_000, 11_200, 9)
+
+    @pytest.mark.unittest
+    def test_lasso_cells_as_geometries(self, lasso_grid):
+        cells = lasso_grid.lasso_cells_as_geometries()
+
+        most_upper_left_cell = cells[0]
+        most_lower_right_cell = cells[-1]
+
+        assert len(cells) == 16
+        assert np.all([isinstance(c, Polygon) for c in cells])
+        assert most_upper_left_cell.bounds == (0, 3, 1, 4)
+        assert most_lower_right_cell.bounds == (3, 0, 4, 1)

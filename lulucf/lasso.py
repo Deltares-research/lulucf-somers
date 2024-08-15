@@ -1,10 +1,12 @@
 from pathlib import WindowsPath
+from typing import List
 
 import dask.array as darray
 import numpy as np
 import rioxarray as rio
 import xarray as xr
 from pyproj import CRS
+from shapely.geometry import Polygon, box
 
 
 class LassoGrid:
@@ -37,6 +39,12 @@ class LassoGrid:
         self.ysize = ysize
         self.crs = CRS(crs)
 
+    def __repr__(self):
+        name = self.__class__.__name__
+        xmin, ymin, xmax, ymax = self.xmin, self.ymin, self.xmax, self.ymax
+        xsize, ysize = self.xsize, self.ysize
+        return f"{name}({xmin=}, {ymin=}, {xmax=}, {ymax=}, {xsize=}, {ysize=})"
+
     @classmethod
     def from_raster(cls, raster: str | WindowsPath):
         raster = rio.open_rasterio(raster).squeeze()
@@ -49,7 +57,7 @@ class LassoGrid:
         return np.arange(xmin, self.xmax, self.xsize)
 
     def ycoordinates(self):
-        ymax = self.ymax + 0.5 * self.ysize
+        ymax = self.ymax - np.abs(0.5 * self.ysize)
         return np.arange(ymax, self.ymin, self.ysize)
 
     def dataarray(self) -> xr.DataArray:
@@ -70,3 +78,17 @@ class LassoGrid:
         )
         coords = {"y": y, "x": x, "layer": bgt_layers}
         return xr.DataArray(empty_arr, coords)
+
+    def lasso_cells_as_geometries(self) -> List[Polygon]:
+        yco, xco = np.meshgrid(self.ycoordinates(), self.xcoordinates())
+
+        dy = np.abs(0.5 * self.ysize)
+        dx = np.abs(0.5 * self.xsize)
+
+        ymin, ymax = yco - dy, yco + dy
+        xmin, xmax = xco - dx, xco + dx
+
+        cell_coords = zip(xmin.ravel(), ymin.ravel(), xmax.ravel(), ymax.ravel())
+
+        geometries = [box(*c) for c in cell_coords]
+        return geometries
