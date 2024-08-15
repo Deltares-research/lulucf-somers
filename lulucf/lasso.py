@@ -1,5 +1,6 @@
 from pathlib import WindowsPath
 
+import dask.array as darray
 import numpy as np
 import rioxarray as rio
 import xarray as xr
@@ -57,3 +58,15 @@ class LassoGrid:
         size = (len(ycoords), len(xcoords))
         da = xr.DataArray(np.full(size, 1), coords=coords, dims=("y", "x"))
         return da.rio.write_crs(self.crs, inplace=True)
+
+    def empty_bgt_array(self, bgt_layers: list, chunksize: int = 3100) -> darray:
+        x = self.xcoordinates()
+        y = self.ycoordinates()
+
+        ny, nx, nz = len(y), len(x), len(bgt_layers)
+
+        empty_arr = darray.empty(
+            shape=(ny, nx, nz), dtype="float64", chunks=(chunksize, chunksize, nz)
+        )
+        coords = {"y": y, "x": x, "layer": bgt_layers}
+        return xr.DataArray(empty_arr, coords)

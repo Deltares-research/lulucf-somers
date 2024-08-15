@@ -4,6 +4,7 @@ import pytest
 import xarray as xr
 from numpy.testing import assert_array_equal
 
+from lulucf.bgt import BGT_LAYERS_FOR_LULUCF
 from lulucf.lasso import LassoGrid
 
 
@@ -50,3 +51,12 @@ class TestLassoGrid:
         assert grid.xsize == 1
         assert grid.ysize == -1
         assert grid.crs == 28992
+
+    @pytest.mark.unittest
+    def test_empty_bgt_array(self):
+        grid = LassoGrid(0, 300_000, 280_000, 625_000, 25, 25)
+        layers = [layer.replace("_polygon", "") for layer in BGT_LAYERS_FOR_LULUCF]
+        da = grid.empty_bgt_array(layers)
+
+        assert isinstance(da, xr.DataArray)
+        assert da.shape == (13_000, 11_200, 9)
