@@ -9,8 +9,19 @@ from pyproj import CRS
 
 class LassoGrid:
     """
-    Containing definition of Lasso grid (25x25 m resolution?). This is the basic grid all
+    Containing definition of LASSO grid (25x25 m resolution?). This is the basic grid all
     the calculations will be performed in and the results will be generated for.
+
+    Parameters
+    ----------
+    xmin, ymin, xmax, ymax : int | float
+        Bounding box coordinates of the LASSO grid.
+    xsize, ysize : int
+        Cellsize in x- and y-direction of the LASSO grid.
+    crs : str | int | CRS
+        EPSG of the target crs. Takes anything that can be interpreted by
+        pyproj.crs.CRS.from_user_input().
+
     """
 
     def __init__(
@@ -45,20 +56,39 @@ class LassoGrid:
 
     @classmethod
     def from_raster(cls, raster: str | WindowsPath):
+        """
+        Initialize a LassoGrid instance from a raster file.
+
+        Parameters
+        ----------
+        raster : str | WindowsPath
+            Path to the raster file to base the grid extent on.
+
+        """
         raster = rio.open_rasterio(raster).squeeze()
         xsize, ysize = raster.rio.resolution()
         xmin, ymin, xmax, ymax = raster.rio.bounds()
         return cls(xmin, ymin, xmax, ymax, xsize, ysize)
 
     def xcoordinates(self):
+        """
+        Return an array of increasing x-coordinates of the LASSO grid.
+        """
         xmin = self.xmin + 0.5 * self.xsize
         return np.arange(xmin, self.xmax, self.xsize)
 
     def ycoordinates(self):
+        """
+        Return an array of decreasing y-coordinates of the LASSO grid.
+        """
         ymax = self.ymax - np.abs(0.5 * self.ysize)
         return np.arange(ymax, self.ymin, self.ysize)
 
     def dataarray(self) -> xr.DataArray:
+        """
+        Return a 2D DataArray filled with ones with the full extent of the LASSO grid.
+
+        """
         ycoords, xcoords = self.ycoordinates(), self.xcoordinates()
         coords = {"y": ycoords, "x": xcoords}
         size = (len(ycoords), len(xcoords))
@@ -68,6 +98,28 @@ class LassoGrid:
     def empty_array(
         self, layer_coords: list, dask: bool = True, chunksize: int = 3100
     ) -> xr.DataArray:
+        """
+        Create an empty 3D DataArray within the extent of the LASSO grid. The "layer_coords"
+        are added in the 3rd dimension, "layer", of the DataArray.
+
+        Parameters
+        ----------
+        layer_coords : list
+            List of coordinate names of the "layer" dimension.
+        dask : bool, optional
+            If True, a DataArray containing an empty Dask array is returned otherwise, a
+            DataArray containing all zeros is returned. The default is True.
+        chunksize : int, optional
+            If the Dask option is used, specify a chunk size for the "y" and "x" dimensions.
+            The dimension "layer" is handled as a single chunk. Recommended memory size of
+            chunks is approximately 100 MB (see Dask documentation). The default is 3100.
+
+        Returns
+        -------
+        xr.DataArray
+            Empty DataArray.
+
+        """
         x = self.xcoordinates()
         y = self.ycoordinates()
 
@@ -78,7 +130,7 @@ class LassoGrid:
                 shape=(ny, nx, nz), dtype="float32", chunks=(chunksize, chunksize, nz)
             )
         else:
-            empty_arr = np.full((ny, nx, nz), 0.0, dtype='float32')
+            empty_arr = np.full((ny, nx, nz), 0.0, dtype="float32")
 
         coords = {"y": y, "x": x, "layer": layer_coords}
         return xr.DataArray(empty_arr, coords)
