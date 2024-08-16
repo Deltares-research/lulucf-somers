@@ -1,9 +1,7 @@
 import itertools
 
 import geopandas as gpd
-import numpy as np
 import pytest
-import xarray as xr
 from scipy.spatial import Voronoi
 from shapely.geometry import LineString, MultiPolygon, box
 from shapely.ops import polygonize
@@ -90,12 +88,4 @@ def bgt_gdf():
 @pytest.fixture
 def empty_bgt_array(lasso_grid):
     bgt_layers = [layer.replace("_polygon", "") for layer in BGT_LAYERS_FOR_LULUCF]
-
-    xco = lasso_grid.xcoordinates()
-    yco = lasso_grid.ycoordinates()
-
-    shape = (len(yco), len(xco), len(bgt_layers))
-    da = xr.DataArray(
-        np.full(shape, np.nan), coords={"y": yco, "x": xco, "layer": bgt_layers}
-    )
-    return da
+    return lasso_grid.empty_bgt_array(bgt_layers, dask=False)

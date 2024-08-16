@@ -56,9 +56,21 @@ class TestLassoGrid:
 
     @pytest.mark.unittest
     def test_empty_bgt_array(self):
-        grid = LassoGrid(0, 300_000, 280_000, 625_000, 25, 25)
         layers = [layer.replace("_polygon", "") for layer in BGT_LAYERS_FOR_LULUCF]
+
+        grid = LassoGrid(0, 300_000, 280_000, 625_000, 25, 25)
         da = grid.empty_bgt_array(layers)
 
         assert isinstance(da, xr.DataArray)
         assert da.shape == (13_000, 11_200, 9)
+        assert da.dims == ("y", "x", "layer")
+        assert da.chunks is not None
+
+        grid = LassoGrid(0, 0, 1000, 1000, 25, 25)
+        da = grid.empty_bgt_array(layers, dask=False)
+
+        assert da.shape == (40, 40, 9)
+        assert da.dims == ("y", "x", "layer")
+        assert da.chunks is None
+        assert np.all(da==0)
+

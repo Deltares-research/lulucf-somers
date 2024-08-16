@@ -1,12 +1,10 @@
 from pathlib import WindowsPath
-from typing import List
 
 import dask.array as darray
 import numpy as np
 import rioxarray as rio
 import xarray as xr
 from pyproj import CRS
-from shapely.geometry import Polygon, box
 
 
 class LassoGrid:
@@ -67,14 +65,20 @@ class LassoGrid:
         da = xr.DataArray(np.full(size, 1), coords=coords, dims=("y", "x"))
         return da.rio.write_crs(self.crs, inplace=True)
 
-    def empty_bgt_array(self, bgt_layers: list, chunksize: int = 3100) -> darray:
+    def empty_bgt_array(
+        self, bgt_layers: list, dask: bool = True, chunksize: int = 3100
+    ) -> xr.DataArray:
         x = self.xcoordinates()
         y = self.ycoordinates()
 
         ny, nx, nz = len(y), len(x), len(bgt_layers)
 
-        empty_arr = darray.empty(
-            shape=(ny, nx, nz), dtype="float64", chunks=(chunksize, chunksize, nz)
-        )
+        if dask:
+            empty_arr = darray.empty(
+                shape=(ny, nx, nz), dtype="float32", chunks=(chunksize, chunksize, nz)
+            )
+        else:
+            empty_arr = np.full((ny, nx, nz), 0.0, dtype='float32')
+
         coords = {"y": y, "x": x, "layer": bgt_layers}
         return xr.DataArray(empty_arr, coords)
