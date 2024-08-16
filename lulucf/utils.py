@@ -1,4 +1,6 @@
+import geopandas as gpd
 import numpy as np
+import pandas as pd
 import xarray as xr
 from shapely.geometry import Polygon, box
 
@@ -32,3 +34,16 @@ def cell_as_geometry(
     xmin, xmax = xcell - dx, xcell + dx
 
     return box(xmin, ymin, xmax, ymax)
+
+
+def _add_layer_idx_column(gdf: gpd.GeoDataFrame, da: xr.DataArray):
+    """
+    Helper function to add the index of the layer coordinates in a DataArray to a
+    GeoDataFrame.
+
+    """
+    df = pd.DataFrame(da["layer"].values, columns=["layer"])
+    df.index.name = "idx"
+    df.reset_index(inplace=True)
+    gdf = gdf.merge(df, on="layer", how="left")
+    return gdf

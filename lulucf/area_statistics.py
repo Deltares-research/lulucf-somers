@@ -3,15 +3,7 @@ import numpy as np
 import pandas as pd
 import xarray as xr
 
-from lulucf.utils import cell_as_geometry
-
-
-def _add_layer_idx_column(gdf: gpd.GeoDataFrame, da: xr.DataArray):
-    df = pd.DataFrame(da["layer"].values, columns=["layer"])
-    df.index.name = "idx"
-    df.reset_index(inplace=True)
-    gdf = gdf.merge(df, on="layer", how="left")
-    return gdf
+from lulucf.utils import _add_layer_idx_column, cell_as_geometry
 
 
 def calculate_areal_percentages_bgt(bgt_data: gpd.GeoDataFrame, da: xr.DataArray):
