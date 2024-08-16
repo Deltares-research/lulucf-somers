@@ -88,4 +88,4 @@ def bgt_gdf():
 @pytest.fixture
 def empty_bgt_array(lasso_grid):
     bgt_layers = [layer.replace("_polygon", "") for layer in BGT_LAYERS_FOR_LULUCF]
-    return lasso_grid.empty_bgt_array(bgt_layers, dask=False)
+    return lasso_grid.empty_array(bgt_layers, dask=False)

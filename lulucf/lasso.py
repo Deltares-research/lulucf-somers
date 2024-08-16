@@ -65,13 +65,13 @@ class LassoGrid:
         da = xr.DataArray(np.full(size, 1), coords=coords, dims=("y", "x"))
         return da.rio.write_crs(self.crs, inplace=True)
 
-    def empty_bgt_array(
-        self, bgt_layers: list, dask: bool = True, chunksize: int = 3100
+    def empty_array(
+        self, layer_coords: list, dask: bool = True, chunksize: int = 3100
     ) -> xr.DataArray:
         x = self.xcoordinates()
         y = self.ycoordinates()
 
-        ny, nx, nz = len(y), len(x), len(bgt_layers)
+        ny, nx, nz = len(y), len(x), len(layer_coords)
 
         if dask:
             empty_arr = darray.empty(
@@ -80,5 +80,5 @@ class LassoGrid:
         else:
             empty_arr = np.full((ny, nx, nz), 0.0, dtype='float32')
 
-        coords = {"y": y, "x": x, "layer": bgt_layers}
+        coords = {"y": y, "x": x, "layer": layer_coords}
         return xr.DataArray(empty_arr, coords)
