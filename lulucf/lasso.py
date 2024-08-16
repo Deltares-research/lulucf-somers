@@ -78,20 +78,3 @@ class LassoGrid:
         )
         coords = {"y": y, "x": x, "layer": bgt_layers}
         return xr.DataArray(empty_arr, coords)
-
-    def lasso_cells_as_geometries(self) -> List[tuple]:
-        yco, xco = np.meshgrid(self.ycoordinates(), self.xcoordinates())
-        ni, nj = yco.shape
-
-        dy = np.abs(0.5 * self.ysize)
-        dx = np.abs(0.5 * self.xsize)
-
-        ymin, ymax = yco - dy, yco + dy
-        xmin, xmax = xco - dx, xco + dx
-
-        geometries_with_index = [
-            (i, j, box(xmin[i, j], ymin[i, j], xmax[i, j], ymax[i, j]))
-            for i in range(ni)
-            for j in range(nj)
-        ]
-        return geometries_with_index

@@ -62,20 +62,3 @@ class TestLassoGrid:
 
         assert isinstance(da, xr.DataArray)
         assert da.shape == (13_000, 11_200, 9)
-
-    @pytest.mark.unittest
-    def test_lasso_cells_as_geometries(self, lasso_grid):
-        cells = lasso_grid.lasso_cells_as_geometries()
-
-        most_upper_left_cell = cells[0]
-        most_lower_right_cell = cells[-1]
-
-        assert len(cells) == 16
-        assert np.all([isinstance(c[2], Polygon) for c in cells])
-        assert most_upper_left_cell[0] == 0
-        assert most_upper_left_cell[1] == 0
-        assert most_upper_left_cell[2].bounds == (0, 3, 1, 4)
-        assert most_lower_right_cell[0] == 3
-        assert most_lower_right_cell[1] == 3
-        assert most_lower_right_cell[2].bounds == (3, 0, 4, 1)
-
