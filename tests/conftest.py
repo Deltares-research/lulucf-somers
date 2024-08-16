@@ -6,8 +6,8 @@ from scipy.spatial import Voronoi
 from shapely.geometry import LineString, MultiPolygon, box
 from shapely.ops import polygonize
 
-from lulucf.bgt import BGT_LAYERS_FOR_LULUCF
 from lulucf.lasso import LassoGrid
+from lulucf.preprocessing.bgt import BGT_LAYERS_FOR_LULUCF
 
 
 def create_bgt_polygons():
