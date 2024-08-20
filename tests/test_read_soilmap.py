@@ -13,7 +13,7 @@ class TestBroSoilmap:
 
 
 @pytest.mark.unittest
-def read_soilmap_geopackage(simple_soilmap):
+def test_read_soilmap_geopackage(simple_soilmap):
     soilmap = read_soilmap_geopackage(simple_soilmap)
     assert isinstance(soilmap, gpd.GeoDataFrame)
 
