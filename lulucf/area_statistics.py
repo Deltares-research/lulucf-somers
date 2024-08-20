@@ -12,6 +12,12 @@ def calculate_areal_percentages_bgt(bgt_data: gpd.GeoDataFrame, da: xr.DataArray
     return da
 
 
+def calculate_areal_percentages_soilmap(soilmap: gpd.GeoDataFrame, da: xr.DataArray):
+    soilmap = _add_layer_idx_column(soilmap, da)
+    da = calc_areal_percentage_in_cells(soilmap, da)
+    return da
+
+
 def calc_areal_percentage_in_cells(polygons: gpd.GeoDataFrame, da: xr.DataArray):
     if "idx" not in polygons.columns:
         raise KeyError("GeoDataFrame must contain an 'idx' column.")

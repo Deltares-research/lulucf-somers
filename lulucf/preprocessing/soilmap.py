@@ -93,6 +93,8 @@ def group_soilmap_units(soilmap: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
     """
     Add a column to the soilmap GeoDataFrame containing main soil groups (i.e. "peat",
     "moerig", "buried" and "other") based on the ids of the soil units in the BRO soilmap.
+    The main groups will be the "layer" dimension in the DataArray to calculate areal
+    statistics with.
 
     Parameters
     ----------
@@ -105,11 +107,11 @@ def group_soilmap_units(soilmap: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
         GeoDataFrame of the BRO soilmap with the added column.
 
     """
-    soilmap["main_group"] = "other"
+    soilmap["layer"] = "other"
 
     id_ = "normalsoilprofile_id"
-    soilmap.loc[soilmap[id_].isin(PEAT_IDS), "main_group"] = "peat"
-    soilmap.loc[soilmap[id_].isin(MOER_IDS), "main_group"] = "moerig"
-    soilmap.loc[soilmap[id_].isin(BURRIED_IDS), "main_group"] = "buried"
+    soilmap.loc[soilmap[id_].isin(PEAT_IDS), "layer"] = "peat"
+    soilmap.loc[soilmap[id_].isin(MOER_IDS), "layer"] = "moerig"
+    soilmap.loc[soilmap[id_].isin(BURRIED_IDS), "layer"] = "buried"
 
     return soilmap
