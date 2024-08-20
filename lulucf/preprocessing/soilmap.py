@@ -2,8 +2,7 @@ from pathlib import Path
 
 import geopandas as gpd
 
-from lulucf.readers import read_soilmap_geopackage
-
+# Below ID's for main groups are based on SOMERS
 PEAT_IDS = [
     1010,
     1030,

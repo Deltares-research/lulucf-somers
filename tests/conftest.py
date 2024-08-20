@@ -10,6 +10,7 @@ from shapely.ops import polygonize
 
 from lulucf.lasso import LassoGrid
 from lulucf.preprocessing.bgt import BGT_LAYERS_FOR_LULUCF
+from lulucf.readers import read_soilmap_geopackage
 
 
 def create_polygons():
@@ -94,7 +95,7 @@ def empty_bgt_array(lasso_grid):
 
 
 @pytest.fixture
-def simple_soilmap(tmp_path):
+def simple_soilmap_path(tmp_path):
     """
     Fixture to create a tmp geopackage file that contains relevant BRO soilmap information
     to test.
@@ -102,22 +103,37 @@ def simple_soilmap(tmp_path):
     """
     polygons = create_polygons()
     maparea_id = np.arange(len(polygons))
-    normalsoilprofile_id = maparea_id + 100
+    normalsoilprofile_id = [
+        1170,
+        1240,
+        1060,
+        1070,
+        1050,
+        2020,
+        2060,
+        2110,
+        2120,
+        16040,
+        16010,
+        15100,
+        15110,
+        1225,
+    ]
     soilunits = [
         "pVc",
-        "kVk",
-        "Vk",
-        "hVb",
-        "Vp",
-        "kVz",
-        "hVz",
-        "hVc",
-        "kVs",
-        "aVc",
-        "zVz",
+        "pVk",
         "hVk",
+        "hVz",
+        "hEV",
+        "vWp",
+        "iWp",
+        "kWz",
+        "zWz",
+        "Rv01C",
+        "pRv81",
+        "Mv51A",
+        "Mv81A",
         "kVc",
-        "hVs",
     ]
     geometries = gpd.GeoDataFrame({"maparea_id": maparea_id, "geometry": polygons})
     link_table = gpd.GeoDataFrame(
@@ -135,3 +151,8 @@ def simple_soilmap(tmp_path):
         table.to_file(outfile, driver="GPKG", layer=layer, index=False)
 
     return outfile
+
+
+@pytest.fixture
+def simple_soilmap(simple_soilmap_path):
+    return read_soilmap_geopackage(simple_soilmap_path)

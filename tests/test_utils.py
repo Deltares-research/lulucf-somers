@@ -37,6 +37,6 @@ def test_cell_as_geometry(cellsize, request):
 
 
 @pytest.mark.unittest
-def test_create_connection(simple_soilmap):
-    conn = create_connection(simple_soilmap)
+def test_create_connection(simple_soilmap_path):
+    conn = create_connection(simple_soilmap_path)
     assert isinstance(conn, sqlite3.Connection)
