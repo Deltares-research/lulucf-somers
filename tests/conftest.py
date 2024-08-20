@@ -1,6 +1,8 @@
 import itertools
 
 import geopandas as gpd
+import numpy as np
+import pandas as pd
 import pytest
 from scipy.spatial import Voronoi
 from shapely.geometry import LineString, MultiPolygon, box
@@ -10,7 +12,7 @@ from lulucf.lasso import LassoGrid
 from lulucf.preprocessing.bgt import BGT_LAYERS_FOR_LULUCF
 
 
-def create_bgt_polygons():
+def create_polygons():
     points = [
         [0, 0],
         [0, 4],
@@ -72,7 +74,7 @@ def bgt_gdf():
     operations involving BGT data.
 
     """
-    polygons = create_bgt_polygons()
+    polygons = create_polygons()
 
     layers = []
     bgt_cycle = itertools.cycle(BGT_LAYERS_FOR_LULUCF)
@@ -89,3 +91,47 @@ def bgt_gdf():
 def empty_bgt_array(lasso_grid):
     bgt_layers = [layer.replace("_polygon", "") for layer in BGT_LAYERS_FOR_LULUCF]
     return lasso_grid.empty_array(bgt_layers, dask=False)
+
+
+@pytest.fixture
+def simple_soilmap(tmp_path):
+    """
+    Fixture to create a tmp geopackage file that contains relevant BRO soilmap information
+    to test.
+
+    """
+    polygons = create_polygons()
+    maparea_id = np.arange(len(polygons))
+    normalsoilprofile_id = maparea_id + 100
+    soilunits = [
+        "pVc",
+        "kVk",
+        "Vk",
+        "hVb",
+        "Vp",
+        "kVz",
+        "hVz",
+        "hVc",
+        "kVs",
+        "aVc",
+        "zVz",
+        "hVk",
+        "kVc",
+        "hVs",
+    ]
+    geometries = gpd.GeoDataFrame({"maparea_id": maparea_id, "geometry": polygons})
+    link_table = gpd.GeoDataFrame(
+        {"maparea_id": maparea_id, "normalsoilprofile_id": normalsoilprofile_id}
+    )
+    normalsoilprofile = gpd.GeoDataFrame(
+        {"normalsoilprofile_id": normalsoilprofile_id, "soilunit": soilunits}
+    )
+
+    layers = ["soilarea", "soilarea_normalsoilprofile", "normalsoilprofiles"]
+    tables = [geometries, link_table, normalsoilprofile]
+
+    outfile = tmp_path / "soilmap.gpkg"
+    for layer, table in zip(layers, tables):
+        table.to_file(outfile, driver="GPKG", layer=layer)
+
+    return outfile
