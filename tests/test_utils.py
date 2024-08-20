@@ -1,7 +1,9 @@
+import sqlite3
+
 import pytest
 from shapely.geometry import Polygon
 
-from lulucf.utils import cell_as_geometry
+from lulucf.utils import cell_as_geometry, create_connection
 
 
 @pytest.fixture
@@ -32,3 +34,9 @@ def test_cell_as_geometry(cellsize, request):
 
     assert isinstance(geom, Polygon)
     assert geom.bounds == (1, 1, 2, 2)
+
+
+@pytest.mark.unittest
+def test_create_connection(simple_soilmap):
+    conn = create_connection(simple_soilmap)
+    assert isinstance(conn, sqlite3.Connection)

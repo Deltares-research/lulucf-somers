@@ -1,3 +1,6 @@
+import sqlite3
+from pathlib import WindowsPath
+
 import geopandas as gpd
 import numpy as np
 import pandas as pd
@@ -47,3 +50,27 @@ def _add_layer_idx_column(gdf: gpd.GeoDataFrame, da: xr.DataArray):
     df.reset_index(inplace=True)
     gdf = gdf.merge(df, on="layer", how="left")
     return gdf
+
+
+def create_connection(database: str | WindowsPath):
+    """
+    Create a database connection to an SQLite database.
+
+    Parameters
+    ----------
+    database: string
+        Path/url/etc. to the database to create the connection to.
+
+    Returns
+    -------
+    conn : sqlite3.Connection
+        Connection object or None.
+
+    """
+    conn = None
+    try:
+        conn = sqlite3.connect(database)
+    except sqlite3.Error as e:
+        print(e)
+
+    return conn
