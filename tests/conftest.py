@@ -132,6 +132,6 @@ def simple_soilmap(tmp_path):
 
     outfile = tmp_path / "soilmap.gpkg"
     for layer, table in zip(layers, tables):
-        table.to_file(outfile, driver="GPKG", layer=layer)
+        table.to_file(outfile, driver="GPKG", layer=layer, index=False)
 
     return outfile
