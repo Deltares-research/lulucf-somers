@@ -70,9 +70,3 @@ def read_soilmap_geopackage(soilmap_path: str | WindowsPath) -> gpd.GeoDataFrame
 
     soilmap = soilmap.merge(soilunits, on="maparea_id", how="left")
     return soilmap
-
-
-if __name__ == "__main__":
-    soilmap = read_soilmap_geopackage(
-        r"c:\Users\knaake\OneDrive - Stichting Deltares\Documents\data\dino\bro_bodemkaart_V2023.gpkg"
-    )
