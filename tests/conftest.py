@@ -103,48 +103,27 @@ def simple_soilmap_path(tmp_path):
     """
     polygons = create_polygons()
     maparea_id = np.arange(len(polygons))
-    normalsoilprofile_id = [
-        1170,
-        1240,
-        1060,
-        1070,
-        1050,
-        2020,
-        2060,
-        2110,
-        2120,
-        16040,
-        16010,
-        15100,
-        15110,
-        1225,
-    ]
     soilunits = [
         "pVc",
-        "pVk",
         "hVk",
-        "hVz",
-        "hEV",
+        "kVc",
+        "Vc",
+        "AAP",
         "vWp",
         "iWp",
         "kWz",
-        "zWz",
+        "AWv",
         "Rv01C",
         "pRv81",
         "Mv51A",
         "Mv81A",
-        "kVc",
+        "bEZ23",
     ]
     geometries = gpd.GeoDataFrame({"maparea_id": maparea_id, "geometry": polygons})
-    link_table = gpd.GeoDataFrame(
-        {"maparea_id": maparea_id, "normalsoilprofile_id": normalsoilprofile_id}
-    )
-    normalsoilprofile = gpd.GeoDataFrame(
-        {"normalsoilprofile_id": normalsoilprofile_id, "soilunit": soilunits}
-    )
+    soilcodes = gpd.GeoDataFrame({"maparea_id": maparea_id, "soilunit_code": soilunits})
 
-    layers = ["soilarea", "soilarea_normalsoilprofile", "normalsoilprofiles"]
-    tables = [geometries, link_table, normalsoilprofile]
+    layers = ["soilarea", "soilarea_soilunit"]
+    tables = [geometries, soilcodes]
 
     outfile = tmp_path / "soilmap.gpkg"
     for layer, table in zip(layers, tables):

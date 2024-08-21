@@ -35,6 +35,12 @@ class BroSoilmap(Geopackage):
     available methods to query and inspect the tables in the geopackage.
     """
 
+    _layers = SoilmapLayers
+
+    @property
+    def layers(self):
+        return [f"{layer.value}" for layer in self._layers]
+
     def read_geometries(self):
         return gpd.read_file(self.file, layer=SoilmapLayers.SOILAREA)
 
@@ -60,9 +66,13 @@ def read_soilmap_geopackage(soilmap_path: str | WindowsPath) -> gpd.GeoDataFrame
     """
     with BroSoilmap(soilmap_path) as sm:
         soilmap = sm.read_geometries()
-        link_table = sm.read_table(SoilmapLayers.SOILAREA_NORMALSOILPROFILE)
-        normalsoilprofile = sm.read_table(SoilmapLayers.NORMALSOILPROFILES)
+        soilunits = sm.read_table(SoilmapLayers.SOILAREA_SOILUNIT)
 
-    soilmap = soilmap.merge(link_table, on="maparea_id", how="left")
-    soilmap = soilmap.merge(normalsoilprofile, on="normalsoilprofile_id", how="left")
+    soilmap = soilmap.merge(soilunits, on="maparea_id", how="left")
     return soilmap
+
+
+if __name__ == "__main__":
+    soilmap = read_soilmap_geopackage(
+        r"c:\Users\knaake\OneDrive - Stichting Deltares\Documents\data\dino\bro_bodemkaart_V2023.gpkg"
+    )

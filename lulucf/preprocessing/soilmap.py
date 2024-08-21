@@ -1,5 +1,3 @@
-from pathlib import Path
-
 import geopandas as gpd
 
 # Below ID's for main groups are based on SOMERS

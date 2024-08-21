@@ -17,5 +17,5 @@ def test_read_soilmap_geopackage(simple_soilmap_path):
     soilmap = read_soilmap_geopackage(simple_soilmap_path)
     assert isinstance(soilmap, gpd.GeoDataFrame)
 
-    expected_columns = ["maparea_id", "normalsoilprofile_id", "soilunit"]
+    expected_columns = ["maparea_id", "soilunit_code"]
     assert all([col in soilmap.columns for col in expected_columns])
