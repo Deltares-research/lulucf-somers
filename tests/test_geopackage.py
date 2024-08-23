@@ -15,6 +15,13 @@ class TestGeopackage:
         assert isinstance(gp.connection, sqlite3.Connection)
 
     @pytest.mark.unittest
+    def test_layers(self, simple_soilmap_path):
+        gp = Geopackage(simple_soilmap_path)
+        layers = gp.layers()
+        expected_layers = ["soilarea", "soilarea_soilunit"]
+        assert_array_equal(layers, expected_layers)
+
+    @pytest.mark.unittest
     def test_context_manager(self, simple_soilmap_path):
         gp = Geopackage(simple_soilmap_path)
         assert gp.connection is None
@@ -40,9 +47,7 @@ class TestGeopackage:
         with Geopackage(simple_soilmap_path) as gp:
             table = gp.read_table(test_table)
             assert isinstance(table, pd.DataFrame)
-            assert_array_equal(
-                table.columns, ["fid", "maparea_id", "soilunit_code"]
-            )
+            assert_array_equal(table.columns, ["fid", "maparea_id", "soilunit_code"])
 
             table = gp.table_head(test_table)
             assert len(table) == 5

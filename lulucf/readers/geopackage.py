@@ -1,5 +1,6 @@
 from pathlib import WindowsPath
 
+import fiona
 import pandas as pd
 
 from lulucf.utils import create_connection
@@ -17,6 +18,9 @@ class Geopackage:
     def __exit__(self, exc_type, exc_value, traceback):
         if self.connection:
             self.connection = None
+
+    def layers(self):
+        return fiona.listlayers(self.file)
 
     def get_connection(self):
         self.connection = create_connection(self.file)
