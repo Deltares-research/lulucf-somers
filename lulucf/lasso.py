@@ -6,7 +6,10 @@ import rioxarray as rio
 import xarray as xr
 from pyproj import CRS
 
+from lulucf.validation import validate_lasso
 
+
+@validate_lasso
 class LassoGrid:
     """
     Containing definition of LASSO grid (25x25 m resolution?). This is the basic grid all
@@ -34,17 +37,8 @@ class LassoGrid:
         ysize: int,
         crs: str | int | CRS = 28992,
     ):
-        if xmin >= xmax:
-            raise ValueError(
-                f"Cannot instantiate {self.__class__.__name__} with xmin > xmax"
-            )
         self.xmin = xmin
         self.xmax = xmax
-
-        if ymin >= ymax:
-            raise ValueError(
-                f"Cannot instantiate {self.__class__.__name__} with ymin  ymax"
-            )
         self.ymin = ymin
         self.ymax = ymax
 
