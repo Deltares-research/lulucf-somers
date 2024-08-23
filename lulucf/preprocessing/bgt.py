@@ -16,6 +16,19 @@ BGT_LAYERS_FOR_LULUCF = [
 ]
 
 
+def _read_layers(bgt_gpkg: str | WindowsPath, layers: list):
+    """
+    Helper function for combine_bgt_layers to read the BGT layers and add the required
+    information for LULUCF. Returns a generator with GeoDataFrames for each layer.
+
+    """
+    for layer in layers:
+        print(f"Read layer: {layer}")
+        layer_gdf = gpd.read_file(bgt_gpkg, layer=layer, columns="geometry")
+        layer_gdf["layer"] = layer.replace("_polygon", "")
+        yield layer_gdf
+
+
 def combine_bgt_layers(bgt_gpkg: str | WindowsPath, layers: list) -> gpd.GeoDataFrame:
     """
     Combine layers from a BGT (Basisregistratie Grootschalige Topografie) geopackage into
@@ -34,9 +47,5 @@ def combine_bgt_layers(bgt_gpkg: str | WindowsPath, layers: list) -> gpd.GeoData
         GeoDataFrame of the combined layers.
 
     """
-    combined = gpd.GeoDataFrame()
-    for layer in layers:
-        print(f"Read layer: {layer}")
-        layer = gpd.read_file(bgt_gpkg, layer=layer)
-        combined = pd.concat([combined, layer], ignore_index=True)
+    combined = pd.concat(_read_layers(bgt_gpkg, layers), ignore_index=True)
     return combined

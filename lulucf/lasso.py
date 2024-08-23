@@ -34,18 +34,23 @@ class LassoGrid:
         ysize: int,
         crs: str | int | CRS = 28992,
     ):
+        if xmin >= xmax:
+            raise ValueError(
+                f"Cannot instantiate {self.__class__.__name__} with xmin > xmax"
+            )
         self.xmin = xmin
-        self.ymin = ymin
         self.xmax = xmax
+
+        if ymin >= ymax:
+            raise ValueError(
+                f"Cannot instantiate {self.__class__.__name__} with ymin  ymax"
+            )
+        self.ymin = ymin
         self.ymax = ymax
 
-        if xsize < 0:
-            xsize *= -1
-        self.xsize = xsize
+        self.xsize = xsize * -1 if xsize < 0 else xsize
+        self.ysize = ysize * -1 if ysize > 0 else ysize
 
-        if ysize > 0:
-            ysize *= -1
-        self.ysize = ysize
         self.crs = CRS(crs)
 
     def __repr__(self):
