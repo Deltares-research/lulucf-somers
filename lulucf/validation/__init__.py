@@ -1,1 +1,1 @@
-from .validate import validate_lasso
+from .validators import LassoValidator

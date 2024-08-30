@@ -6,10 +6,9 @@ import rioxarray as rio
 import xarray as xr
 from pyproj import CRS
 
-from lulucf.validation import validate_lasso
+from lulucf.validation import LassoValidator
 
 
-@validate_lasso
 class LassoGrid:
     """
     Containing definition of LASSO grid (25x25 m resolution?). This is the basic grid all
@@ -26,6 +25,11 @@ class LassoGrid:
         pyproj.crs.CRS.from_user_input().
 
     """
+
+    def __new__(cls, *args):
+        validator = LassoValidator()
+        validator.validate(*args)
+        return super().__new__(cls)
 
     def __init__(
         self,

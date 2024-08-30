@@ -27,6 +27,10 @@ def test_validation_passes():
     xmin, xmax = 0, 4
     ymin, ymax = 0, 4
     cellsize = 1
-    LassoGrid(xmin, ymin, xmax, ymax, cellsize, cellsize)
-    validation_passes = True
+
+    try:
+        LassoGrid(xmin, ymin, xmax, ymax, cellsize, cellsize)
+        validation_passes = True
+    except InvalidLassoError as e:
+        raise e
     assert validation_passes

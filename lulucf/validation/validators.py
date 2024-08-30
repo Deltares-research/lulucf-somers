@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from .exceptions import InvalidBoundsError
+from .exceptions import InvalidBoundsError, InvalidLassoError
 
 
 class AbstractValidator(ABC):
@@ -10,22 +10,22 @@ class AbstractValidator(ABC):
 
 
 class LassoValidator(AbstractValidator):
-    def __init__(self):
-        self.errors = []
-
-    def get_error_message(self):
-        return "\n".join([e.message for e in self.errors])
-
-    def validate(self, lasso_grid):
-        try:
-            self.validate_xbounds(lasso_grid.xmin, lasso_grid.xmax)
-        except InvalidBoundsError as e:
-            self.errors.append(e)
+    def validate(self, *args):
+        errors = []
+        xmin, ymin, xmax, ymax, *cellsize = args
 
         try:
-            self.validate_ybounds(lasso_grid.ymin, lasso_grid.ymax)
+            self.validate_xbounds(xmin, xmax)
         except InvalidBoundsError as e:
-            self.errors.append(e)
+            errors.append(str(e))
+
+        try:
+            self.validate_ybounds(ymin, ymax)
+        except InvalidBoundsError as e:
+            errors.append(str(e))
+
+        if errors:
+            raise InvalidLassoError("Invalid LassoGrid with errors:", errors)
 
     @staticmethod
     def validate_xbounds(xmin: int | float, xmax: int | float):
