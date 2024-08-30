@@ -141,3 +141,24 @@ def simple_soilmap_path(tmp_path):
 @pytest.fixture
 def simple_soilmap(simple_soilmap_path):
     return read_soilmap_geopackage(simple_soilmap_path)
+
+
+@pytest.fixture
+def somers_parcels():
+    """
+    Simple GeoDataFrame with rectangular parcels to mimic SOMERS input data.
+
+    """
+    parcels = [
+        box(0, 3.05, 1.3, 3.99),
+        box(0.1, 2, 1.5, 2.99),
+        box(2, 1.15, 2.5, 1.99),
+        box(1, 0.5, 2.8, 1.1),
+        box(2, 2.5, 3.5, 3.5),
+    ]
+    ids = np.arange(len(parcels))
+    co2 = [2700, 1500, 7000, 5000, 4800]
+
+    return gpd.GeoDataFrame(
+        zip(ids, co2), columns=["parcel_id", "median"], geometry=parcels
+    )
