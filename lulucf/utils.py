@@ -1,4 +1,6 @@
+import cProfile
 import sqlite3
+from functools import wraps
 from pathlib import WindowsPath
 
 import geopandas as gpd
@@ -74,3 +76,16 @@ def create_connection(database: str | WindowsPath):
         print(e)
 
     return conn
+
+
+def profile_function(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        profiler = cProfile.Profile()
+        profiler.enable()
+        result = func(*args, **kwargs)
+        profiler.disable()
+        profiler.print_stats(sort="cumulative")
+        return result
+
+    return wrapper
