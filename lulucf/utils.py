@@ -94,42 +94,108 @@ def profile_function(func):
 
 def rasterize_like(
     shapefile: str | WindowsPath | gpd.GeoDataFrame,
-    attribute: str,
     da: xr.DataArray,
+    attribute: str = None,
+    **features_kwargs,
 ):
     """
-    Rasterize a shapefile like an atmod Raster or into the 2D extent of a VoxelModel
-    object.
+    Rasterize a shapefile like an Xarray DataArray object.
 
     Parameters
     ----------
     shapefile : str | WindowsPath | gpd.GeoDataFrame
         Input shapefile to rasterize. Can be a path to the shapefile or an in
         memory GeoDataFrame.
-    attribute : str
-        Name of the attribute in the shapefile to rasterize.
     da : xr.DataArray,
-        Atmod Raster or VoxelModel object to rasterize the shapefile like.
-    cellsize : int, optional
-        Cellsize of the output DataArray. The default is None, then the x and y
-        size will be derived from the input DataArray.
+        DataArray to use the extent from rasterize the shapefile like.
+    attribute : str, optional
+        Name of the attribute in the shapefile to rasterize. The default is None, in
+        this case, a default value of 1 will be burnt into the DataArray.
+
+    **features_kwargs
+        See rasterio.features.rasterize docs for additional optional parameters.
 
     Returns
     -------
     xr.DataArray
         DataArray of the rasterized shapefile.
 
+    Examples
+    --------
+    Rasterize a specific attribute of a shapefile:
+    >>> rasterize_like(shapefile, da, "attribute")
+
+    Use additional `features.rasterize` options:
+    >>> rasterize_like(shapefile, da, "attribute", all_touched=True)
+
     """
     if isinstance(shapefile, (str, WindowsPath)):
         shapefile = gpd.read_file(shapefile)
 
-    shapes = ((geom, z) for z, geom in zip(shapefile[attribute], shapefile["geometry"]))
+    if attribute:
+        shapes = (
+            (geom, z) for z, geom in zip(shapefile[attribute], shapefile["geometry"])
+        )
+    else:
+        shapes = (geom for geom in shapefile["geometry"])
+        features_kwargs["default_value"] = 1
 
     rasterized = features.rasterize(
         shapes=shapes,
         fill=np.nan,
         out_shape=da.shape,
         transform=da.rio.transform(),
+        **features_kwargs,
     )
-    rasterized = xr.DataArray(rasterized, coords=da.coords, dims=da.dims)
-    return rasterized
+
+    return xr.DataArray(rasterized, coords=da.coords, dims=da.dims)
+
+
+def rasterize_as_mask(
+    shapefile: str | WindowsPath | gpd.GeoDataFrame,
+    da: xr.DataArray,
+    **features_kwargs,
+):
+    """
+    Rasterize a shapefile as a boolean mask within the extent of an Xarray DataArray
+    object. By default, mask is intended for use as a numpy mask, where cells that
+    overlap shapefile geometries are False.
+
+    Parameters
+    ----------
+    shapefile : str | WindowsPath | gpd.GeoDataFrame
+        Input shapefile to rasterize. Can be a path to the shapefile or an in
+        memory GeoDataFrame.
+    da : xr.DataArray,
+        DataArray to use the extent from rasterize the shapefile like.
+
+    **features_kwargs
+        See rasterio.features.rasterize docs for additional optional parameters.
+
+    Returns
+    -------
+    xr.DataArray
+        Boolean DataArray of the rasterized shapefile.
+
+    Examples
+    --------
+    Get a default mask (i.e. where cells that overlap with geometries are False):
+    >>> rasterize_as_mask(shapefile, da)
+
+    Get a mask which is True for cells that overlap with geometries:
+    >>> rasterize_as_mask(shapefile, da, invert=True)
+
+    """
+    if isinstance(shapefile, (str, WindowsPath)):
+        shapefile = gpd.read_file(shapefile)
+
+    shapes = (geom for geom in shapefile["geometry"])
+
+    mask = features.geometry_mask(
+        geometries=shapes,
+        out_shape=da.shape,
+        transform=da.rio.transform(),
+        **features_kwargs,
+    )
+
+    return xr.DataArray(mask, coords=da.coords, dims=da.dims)
