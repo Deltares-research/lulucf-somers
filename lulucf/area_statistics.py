@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import xarray as xr
 
-from lulucf.utils import _add_layer_idx_column, cell_as_geometry
+from lulucf.utils import _add_layer_idx_column, cell_as_geometry, profile_function
 
 
 def calculate_areal_percentages_bgt(bgt_data: gpd.GeoDataFrame, da: xr.DataArray):
@@ -26,7 +26,7 @@ def calc_areal_percentage_in_cells(polygons: gpd.GeoDataFrame, da: xr.DataArray)
         raise KeyError("DataArray must contain dimensions 'y' and 'x'.")
 
     cellsize = da.rio.resolution()
-    cellarea = np.abs((cellsize[0] * cellsize[1]) ** 2)
+    cellarea = np.abs((cellsize[0] * cellsize[1]))
 
     for i, y in enumerate(da["y"]):
         for j, x in enumerate(da["x"]):
@@ -40,3 +40,13 @@ def calc_areal_percentage_in_cells(polygons: gpd.GeoDataFrame, da: xr.DataArray)
             da[i, j, idx] = percentage.values
 
     return da
+
+
+def calc_areal_percentages_for(indices, bgt_data, soilmap, bgt_da, soilmap_da):
+    bgt_data = _add_layer_idx_column(bgt_data, bgt_da)
+    soilmap = _add_layer_idx_column(soilmap, soilmap_da)
+
+    for idx in indices:
+        break
+
+    return
