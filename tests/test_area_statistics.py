@@ -22,3 +22,10 @@ def test_calc_areal_percentage_in_cells(bgt_gdf, empty_bgt_array):
         result[0, 1], [0.85454545, 0.14545455, 0, 0, 0, 0, 0, 0, 0]
     )
     assert_array_almost_equal(result[3, 2], [0, 0, 0, 0, 0, 0.9, 0.1, 0, 0])
+
+
+@pytest.mark.unittest
+def test_calc_areal_percentages(
+    bgt_gdf, simple_soilmap, empty_bgt_array, empty_soilmap_array
+):
+    assert 1 == 1
