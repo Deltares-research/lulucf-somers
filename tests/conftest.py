@@ -95,6 +95,12 @@ def empty_bgt_array(lasso_grid):
 
 
 @pytest.fixture
+def empty_soilmap_array(lasso_grid):
+    layers = ["peat", "moerig", "buried", "other"]
+    return lasso_grid.empty_array(layers, dask=False)
+
+
+@pytest.fixture
 def simple_soilmap_path(tmp_path):
     """
     Fixture to create a tmp geopackage file that contains relevant BRO soilmap information
@@ -104,20 +110,20 @@ def simple_soilmap_path(tmp_path):
     polygons = create_polygons()
     maparea_id = np.arange(len(polygons))
     soilunits = [
-        "pVc",
-        "hVk",
-        "kVc",
-        "Vc",
-        "AAP",
-        "vWp",
-        "iWp",
-        "kWz",
-        "AWv",
-        "Rv01C",
-        "pRv81",
-        "Mv51A",
-        "Mv81A",
-        "bEZ23",
+        "pVc",  # Peat type
+        "hVk",  # Peat type
+        "kVc",  # Peat type
+        "Vc",  # Peat type
+        "AAP",  # Peat type
+        "vWp",  # Moerig type
+        "iWp",  # Moerig type
+        "kWz",  # Moerig type
+        "AWv",  # Moerig type
+        "Rv01C",  # Buried type
+        "pRv81",  # Buried type
+        "Mv51A",  # Buried type
+        "Mv81A",  # Buried type
+        "bEZ23",  # Other type
     ]
     geometries = gpd.GeoDataFrame({"maparea_id": maparea_id, "geometry": polygons})
     soilcodes = gpd.GeoDataFrame({"maparea_id": maparea_id, "soilunit_code": soilunits})
