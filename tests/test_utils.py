@@ -8,6 +8,7 @@ from shapely.geometry import Polygon
 from lulucf.utils import (
     cell_as_geometry,
     create_connection,
+    get_valid_indices,
     rasterize_as_mask,
     rasterize_like,
 )
@@ -26,6 +27,12 @@ def cellsize_negative_x():
 @pytest.fixture
 def cellsize_positive():
     return (1, 1)
+
+
+@pytest.fixture
+def mask_array(somers_parcels, lasso_grid):
+    da = lasso_grid.dataarray()
+    return rasterize_as_mask(somers_parcels, da, invert=True)
 
 
 @pytest.mark.parametrize(
@@ -89,3 +96,21 @@ def test_rasterize_as_mask(lasso_grid, somers_parcels):
     assert mask.rio.resolution() == (1, -1)
     assert mask.sizes == {"y": 4, "x": 4}
     assert_array_equal(mask.values, expected_values)
+
+
+@pytest.mark.unittest
+def test_get_valid_indices(mask_array):
+    indices = get_valid_indices(mask_array)
+    expected_indices = [
+        [0, 0],
+        [0, 2],
+        [0, 3],
+        [1, 0],
+        [1, 1],
+        [1, 2],
+        [1, 3],
+        [2, 2],
+        [3, 1],
+        [3, 2],
+    ]
+    assert_array_equal(indices, expected_indices)

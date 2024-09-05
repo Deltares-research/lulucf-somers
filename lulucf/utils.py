@@ -199,3 +199,23 @@ def rasterize_as_mask(
     )
 
     return xr.DataArray(mask, coords=da.coords, dims=da.dims)
+
+
+def get_valid_indices(mask: np.ndarray | xr.DataArray) -> np.ndarray:
+    """
+    Return the indices where a boolean array or DataArray is True.
+
+    Parameters
+    ----------
+    mask : np.ndarray | xr.DataArray
+        Boolean array to find the indices from.
+
+    Returns
+    -------
+    np.ndarray
+        Array of shape (n, 2) containing the indices where the boolean array is True.
+
+    """
+    if isinstance(mask, xr.DataArray):
+        mask = mask.values
+    return np.argwhere(mask)
