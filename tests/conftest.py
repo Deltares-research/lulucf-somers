@@ -160,5 +160,5 @@ def somers_parcels():
     co2 = [2700, 1500, 7000, 5000, 4800]
 
     return gpd.GeoDataFrame(
-        zip(ids, co2), columns=["parcel_id", "median"], geometry=parcels
+        zip(ids, co2), columns=["parcel_id", "median"], geometry=parcels, crs=28992
     )

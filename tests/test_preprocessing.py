@@ -1,7 +1,8 @@
+import pandas as pd
 import pytest
 from numpy.testing import assert_array_equal
 
-from lulucf.preprocessing import group_soilmap_units
+from lulucf.preprocessing import calc_somers_emission_per_ha, group_soilmap_units
 
 
 @pytest.mark.unittest
@@ -25,3 +26,9 @@ def test_group_soilmap_units(simple_soilmap):
         "other",
     ]
     assert_array_equal(simple_soilmap["layer"], expected_result)
+
+
+@pytest.mark.unittest
+def test_calc_somers_emission_per_ha(somers_parcels):
+    ef_per_ha = calc_somers_emission_per_ha(somers_parcels)
+    assert isinstance(ef_per_ha, pd.Series)
