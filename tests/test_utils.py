@@ -61,12 +61,12 @@ def test_rasterize_like(lasso_grid, somers_parcels):
     da = lasso_grid.dataarray()
 
     raster = rasterize_like(somers_parcels, da, "parcel_id")
-
+    nan = np.nan
     expected_values = [
-        [0, np.nan, 4, 4],
-        [1, 1, 4, 4],
-        [np.nan, np.nan, 2, np.nan],
-        [np.nan, 3, 3, np.nan],
+        [1, 0, 0, nan],
+        [1, 2, 2, nan],
+        [nan, nan, 3, nan],
+        [nan, 4, 3, 5],
     ]
 
     assert raster.shape == (4, 4)
@@ -85,10 +85,10 @@ def test_rasterize_as_mask(lasso_grid, somers_parcels):
     mask = rasterize_as_mask(somers_parcels, da, invert=True)
 
     expected_values = [
-        [True, False, True, True],
-        [True, True, True, True],
+        [True, True, True, False],
+        [True, True, True, False],
         [False, False, True, False],
-        [False, True, True, False],
+        [False, True, True, True],
     ]
 
     assert mask.shape == (4, 4)
@@ -103,14 +103,14 @@ def test_get_valid_indices(mask_array):
     indices = get_valid_indices(mask_array)
     expected_indices = [
         [0, 0],
+        [0, 1],
         [0, 2],
-        [0, 3],
         [1, 0],
         [1, 1],
         [1, 2],
-        [1, 3],
         [2, 2],
         [3, 1],
         [3, 2],
+        [3, 3],
     ]
     assert_array_equal(indices, expected_indices)

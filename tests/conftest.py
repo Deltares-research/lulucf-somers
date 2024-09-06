@@ -77,12 +77,22 @@ def bgt_gdf():
     """
     polygons = create_polygons()
 
-    layers = []
-    bgt_cycle = itertools.cycle(BGT_LAYERS_FOR_LULUCF)
-    for ii, layer in enumerate(bgt_cycle):
-        if ii == len(polygons):
-            break
-        layers.append(layer.replace("_polygon", ""))
+    layers = [
+        "begroeidterreindeel",
+        "onbegroeidterreindeel",
+        "begroeidterreindeel",
+        "wegdeel",
+        "waterdeel",
+        "pand",
+        "begroeidterreindeel",
+        "begroeidterreindeel",
+        "ondersteunendwaterdeel",
+        "ondersteunendwegdeel",
+        "begroeidterreindeel",
+        "scheiding",
+        "begroeidterreindeel",
+        "overigbouwwerk",
+    ]
 
     bgt_data = {"layer": layers, "geometry": polygons}
     return gpd.GeoDataFrame(bgt_data)
@@ -146,18 +156,13 @@ def simple_soilmap(simple_soilmap_path):
 @pytest.fixture
 def somers_parcels():
     """
-    Simple GeoDataFrame with rectangular parcels to mimic SOMERS input data.
+    Simple GeoDataFrame with parcels and a CO2 emission to mimic SOMERS input data.
 
     """
-    parcels = [
-        box(0, 3.05, 1.3, 3.99),
-        box(0.1, 2, 1.5, 2.99),
-        box(2, 1.15, 2.5, 1.99),
-        box(1, 0.5, 2.8, 1.1),
-        box(2, 2.5, 3.5, 3.5),
-    ]
+    parcels = np.array(create_polygons())
+    parcels = parcels[[0, 1, 4, 5, 6, 10, 11, -1]]
     ids = np.arange(len(parcels))
-    co2 = [2700, 1500, 7000, 5000, 4800]
+    co2 = [2700, 1500, 6100, 3200, 7000, 5000, 2250, 4800]
 
     return gpd.GeoDataFrame(
         zip(ids, co2), columns=["parcel_id", "median"], geometry=parcels, crs=28992
