@@ -34,13 +34,18 @@ class TestLassoGrid:
 
     @pytest.mark.unittest
     def test_dataarray(self, lasso_grid):
-        da = lasso_grid.dataarray()
+        da = lasso_grid.dataarray()  # Use default fill value of 1, dtype int.
 
         assert isinstance(da, xr.DataArray)
+        assert da.dtype == int
         assert len(da["x"]) == 4
         assert len(da["y"]) == 4
         assert da.rio.resolution() == (1.0, -1.0)
         assert da.rio.crs == 28992
+
+        da = lasso_grid.dataarray(np.nan)
+        assert np.all(np.isnan(da))
+        assert da.dtype == float
 
     @pytest.mark.unittest
     def test_from_raster(self, raster_file):

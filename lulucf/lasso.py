@@ -87,15 +87,29 @@ class LassoGrid:
         ymax = self.ymax - np.abs(0.5 * self.ysize)
         return np.arange(ymax, self.ymin, self.ysize)
 
-    def dataarray(self) -> xr.DataArray:
+    def dataarray(self, fill_value: int | float = 1) -> xr.DataArray:
         """
-        Return a 2D DataArray filled with ones with the full extent of the LASSO grid.
+        Return a 2D DataArray filled with a single value with the full extent of the LASSO
+        grid.
+
+        Parameters
+        ----------
+        fill_value : int | float, optional
+            Value to use in the DataArray. The default is 1.
+
+        Returns
+        -------
+        xr.DataArray
 
         """
         ycoords, xcoords = self.ycoordinates(), self.xcoordinates()
         coords = {"y": ycoords, "x": xcoords}
         size = (len(ycoords), len(xcoords))
-        da = xr.DataArray(np.full(size, 1), coords=coords, dims=("y", "x"))
+        da = xr.DataArray(
+            np.full(size, fill_value, dtype=type(fill_value)),
+            coords=coords,
+            dims=("y", "x"),
+        )
         return da.rio.write_crs(self.crs, inplace=True)
 
     def empty_array(
