@@ -58,7 +58,7 @@ class LassoGrid:
         return f"{name}({xmin=}, {ymin=}, {xmax=}, {ymax=}, {xsize=}, {ysize=})"
 
     @classmethod
-    def from_raster(cls, raster: str | WindowsPath):
+    def from_raster(cls, raster: str | WindowsPath, bbox: tuple = None):
         """
         Initialize a LassoGrid instance from a raster file.
 
@@ -66,9 +66,20 @@ class LassoGrid:
         ----------
         raster : str | WindowsPath
             Path to the raster file to base the grid extent on.
+        bbox : tuple, optional
+            Tuple (xmin, ymin, xmax, ymax) to return a LassoGrid for a selected area.
 
         """
         raster = rio.open_rasterio(raster).squeeze()
+
+        if bbox is not None:
+            xmin, ymin, xmax, ymax = bbox
+            if raster["y"][1] > raster["y"][0]:  # Check if coordinates are descending.
+                ymax, ymin = ymin, ymax
+            if raster["x"][1] < raster["x"][0]:
+                xmax, xmin = xmin, xmax
+            raster = raster.sel(x=slice(xmin, xmax), y=slice(ymax, ymin))
+
         xsize, ysize = raster.rio.resolution()
         xmin, ymin, xmax, ymax = raster.rio.bounds()
         return cls(xmin, ymin, xmax, ymax, xsize, ysize)

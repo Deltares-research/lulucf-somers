@@ -59,6 +59,17 @@ class TestLassoGrid:
         assert grid.ysize == -1
         assert grid.crs == 28992
 
+        bbox = (1, 1, 3, 3)
+        grid = LassoGrid.from_raster(raster_file, bbox=bbox)
+
+        assert grid.xmin == 1
+        assert grid.ymin == 1
+        assert grid.xmax == 3
+        assert grid.ymax == 3
+        assert grid.xsize == 1
+        assert grid.ysize == -1
+        assert grid.crs == 28992
+
     @pytest.mark.unittest
     def test_empty_array(self):
         layers = [layer.replace("_polygon", "") for layer in BGT_LAYERS_FOR_LULUCF]
