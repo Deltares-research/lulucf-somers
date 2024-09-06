@@ -42,13 +42,13 @@ def cell_as_geometry(
     return box(xmin, ymin, xmax, ymax)
 
 
-def _add_layer_idx_column(gdf: gpd.GeoDataFrame, da: xr.DataArray):
+def _add_layer_idx_column(gdf: gpd.GeoDataFrame, layers: list):
     """
     Helper function to add the index of the layer coordinates in a DataArray to a
     GeoDataFrame.
 
     """
-    df = pd.DataFrame(da["layer"].values, columns=["layer"])
+    df = pd.DataFrame(layers, columns=["layer"])
     df.index.name = "idx"
     df.reset_index(inplace=True)
     gdf = gdf.merge(df, on="layer", how="left")
