@@ -6,7 +6,7 @@ import xarray as xr
 from numpy.testing import assert_array_equal
 from shapely.geometry import Polygon
 
-from lulucf.lasso import LassoGrid
+from lulucf import LassoGrid
 from lulucf.preprocessing.bgt import BGT_LAYERS_FOR_LULUCF
 
 

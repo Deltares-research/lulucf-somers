@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import xarray as xr
 from shapely.geometry import Polygon
+from tqdm import tqdm
 
 from lulucf.utils import _add_layer_idx_column, cell_as_geometry
 
@@ -27,7 +28,7 @@ def calc_flux_and_coverage_for(
     n_bgt_layers = bgt_data["layer"].nunique()
     n_soilmap_layers = soilmap["layer"].nunique()
 
-    for idx in indices:
+    for idx in tqdm(indices, total=len(indices), desc="Calculate flux and coverage"):
         i, j = idx[0], idx[1]
         y, x = flux["y"][i], flux["x"][j]
         geom = cell_as_geometry(x, y, cellsize)

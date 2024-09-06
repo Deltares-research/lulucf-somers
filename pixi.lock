@@ -235,6 +235,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/tomli-2.0.1-pyhd8ed1ab_0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/noarch/toolz-0.12.1-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/tornado-6.4.1-py312h4389bb4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/noarch/tqdm-4.66.5-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2024a-h0c530f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/ucrt-10.0.22621.0-h57928b3_0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/win-64/uriparser-0.9.8-h5a68840_0.conda
@@ -3292,7 +3293,7 @@ packages:
   name: lulucf
   version: 0.1.0
   path: .
-  sha256: 2d36a9bbaaec509514f10a073676d2e2ed458d70de8377b377690302c883157f
+  sha256: 9f6739a2ea5b21af8548fdee5b0f30cde2d755713dae99df9fa12b9d9f92ab1d
   requires_python: '>=3.11'
   editable: true
 - kind: conda
@@ -4897,6 +4898,23 @@ packages:
   - pkg:pypi/tornado?source=conda-forge-mapping
   size: 844267
   timestamp: 1717723122629
+- kind: conda
+  name: tqdm
+  version: 4.66.5
+  build: pyhd8ed1ab_0
+  subdir: noarch
+  noarch: python
+  url: https://conda.anaconda.org/conda-forge/noarch/tqdm-4.66.5-pyhd8ed1ab_0.conda
+  sha256: f2384902cef72048b0e9bad5c03d7a843de02ba6bc8618a9ecab6ff81a131312
+  md5: c6e94fc2b2ec71ea33fe7c7da259acb4
+  depends:
+  - colorama
+  - python >=3.7
+  license: MPL-2.0 or MIT
+  purls:
+  - pkg:pypi/tqdm?source=conda-forge-mapping
+  size: 89519
+  timestamp: 1722737568509
 - kind: conda
   name: tzdata
   version: 2024a
