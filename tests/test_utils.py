@@ -35,6 +35,7 @@ def mask_array(somers_parcels, lasso_grid):
     return rasterize_as_mask(somers_parcels, da, invert=True)
 
 
+@pytest.mark.unittest
 @pytest.mark.parametrize(
     "cellsize", ["cellsize_negative_y", "cellsize_negative_x", "cellsize_positive"]
 )
