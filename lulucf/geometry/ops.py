@@ -20,10 +20,10 @@ class PolygonCoordinates:
 
 @jitclass(
     [
-        ("xmin", numba.float32),
-        ("ymin", numba.float32),
-        ("xmax", numba.float32),
-        ("ymax", numba.float32),
+        ("xmin", numba.float64),
+        ("ymin", numba.float64),
+        ("xmax", numba.float64),
+        ("ymax", numba.float64),
     ]
 )
 class Cell:
@@ -76,35 +76,35 @@ def line_intersection(p1, p2, q1, q2):
     x3, y3 = q1
     x4, y4 = q2
 
-    # Bereken de determinant
+    # Caluclate determinant
     det = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
     if det == 0:
-        return None  # Geen snijpunt (lijnen zijn parallel)
+        return np.array([np.nan, np.nan])  # No intersection (lines are parallel)
 
-    # Bereken de snijpunt coördinaten
+    # Calculate intersection coördinates
     t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / det
     u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / det
 
-    # Controleer of het snijpunt binnen de lijnsegmenten ligt
+    # Check if intersection is on the line segment
     if 0 <= t <= 1 and 0 <= u <= 1:
         ix = x1 + t * (x2 - x1)
         iy = y1 + t * (y2 - y1)
-        return (ix, iy)
-    return None
+        return np.array([ix, iy])
+    return np.array([np.nan, np.nan])
 
 
-# @numba.njit
+@numba.njit
 def clip_polygon(coords, cell):
-    clipped_points = np.full((len(coords) * 2, 2), np.nan, dtype=np.float64)
-    intersects = np.full(len(coords) * 2, 0, dtype=np.float64)
+    clipped_points = np.full_like(coords, np.nan)
+    intersects = np.full(len(coords), 0.0)
 
     cell_segments = cell.get_cell_segments()
 
     counter = 0
     for i in range(len(coords) - 1):
         if counter >= len(clipped_points):
-            new_clipped_points = np.full(counter * 2, np.nan, dtype=np.float64)
-            new_intersects = np.full(counter * 2, 0, dtype=np.float64)
+            new_clipped_points = np.full((counter * 2, 2), np.nan)
+            new_intersects = np.full(counter * 2, 0.0)
             new_clipped_points[:counter] = clipped_points
             new_intersects[:counter] = intersects
             clipped_points = new_clipped_points
@@ -121,16 +121,17 @@ def clip_polygon(coords, cell):
             c2 = cell_segments[j + 1]
 
             intersection = line_intersection(p1, p2, c1, c2)
+            has_intersection = np.all(~np.isnan(intersection))
 
-            if not (p1_in_cell or p2_in_cell or intersection):
+            if not (p1_in_cell or p2_in_cell or has_intersection):
                 continue
-            elif p1_in_cell and p2_in_cell and not intersection:
+            elif p1_in_cell and p2_in_cell and not has_intersection:
                 pass  # Hele segment toevoegen
-            elif p2_in_cell and intersection and not p1_in_cell:
+            elif p2_in_cell and has_intersection and not p1_in_cell:
                 pass  # Voeg intersection, p2 toe
-            elif p1_in_cell and intersection and not p2_in_cell:
+            elif p1_in_cell and has_intersection and not p2_in_cell:
                 pass  # Voeg p1, intersection toe
-            elif not (p1_in_cell or p2_in_cell) and intersection:
+            elif not (p1_in_cell or p2_in_cell) and has_intersection:
                 pass  # Voeg intersections toe
             else:
                 pass  # Kijken of er nog een optie is.

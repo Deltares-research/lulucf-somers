@@ -58,7 +58,7 @@ class TestCell:
     @pytest.mark.unittest
     def test_contains_point(self, cell):
         assert cell.contains_point(1.5, 1.5)
-        assert not cell.contains_point(4., 4.)
+        assert not cell.contains_point(4.0, 4.0)
 
 
 @pytest.mark.unittest
@@ -86,11 +86,11 @@ def test_line_intersection():
     q1 = (1.0, 0.5)
     q2 = (2.0, 1.5)
     intersection = ops.line_intersection(p1, p2, q1, q2)
-    assert intersection == (1.5, 1.0)
+    assert_array_equal(intersection, [1.5, 1.0])
 
     q2 = (1.0, 0.5)
     intersection = ops.line_intersection(p1, p2, q1, q2)
-    assert intersection is None
+    assert np.all(np.isnan(intersection))
 
 
 @pytest.mark.unittest
