@@ -36,6 +36,8 @@ pyarrow = ">=17.0.0,<17.1"
 pytest = ">=8.3.2,<8.4"
 dask = ">=2024.8.0,<2024.9"
 tqdm = ">=4.66.5,<4.67"
+xugrid = ">=0.12.1,<0.13"
+mapbox_earcut = ">=1.0.1,<1.1"
 
 [tool.pytest.ini_options]
 testpaths = [
