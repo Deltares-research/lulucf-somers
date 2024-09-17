@@ -5,7 +5,7 @@ from lulucf.validation import validate_somers
 
 
 @validate_somers
-def calc_somers_emission_per_ha(somers: gpd.GeoDataFrame) -> pd.Series:
+def calc_somers_emission_per_m2(somers: gpd.GeoDataFrame) -> pd.Series:
     """
     Divide median emission factor (EF) by parcel area to calculate EF per ha. The input
     GeoDataFrame must have a column "median" present.
