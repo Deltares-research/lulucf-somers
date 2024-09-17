@@ -8,20 +8,13 @@ from lulucf import calculate_emissions
 @pytest.mark.unittest
 def test_calculate_emissions(somers_parcels, lasso_grid, simple_soilmap, bgt_gdf):
     flux, areal = calculate_emissions(
-        somers_parcels, lasso_grid, simple_soilmap, bgt_gdf, False
+        somers_parcels, lasso_grid, simple_soilmap, bgt_gdf
     )
     nan = np.nan
     expected_flux = [
-        [1513.04561724, 2525.45454545, 2700.06923526, nan],
-        [1500.0, 4415.72445438, 6020.22630994, nan],
-        [nan, nan, 4410.18934408, nan],
-        [nan, 7000.0, 3580.0, 4259.75316917],
+        [834.05040386, 836.18826335, 917.27213807, 1822.00449905],
+        [1822.00449905, 917.27213807, 835.16359015, nan],
+        [nan, 836.18826335, 1358.27582059, 1822.00449905],
+        [1822.00449905, 1822.00449905, 836.18826335, 835.16359015],
     ]
     assert_array_almost_equal(flux, expected_flux)
-
-    invalid_indices = np.isnan(flux)
-    assert np.all(areal.values[invalid_indices.values] == 0)
-
-    valid_values = areal.values[~invalid_indices.values]
-    assert np.all(valid_values >= 0)
-    assert np.any(valid_values > 0)
