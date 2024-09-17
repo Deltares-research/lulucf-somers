@@ -1,3 +1,5 @@
+from typing import NamedTuple
+
 import geopandas as gpd
 import mapbox_earcut as earcut
 import numpy as np
@@ -5,6 +7,13 @@ import pandas as pd
 import shapely
 import xarray as xr
 import xugrid as xu
+
+
+class PolygonGridArea(NamedTuple):
+    cell_idx: np.ndarray
+    cell_indices: np.ndarray
+    polygon: np.ndarray
+    area: np.ndarray
 
 
 def polygon_coords(polygons: gpd.GeoDataFrame):
@@ -44,11 +53,9 @@ def polygon_area_in_grid(polygons: gpd.GeoDataFrame, grid: xr.DataArray):
     cell_idx_pointer = ds["__regrid_indptr"].to_numpy()
     polygon_idx = ds["__regrid_indices"].to_numpy()
     area = ds["__regrid_data"].to_numpy()
-    nrows = ds["__regrid_n"]
 
     nonzero_per_row = np.diff(cell_idx_pointer)
-    cell_idx = np.repeat(np.arange(nrows), nonzero_per_row)
+    cell_idx = np.flatnonzero(nonzero_per_row)
+    cell_indices = nonzero_per_row[cell_idx]
 
-    return pd.DataFrame(  # TODO: Don't use DataFrame but translate values to grid.
-        {"grid_index": cell_idx, "area": area, "polygon": index[polygon_idx]}
-    )
+    return PolygonGridArea(cell_idx, cell_indices, index[polygon_idx], area)

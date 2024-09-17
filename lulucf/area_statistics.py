@@ -1,91 +1,44 @@
 import geopandas as gpd
+import numba
 import numpy as np
-import pandas as pd
-import xarray as xr
-from shapely.geometry import Polygon
-from tqdm import tqdm
 
-from lulucf.utils import _add_layer_idx_column, cell_as_geometry
+from lulucf.geometry import ops
 
 
-def somers_flux_in(cell: Polygon, somers: gpd.GeoDataFrame):
-    cell_clip = somers.clip(cell)
-    flux = np.average(cell_clip["median"], weights=cell_clip["geometry"].area)
-    return flux
+def areal_percentage_bgt_soilmap(grid, bgt, soilmap, bgt_units, soilmap_units):
+    bgt_area = calc_areal_percentage_in_cells(bgt, grid, bgt_units)
+    soilmap_area = calc_areal_percentage_in_cells(soilmap, grid, soilmap_units)
+    return soilmap_area.values[:, :, :, None] * bgt_area.values[:, :, None, :]
 
 
-def calc_flux_and_coverage_for(
-    indices: np.ndarray,
-    somers: gpd.GeoDataFrame,
-    bgt_data: gpd.GeoDataFrame,
-    soilmap: gpd.GeoDataFrame,
-    flux: xr.DataArray,
-    areal_da: xr.DataArray,
-):
-    cellsize = flux.rio.resolution()
-    cellarea = np.abs(cellsize[0] * cellsize[1])
+def calc_areal_percentage_in_cells(polygons, lasso_grid, units):
+    polygon_area = ops.polygon_area_in_grid(polygons, lasso_grid.dataarray())
+    polygon_area.polygon[:] = polygons["idx"].values[polygon_area.polygon]
 
-    n_bgt_layers = bgt_data["layer"].nunique()
-    n_soilmap_layers = soilmap["layer"].nunique()
-
-    for idx in tqdm(indices, total=len(indices), desc="Calculate flux and coverage"):
-        i, j = idx[0], idx[1]
-        y, x = flux["y"][i], flux["x"][j]
-        geom = cell_as_geometry(x, y, cellsize)
-
-        flux[i, j] = somers_flux_in(geom, somers)
-
-        bgt_perc = _calc_coverage_percentage(geom, bgt_data, cellarea, n_bgt_layers)
-        soilmap_perc = _calc_coverage_percentage(
-            geom, soilmap, cellarea, n_soilmap_layers
-        )
-
-        areal_da[i, j] = np.outer(soilmap_perc, bgt_perc).ravel()
-
-    return flux, areal_da
+    cellarea = np.abs(lasso_grid.xsize * lasso_grid.ysize)
+    area_grid = lasso_grid.empty_array(units, False)
+    area_grid.values = area_to_grid3d(polygon_area, area_grid.values)
+    area_grid = area_grid / cellarea
+    return area_grid
 
 
-def _calc_coverage_percentage(
-    cell: Polygon, gdf: gpd.GeoDataFrame, area: int | float, ntypes: int
-):
-    """
-    Helper function to calculate the areal percentages of each polygon in a cell geometry.
+@numba.njit
+def area_to_grid3d(polygon_area, area_grid):
+    _, nx, nz = area_grid.shape
 
-    """
-    cell_clip = gdf.clip(cell)
-    percentage = cell_clip["geometry"].area.values / area
-    idx = cell_clip["idx"].values
-    percentage = np.bincount(idx, weights=percentage, minlength=ntypes)
-    return percentage
+    min_idx = 0
+    for i in range(len(polygon_area.cell_idx)):
+        cell_idx = polygon_area.cell_idx[i]
+        nitems = polygon_area.cell_indices[i]
+        max_idx = min_idx + nitems
 
+        polygons = polygon_area.polygon[min_idx:max_idx]
+        area = polygon_area.area[min_idx:max_idx]
 
-def calculate_areal_percentages_bgt(bgt_data: gpd.GeoDataFrame, da: xr.DataArray):
-    bgt_data = _add_layer_idx_column(bgt_data, da)
-    da = calc_areal_percentage_in_cells(bgt_data, da)
-    return da
+        area = np.bincount(polygons, weights=area, minlength=nz)
+        row, col = np.divmod(cell_idx, nx)
 
+        area_grid[row, col, :] = area
+        min_idx += nitems
 
-def calculate_areal_percentages_soilmap(soilmap: gpd.GeoDataFrame, da: xr.DataArray):
-    soilmap = _add_layer_idx_column(soilmap, da)
-    da = calc_areal_percentage_in_cells(soilmap, da)
-    return da
-
-
-def calc_areal_percentage_in_cells(polygons: gpd.GeoDataFrame, da: xr.DataArray):
-    if "idx" not in polygons.columns:
-        raise KeyError("GeoDataFrame must contain an 'idx' column.")
-
-    if "y" not in da.dims or "x" not in da.dims:
-        raise KeyError("DataArray must contain dimensions 'y' and 'x'.")
-
-    cellsize = da.rio.resolution()
-    cellarea = np.abs((cellsize[0] * cellsize[1]))
-    nlayers = len(da["layer"])
-
-    for i, y in enumerate(da["y"]):
-        for j, x in enumerate(da["x"]):
-            geom = cell_as_geometry(x, y, cellsize)
-            percentage = _calc_coverage_percentage(geom, polygons, cellarea, nlayers)
-            da[i, j] = percentage
-
-    return da
+    return area_grid

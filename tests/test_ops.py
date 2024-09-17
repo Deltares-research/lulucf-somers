@@ -27,3 +27,12 @@ def test_triangulate():
     triangles, index = ops.triangulate(coords, index)
     assert_array_equal(triangles, [[3, 0, 1], [1, 2, 3]])
     assert_array_equal(index, [0, 0])
+
+
+@pytest.mark.unittest
+def test_polygon_area_in_grid(gdf_single_polygon, lasso_grid):
+    area = ops.polygon_area_in_grid(gdf_single_polygon, lasso_grid.dataarray())
+    assert_array_equal(area.cell_idx, [12])
+    assert_array_equal(area.cell_indices, [2])
+    assert_array_equal(area.polygon, [0, 0])
+    assert_array_equal(area.area, [0.5, 0.5])
