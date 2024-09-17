@@ -33,15 +33,58 @@ def calculate_emissions(
     soilmap: gpd.GeoDataFrame,
     bgt: gpd.GeoDataFrame,
 ):
-    somers['median_m2'] = calc_somers_emission_per_m2(somers)
+    """
+    Calculate a weighted greenhouse gas flux per cell in a 2D grid from Somers emission
+    data.
+
+    Parameters
+    ----------
+    somers : gpd.GeoDataFrame
+        _description_
+    grid : LassoGrid
+        _description_
+    soilmap : gpd.GeoDataFrame
+        _description_
+    bgt : gpd.GeoDataFrame
+        _description_
+
+    Returns
+    -------
+    _type_
+        _description_
+    """
+    somers["median_m2"] = calc_somers_emission_per_m2(somers)
     flux_per_m2 = calculate_somers_flux(somers, grid)
 
-    area = bgt_soilmap_coverage_grid(bgt, soilmap, grid)
+    area = bgt_soilmap_coverage(bgt, soilmap, grid)
 
     return flux_per_m2, area
 
 
-def bgt_soilmap_coverage_grid(bgt, soilmap, grid):
+def bgt_soilmap_coverage(
+    bgt: gpd.GeoDataFrame, soilmap: gpd.GeoDataFrame, grid: LassoGrid
+) -> xr.DataArray:
+    """
+    Calculate per cell in a grid for each combination of BGT and Soil Map polygons what
+    percentage of a cell is covered by the combination. This returns a 3D DataArray with
+    dimensions ('y', 'x', 'layer') where the dimension 'layer' contains ordered BGT-Soilmap
+    layer combinations.
+
+    Parameters
+    ----------
+    grid : lulucf.LassoGrid
+        LassoGrid instance containing the raster grid to calculate the percentages for.
+    bgt : gpd.GeoDataFrame
+        GeoDataFrame containing the BGT data polygons.
+    soilmap : gpd.GeoDataFrame
+        GeoDataFrame containing the BGT data polygons.
+
+    Returns
+    -------
+    xr.DataArray
+        3D DataArray with the areal percentages.
+
+    """
     soilmap = group_soilmap_units(soilmap)
 
     bgt = _add_layer_idx_column(bgt, MAIN_BGT_UNITS)
