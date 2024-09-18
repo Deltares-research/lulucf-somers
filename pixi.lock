@@ -3362,7 +3362,7 @@ packages:
   name: lulucf
   version: 0.1.0
   path: .
-  sha256: 4b99c45aaa29f4b68aa89a57fe522af8209f10f329f2caafe7014faa454389b2
+  sha256: f41e0bac038aee3d3b264da586fb7b037f6dfe51100b8c2179abfb88f37f74f6
   requires_python: '>=3.11'
   editable: true
 - kind: conda
