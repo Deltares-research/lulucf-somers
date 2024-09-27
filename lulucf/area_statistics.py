@@ -70,6 +70,8 @@ def calc_areal_percentage_in_cells(
     xr.DataArray
         _description_
     """
+    # Needs unique polygons, otherwise area calculation goes wrong
+    polygons = polygons.explode()
     polygon_area = ops.polygon_area_in_grid(polygons, lasso_grid.dataarray())
     polygon_area.polygon[:] = polygons["idx"].values[polygon_area.polygon]
 
