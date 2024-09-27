@@ -82,7 +82,7 @@ def calc_areal_percentage_in_cells(
     return area_grid
 
 
-def calculate_somers_flux(somers: gpd.GeoDataFrame, grid: LassoGrid) -> xr.DataArray:
+def calculate_model_flux(model: gpd.GeoDataFrame, grid: LassoGrid) -> xr.DataArray:
     """
     Calculate a weighted flux per cell in a 2D grid from Somers emissions data.
 
@@ -100,8 +100,8 @@ def calculate_somers_flux(somers: gpd.GeoDataFrame, grid: LassoGrid) -> xr.DataA
 
     """
     flux_grid = grid.dataarray(np.nan)
-    area = ops.polygon_area_in_grid(somers, flux_grid)
-    flux = somers["median_m2"].values[area.polygon]
+    area = ops.polygon_area_in_grid(model, flux_grid)
+    flux = model["flux_m2"].values[area.polygon]
 
     flux_grid.values = flux_to_grid(flux, area, flux_grid.values)
     return flux_grid

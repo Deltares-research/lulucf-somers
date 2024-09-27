@@ -4,7 +4,7 @@ import geopandas as gpd
 import numpy as np
 import xarray as xr
 
-from lulucf.area_statistics import areal_percentage_bgt_soilmap, calculate_somers_flux
+from lulucf.area_statistics import areal_percentage_bgt_soilmap, calculate_model_flux
 from lulucf.lasso import LassoGrid
 from lulucf.preprocessing import calc_somers_emission_per_m2, group_soilmap_units
 from lulucf.utils import _add_layer_idx_column
@@ -53,8 +53,8 @@ def calculate_emissions(
     _type_
         _description_
     """
-    somers["median_m2"] = calc_somers_emission_per_m2(somers)
-    flux_per_m2 = calculate_somers_flux(somers, grid)
+    somers["flux_m2"] = calc_somers_emission_per_m2(somers)
+    flux_per_m2 = calculate_model_flux(somers, grid)
 
     area = bgt_soilmap_coverage(bgt, soilmap, grid)
 
