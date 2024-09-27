@@ -7,18 +7,19 @@ from lulucf.validation import validate_somers
 @validate_somers
 def calc_somers_emission_per_m2(somers: gpd.GeoDataFrame) -> pd.Series:
     """
-    Divide median emission factor (EF) by parcel area to calculate EF per ha. The input
-    GeoDataFrame must have a column "median" present.
+    Divide median emission factor (EF; ton/ha) by parcel area to calculate EF per m2.
+    The input GeoDataFrame must have a column "median" present.
 
     Parameters
     ----------
     somers : gpd.GeoDataFrame
-        Input SOMERS data with emission factors.
+        Input SOMERS data with emission factors in ton/ha.
 
     Returns
     -------
     pd.Series
-        Pandas Series with EF per ha.
+        Pandas Series with EF per m2.
 
     """
-    return somers["median"] / somers["geometry"].area
+    to_m2 = 10_000
+    return somers["median"] / (to_m2 * somers["geometry"].area)
