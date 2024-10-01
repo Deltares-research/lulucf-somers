@@ -3362,7 +3362,7 @@ packages:
   name: lulucf
   version: 0.1.0
   path: .
-  sha256: 0ffe79a96ffe9c6974a907739917590998494846f69bf861880bfabb1cc14c94
+  sha256: d878cbe60b335ae2a7948a5a79707cc308a93220fe4fe7a894a31a8688b17bb8
   requires_dist:
   - dask
   - geopandas
@@ -3370,6 +3370,7 @@ packages:
   - numba
   - numpy
   - pandas
+  - pyarrow
   - rioxarray
   - xarray
   - xugrid
