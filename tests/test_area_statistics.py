@@ -1,27 +1,23 @@
 import numpy as np
 import pytest
-from numpy.testing import assert_approx_equal, assert_array_almost_equal
+from numpy.testing import assert_array_almost_equal, assert_array_equal
 
 from lulucf.area_statistics import (
-    _calc_coverage_percentage,
+    area_to_grid3d,
+    areal_percentage_bgt_soilmap,
     calc_areal_percentage_in_cells,
-    calc_flux_and_coverage_for,
-    somers_flux_in,
 )
 from lulucf.emissions import (
     MAIN_BGT_UNITS,
     MAIN_SOILMAP_UNITS,
-    _combine_bgt_soilmap_names,
 )
-from lulucf.utils import _add_layer_idx_column, cell_as_geometry
+from lulucf.geometry.ops import PolygonGridArea
+from lulucf.utils import _add_layer_idx_column
 
 
 @pytest.fixture
-def raster_cell():
-    """
-    Single raster cell to test _calc_percentage with.
-    """
-    return cell_as_geometry(0.5, 0.5, (1, 1))
+def area_tuple():
+    return PolygonGridArea([12], [2], [0, 0], [0.5, 0.5])
 
 
 @pytest.fixture
@@ -33,17 +29,11 @@ def grouped_soilmap(simple_soilmap):
     return simple_soilmap
 
 
-@pytest.fixture
-def empty_areal_array(lasso_grid):
-    layers = _combine_bgt_soilmap_names(MAIN_BGT_UNITS, MAIN_SOILMAP_UNITS)
-    return lasso_grid.empty_array(layers, dask=False)
-
-
 @pytest.mark.unittest
-def test_calc_areal_percentage_in_cells(bgt_gdf, empty_bgt_array):
+def test_calc_areal_percentage_in_cells(bgt_gdf, lasso_grid):
     bgt_gdf = _add_layer_idx_column(bgt_gdf, MAIN_BGT_UNITS)
 
-    result = calc_areal_percentage_in_cells(bgt_gdf, empty_bgt_array)
+    result = calc_areal_percentage_in_cells(bgt_gdf, lasso_grid, MAIN_BGT_UNITS)
 
     assert np.all((result == 0).any(dim="layer"))
 
@@ -58,16 +48,13 @@ def test_calc_areal_percentage_in_cells(bgt_gdf, empty_bgt_array):
 
 
 @pytest.mark.unittest
-def test_calc_flux_and_coverage_for(
-    lasso_grid, bgt_gdf, somers_parcels, grouped_soilmap, empty_areal_array
-):
+def test_areal_percentage_bgt_soilmap(lasso_grid, bgt_gdf, grouped_soilmap):
     bgt_gdf = _add_layer_idx_column(bgt_gdf, MAIN_BGT_UNITS)
-    flux = lasso_grid.dataarray(np.nan)
-    test_indices = [[1, 2], [2, 1]]
-    flux, areal = calc_flux_and_coverage_for(
-        test_indices, somers_parcels, bgt_gdf, grouped_soilmap, flux, empty_areal_array
-    )
 
+    areal = areal_percentage_bgt_soilmap(
+        lasso_grid, bgt_gdf, grouped_soilmap, MAIN_BGT_UNITS, MAIN_SOILMAP_UNITS
+    )
+    areal = areal.reshape(4, 4, 36)
     expected_idx0 = [0, 0.11647059, 0.637315, 0, 0, 0.24621446] + [0] * 30
     assert_array_almost_equal(areal[1, 2], expected_idx0)
 
@@ -84,15 +71,15 @@ def test_calc_flux_and_coverage_for(
 
 
 @pytest.mark.unittest
-def test_calc_coverage_percentage(raster_cell, grouped_soilmap):
-    ngroups = 4
-    cellarea = 1
-    perc = _calc_coverage_percentage(raster_cell, grouped_soilmap, cellarea, ngroups)
-    expected_result = [0, 0.84455372, 0.03044628, 0.125]
-    assert_array_almost_equal(perc, expected_result)
+def test_area_to_grid3d(area_tuple):
+    nan = np.nan
+    grid = np.full((4, 4, 1), nan)
+    grid = area_to_grid3d(area_tuple, grid)
 
-
-@pytest.mark.unittest
-def test_somers_flux_in(raster_cell, somers_parcels):
-    flux = somers_flux_in(raster_cell, somers_parcels)
-    assert_approx_equal(flux, 4801.43383)
+    expected_grid = [
+        [[nan], [nan], [nan], [nan]],
+        [[nan], [nan], [nan], [nan]],
+        [[nan], [nan], [nan], [nan]],
+        [[1], [nan], [nan], [nan]],
+    ]
+    assert_array_equal(grid, expected_grid)

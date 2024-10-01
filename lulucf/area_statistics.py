@@ -1,91 +1,195 @@
+from typing import List, TypeVar
+
 import geopandas as gpd
+import numba
 import numpy as np
-import pandas as pd
 import xarray as xr
-from shapely.geometry import Polygon
-from tqdm import tqdm
 
-from lulucf.utils import _add_layer_idx_column, cell_as_geometry
+from lulucf.geometry import ops
 
-
-def somers_flux_in(cell: Polygon, somers: gpd.GeoDataFrame):
-    cell_clip = somers.clip(cell)
-    flux = np.average(cell_clip["median"], weights=cell_clip["geometry"].area)
-    return flux
+LassoGrid = TypeVar("LassoGrid")
 
 
-def calc_flux_and_coverage_for(
-    indices: np.ndarray,
-    somers: gpd.GeoDataFrame,
-    bgt_data: gpd.GeoDataFrame,
+def areal_percentage_bgt_soilmap(
+    grid: LassoGrid,
+    bgt: gpd.GeoDataFrame,
     soilmap: gpd.GeoDataFrame,
-    flux: xr.DataArray,
-    areal_da: xr.DataArray,
-):
-    cellsize = flux.rio.resolution()
-    cellarea = np.abs(cellsize[0] * cellsize[1])
-
-    n_bgt_layers = bgt_data["layer"].nunique()
-    n_soilmap_layers = soilmap["layer"].nunique()
-
-    for idx in tqdm(indices, total=len(indices), desc="Calculate flux and coverage"):
-        i, j = idx[0], idx[1]
-        y, x = flux["y"][i], flux["x"][j]
-        geom = cell_as_geometry(x, y, cellsize)
-
-        flux[i, j] = somers_flux_in(geom, somers)
-
-        bgt_perc = _calc_coverage_percentage(geom, bgt_data, cellarea, n_bgt_layers)
-        soilmap_perc = _calc_coverage_percentage(
-            geom, soilmap, cellarea, n_soilmap_layers
-        )
-
-        areal_da[i, j] = np.outer(soilmap_perc, bgt_perc).ravel()
-
-    return flux, areal_da
-
-
-def _calc_coverage_percentage(
-    cell: Polygon, gdf: gpd.GeoDataFrame, area: int | float, ntypes: int
-):
+    bgt_units: List[str],
+    soilmap_units: List[str],
+) -> np.ndarray:
     """
-    Helper function to calculate the areal percentages of each polygon in a cell geometry.
+    Calculate per cell in a grid for each combination of BGT and Soil Map polygons what
+    percentage of a cell is covered by the combination. This returns a 3D output array
+    with dimensions ('y', 'x', 'layer') where the dimension 'layer' (axis=2) contains
+    ordered BGT-Soilmap layer combinations.
+
+    Parameters
+    ----------
+    grid : lulucf.LassoGrid
+        LassoGrid instance containing the raster grid to calculate the percentages for.
+    bgt : gpd.GeoDataFrame
+        GeoDataFrame containing the BGT data polygons.
+    soilmap : gpd.GeoDataFrame
+        GeoDataFrame containing the BGT data polygons.
+    bgt_units : List[str]
+        List containing the ordered unique BGT layers. This determines the ordering of the
+        BGT-Soilmap combinations in the output DataArray.
+    soilmap_units : List[str]
+        List containing the ordered unique Soilmap layers. This determines the ordering of
+        the BGT-Soilmap combinations in the output DataArray.
+
+    Returns
+    -------
+    np.ndarray
+        3D array with the areal percentages.
 
     """
-    cell_clip = gdf.clip(cell)
-    percentage = cell_clip["geometry"].area.values / area
-    idx = cell_clip["idx"].values
-    percentage = np.bincount(idx, weights=percentage, minlength=ntypes)
-    return percentage
+    bgt_area = calc_areal_percentage_in_cells(bgt, grid, bgt_units)
+    soilmap_area = calc_areal_percentage_in_cells(soilmap, grid, soilmap_units)
+    return soilmap_area.values[:, :, :, None] * bgt_area.values[:, :, None, :]
 
 
-def calculate_areal_percentages_bgt(bgt_data: gpd.GeoDataFrame, da: xr.DataArray):
-    bgt_data = _add_layer_idx_column(bgt_data, da)
-    da = calc_areal_percentage_in_cells(bgt_data, da)
-    return da
+def calc_areal_percentage_in_cells(
+    polygons: gpd.GeoDataFrame, lasso_grid: LassoGrid, units: List[str]
+) -> xr.DataArray:
+    """
+    Calculate in each grid cell the proportion of the area that is covered by each polygon
+    in a GeoDataFrame.
+
+    Parameters
+    ----------
+    polygons : gpd.GeoDataFrame
+        _description_
+    lasso_grid : LassoGrid
+        _description_
+    units : List[str]
+        _description_
+
+    Returns
+    -------
+    xr.DataArray
+        _description_
+    """
+    # Needs unique polygons, otherwise area calculation goes wrong
+    polygons = polygons.explode()
+    polygon_area = ops.polygon_area_in_grid(polygons, lasso_grid.dataarray())
+    polygon_area.polygon[:] = polygons["idx"].values[polygon_area.polygon]
+
+    cellarea = np.abs(lasso_grid.xsize * lasso_grid.ysize)
+    area_grid = lasso_grid.empty_array(units, False)
+    area_grid.values = area_to_grid3d(polygon_area, area_grid.values)
+    area_grid = area_grid / cellarea
+    return area_grid
 
 
-def calculate_areal_percentages_soilmap(soilmap: gpd.GeoDataFrame, da: xr.DataArray):
-    soilmap = _add_layer_idx_column(soilmap, da)
-    da = calc_areal_percentage_in_cells(soilmap, da)
-    return da
+def calculate_model_flux(model: gpd.GeoDataFrame, grid: LassoGrid) -> xr.DataArray:
+    """
+    Calculate a weighted flux per cell in a 2D grid from Somers emissions data.
+
+    Parameters
+    ----------
+    somers : gpd.GeoDataFrame
+        GeoDataFrame containing Somers emissions per polygon.
+    grid : LassoGrid
+        2D grid to calculate the emission fluxes for.
+
+    Returns
+    -------
+    xr.DataArray
+        2D grid with weighted emission flux per cell.
+
+    """
+    flux_grid = grid.dataarray(np.nan)
+    model = model.explode()
+    area = ops.polygon_area_in_grid(model, flux_grid)
+    flux = model["flux_m2"].values[area.polygon]
+
+    flux_grid.values = flux_to_grid(flux, area, flux_grid.values)
+    return flux_grid
 
 
-def calc_areal_percentage_in_cells(polygons: gpd.GeoDataFrame, da: xr.DataArray):
-    if "idx" not in polygons.columns:
-        raise KeyError("GeoDataFrame must contain an 'idx' column.")
+@numba.njit
+def area_to_grid3d(
+    polygon_area: ops.PolygonGridArea, area_grid: np.ndarray
+) -> np.ndarray:
+    """
+    Translate calculated areas for polygons per grid cell into a 3D grid.
 
-    if "y" not in da.dims or "x" not in da.dims:
-        raise KeyError("DataArray must contain dimensions 'y' and 'x'.")
+    Parameters
+    ----------
+    polygon_area : ops.PolygonGridArea
+        _description_
+    area_grid : np.ndarray
+        _description_
 
-    cellsize = da.rio.resolution()
-    cellarea = np.abs((cellsize[0] * cellsize[1]))
-    nlayers = len(da["layer"])
+    Returns
+    -------
+    np.ndarray
+        _description_
+    """
+    _, nx, nz = area_grid.shape
 
-    for i, y in enumerate(da["y"]):
-        for j, x in enumerate(da["x"]):
-            geom = cell_as_geometry(x, y, cellsize)
-            percentage = _calc_coverage_percentage(geom, polygons, cellarea, nlayers)
-            da[i, j] = percentage
+    min_idx = 0
+    for i in range(len(polygon_area.cell_idx)):
+        cell_idx = polygon_area.cell_idx[i]
+        nitems = polygon_area.cell_indices[i]
+        max_idx = min_idx + nitems
 
-    return da
+        polygons = polygon_area.polygon[min_idx:max_idx]
+        area = polygon_area.area[min_idx:max_idx]
+
+        area = np.bincount(polygons, weights=area, minlength=nz)
+        row, col = np.divmod(cell_idx, nx)
+
+        area_grid[row, col, :] = area
+        min_idx += nitems
+
+    return area_grid
+
+
+@numba.njit
+def flux_to_grid(
+    flux: np.ndarray, area: ops.PolygonGridArea, grid: np.ndarray
+) -> np.ndarray:
+    """
+    Translate Somers emissions for polygons to a 2D grid containing a weighted flux by
+    area based on the calculated area of each polygon in a cell.
+
+    Parameters
+    ----------
+    flux : np.ndarray
+        _description_
+    area : ops.PolygonGridArea
+        _description_
+    grid : np.ndarray
+        _description_
+
+    Returns
+    -------
+    np.ndarray
+        _description_
+    """
+    _, nx = grid.shape
+    min_idx = 0
+    for i in range(len(area.cell_idx)):
+        cell_idx = area.cell_idx[i]
+        nitems = area.cell_indices[i]
+        max_idx = min_idx + nitems
+
+        f = flux[min_idx:max_idx]
+        a = area.area[min_idx:max_idx]
+
+        row, col = np.divmod(cell_idx, nx)
+        grid[row, col] = _weighted_average(f, a)
+        min_idx += nitems
+
+    return grid
+
+
+@numba.njit
+def _weighted_average(flux: np.ndarray, area: np.ndarray) -> np.ndarray:
+    """
+    Helper function for weighted average in Numba compiled functions.
+
+    """
+    return np.sum(flux * area) / np.sum(area)

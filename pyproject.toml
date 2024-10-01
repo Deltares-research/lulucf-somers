@@ -4,6 +4,17 @@ version = "0.1.0"
 description = "Add a short description here"
 authors = [{name = "smknaake", email = "bas.knaake@deltares.nl"}]
 requires-python = ">= 3.11"
+dependencies = [
+	"dask",
+	"geopandas",
+	"mapbox-earcut",
+	"numba",
+	"numpy",
+	"pandas",
+	"rioxarray",
+	"xarray",
+	"xugrid",
+]
 
 [build-system]
 requires = ["setuptools"]
@@ -36,6 +47,9 @@ pyarrow = ">=17.0.0,<17.1"
 pytest = ">=8.3.2,<8.4"
 dask = ">=2024.8.0,<2024.9"
 tqdm = ">=4.66.5,<4.67"
+xugrid = ">=0.12.1,<0.13"
+mapbox_earcut = ">=1.0.1,<1.1"
+numba = ">=0.60.0,<0.61"
 
 [tool.pytest.ini_options]
 testpaths = [

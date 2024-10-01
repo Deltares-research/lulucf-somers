@@ -6,4 +6,6 @@ Python package to calculate spatial greenhouse gas (GHG) emissions based on [Pea
 # How to install
 Currently, the package is not available on the Python Package Index (PyPI). The package can be installed directly from the repository with pip using the following command:
 
-`pip install git+https://github.com/Deltares-research/lulucf.git`
+```powershell
+pip install git+https://github.com/Deltares-research/lulucf.git
+```
