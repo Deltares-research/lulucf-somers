@@ -3362,7 +3362,16 @@ packages:
   name: lulucf
   version: 0.1.0
   path: .
-  sha256: f41e0bac038aee3d3b264da586fb7b037f6dfe51100b8c2179abfb88f37f74f6
+  sha256: 17fbb0c87255b323a3aecf8cc54c53db6c7498410d7f772d42e81fa48cda8be7
+  requires_dist:
+  - geopandas
+  - mapbox-earcut
+  - numba
+  - numpy
+  - pandas
+  - rioxarray
+  - xarray
+  - xugrid
   requires_python: '>=3.11'
   editable: true
 - kind: conda
