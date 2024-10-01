@@ -100,6 +100,7 @@ def calculate_model_flux(model: gpd.GeoDataFrame, grid: LassoGrid) -> xr.DataArr
 
     """
     flux_grid = grid.dataarray(np.nan)
+    model = model.explode()
     area = ops.polygon_area_in_grid(model, flux_grid)
     flux = model["flux_m2"].values[area.polygon]
 
