@@ -3362,8 +3362,9 @@ packages:
   name: lulucf
   version: 0.1.0
   path: .
-  sha256: 17fbb0c87255b323a3aecf8cc54c53db6c7498410d7f772d42e81fa48cda8be7
+  sha256: 0ffe79a96ffe9c6974a907739917590998494846f69bf861880bfabb1cc14c94
   requires_dist:
+  - dask
   - geopandas
   - mapbox-earcut
   - numba
