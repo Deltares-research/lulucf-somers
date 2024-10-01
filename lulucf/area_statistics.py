@@ -180,6 +180,7 @@ def flux_to_grid(
 
         row, col = np.divmod(cell_idx, nx)
         grid[row, col] = _weighted_average(f, a)
+        min_idx += nitems
 
     return grid
 
