@@ -147,7 +147,7 @@ def area_to_grid3d(
     return area_grid
 
 
-@numba.njit
+# @numba.njit
 def flux_to_grid(
     flux: np.ndarray, area: ops.PolygonGridArea, grid: np.ndarray
 ) -> np.ndarray:
@@ -186,7 +186,7 @@ def flux_to_grid(
     return grid
 
 
-@numba.njit
+# @numba.njit
 def _weighted_average(flux: np.ndarray, area: np.ndarray) -> np.ndarray:
     """
     Helper function for weighted average in Numba compiled functions.
