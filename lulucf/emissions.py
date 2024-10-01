@@ -27,11 +27,9 @@ def _combine_bgt_soilmap_names(bgt_layers, soilmap_layers):
     return [f"{b}_{s}" for s, b in itertools.product(soilmap_layers, bgt_layers)]
 
 
-def calculate_emissions(
+def calculate_somers_emissions(
     somers: gpd.GeoDataFrame,
     grid: LassoGrid,
-    soilmap: gpd.GeoDataFrame,
-    bgt: gpd.GeoDataFrame,
 ):
     """
     Calculate a weighted greenhouse gas flux per cell in a 2D grid from Somers emission
@@ -43,10 +41,6 @@ def calculate_emissions(
         _description_
     grid : LassoGrid
         _description_
-    soilmap : gpd.GeoDataFrame
-        _description_
-    bgt : gpd.GeoDataFrame
-        _description_
 
     Returns
     -------
@@ -55,10 +49,7 @@ def calculate_emissions(
     """
     somers["flux_m2"] = calc_somers_emission_per_m2(somers)
     flux_per_m2 = calculate_model_flux(somers, grid)
-
-    area = bgt_soilmap_coverage(bgt, soilmap, grid)
-
-    return flux_per_m2, area
+    return flux_per_m2
 
 
 def bgt_soilmap_coverage(
