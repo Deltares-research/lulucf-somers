@@ -3,7 +3,6 @@ from typing import NamedTuple
 import geopandas as gpd
 import mapbox_earcut as earcut
 import numpy as np
-import pandas as pd
 import shapely
 import xarray as xr
 import xugrid as xu
