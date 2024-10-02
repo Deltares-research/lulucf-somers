@@ -6,6 +6,7 @@ authors = [{name = "smknaake", email = "bas.knaake@deltares.nl"}]
 requires-python = ">= 3.11"
 dependencies = [
 	"dask",
+	"fiona",
 	"geopandas",
 	"mapbox-earcut",
 	"numba",
