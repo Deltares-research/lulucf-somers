@@ -126,7 +126,7 @@ def rasterize_like(
     >>> rasterize_like(shapefile, da, "attribute")
 
     Use additional `features.rasterize` options:
-    >>> rasterize_like(shapefile, da, "attribute", all_touched=True)
+    >>> rasterize_like(shapefile, da, "attribute", fill=np.nan, all_touched=True)
 
     """
     if isinstance(shapefile, (str, WindowsPath)):
@@ -142,7 +142,6 @@ def rasterize_like(
 
     rasterized = features.rasterize(
         shapes=shapes,
-        fill=np.nan,
         out_shape=da.shape,
         transform=da.rio.transform(),
         **features_kwargs,

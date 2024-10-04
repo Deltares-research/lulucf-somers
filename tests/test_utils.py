@@ -60,13 +60,13 @@ def test_create_connection(simple_soilmap_path):
 def test_rasterize_like(lasso_grid, somers_parcels):
     da = lasso_grid.dataarray()
 
-    raster = rasterize_like(somers_parcels, da, "parcel_id")
-    nan = np.nan
+    raster = rasterize_like(somers_parcels, da, "parcel_id", fill=-9999)
+
     expected_values = [
-        [1, 0, 0, nan],
-        [1, 2, 2, nan],
-        [nan, nan, 3, nan],
-        [nan, 4, 3, 5],
+        [1, 0, 0, -9999],
+        [1, 2, 2, -9999],
+        [-9999, -9999, 3, -9999],
+        [-9999, 4, 3, 5],
     ]
 
     assert raster.shape == (4, 4)
@@ -76,7 +76,7 @@ def test_rasterize_like(lasso_grid, somers_parcels):
     assert_array_equal(raster.values, expected_values)
 
     raster = rasterize_like(somers_parcels, da)  # Test without input attribute
-    assert_array_equal(np.unique(raster), [1, np.nan])
+    assert_array_equal(np.unique(raster), [0, 1])
 
 
 def test_rasterize_as_mask(lasso_grid, somers_parcels):
