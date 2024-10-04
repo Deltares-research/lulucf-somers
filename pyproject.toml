@@ -6,15 +6,17 @@ authors = [{name = "smknaake", email = "bas.knaake@deltares.nl"}]
 requires-python = ">= 3.11"
 dependencies = [
 	"dask",
+	"fiona",
 	"geopandas",
 	"mapbox-earcut",
 	"numba",
+	"numba_celltree",
 	"numpy",
 	"pandas",
 	"pyarrow",
 	"rioxarray",
 	"xarray",
-	"xugrid", "fiona",
+	"xugrid",
 ]
 
 [build-system]
@@ -35,22 +37,23 @@ lulucf = { path = ".", editable = true }
 
 [tool.pixi.dependencies]
 python = "3.12.*"
-pip = ">=24.2,<25"
-numpy = ">=2.0.1,<2.1"
-pandas = ">=2.2.2,<2.3"
-geopandas = ">=1.0.1,<1.1"
-xarray = ">=2024.7.0,<2024.8"
-rioxarray = ">=0.17.0,<0.18"
-fiona = ">=1.9.6,<1.10"
-matplotlib = ">=3.9.1,<3.10"
-lxml = ">=5.3.0,<5.4"
-pyarrow = ">=17.0.0,<17.1"
-pytest = ">=8.3.2,<8.4"
-dask = ">=2024.8.0,<2024.9"
-tqdm = ">=4.66.5,<4.67"
-xugrid = ">=0.12.1,<0.13"
-mapbox_earcut = ">=1.0.1,<1.1"
-numba = ">=0.60.0,<0.61"
+pip = "*"
+numpy = "*"
+pandas = "*"
+geopandas = "*"
+xarray = "*"
+rioxarray = "*"
+fiona = "*"
+matplotlib = "*"
+lxml = "*"
+pyarrow = "*"
+pytest = "*"
+dask = "*"
+tqdm = "*"
+xugrid = "*"
+mapbox_earcut = "*"
+numba = "*"
+numba_celltree = "*"
 
 [tool.pytest.ini_options]
 testpaths = [
