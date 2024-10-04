@@ -84,6 +84,12 @@ class LassoGrid:
         xmin, ymin, xmax, ymax = raster.rio.bounds()
         return cls(xmin, ymin, xmax, ymax, xsize, ysize)
 
+    @classmethod
+    def from_dataarray(cls, da: xr.DataArray):
+        xsize, ysize = da.rio.resolution()
+        xmin, ymin, xmax, ymax = da.rio.bounds()
+        return cls(xmin, ymin, xmax, ymax, xsize, ysize)
+
     def xcoordinates(self):
         """
         Return an array of increasing x-coordinates of the LASSO grid.

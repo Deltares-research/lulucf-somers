@@ -71,6 +71,20 @@ class TestLassoGrid:
         assert grid.crs == 28992
 
     @pytest.mark.unittest
+    def test_from_dataarray(self, lasso_grid):
+        da = lasso_grid.dataarray()
+        lasso = LassoGrid.from_dataarray(da)
+        assert isinstance(lasso, LassoGrid)
+        assert lasso.xmin == 0
+        assert lasso.ymin == 0
+        assert lasso.xmax == 4
+        assert lasso.ymax == 4
+        assert lasso.xsize == 1
+        assert lasso.ysize == -1
+        assert lasso.crs == 28992
+
+
+    @pytest.mark.unittest
     def test_empty_array(self):
         layers = [layer.replace("_polygon", "") for layer in BGT_LAYERS_FOR_LULUCF]
 
