@@ -7,7 +7,7 @@ from lulucf.area_statistics import (
     areal_percentage_bgt_soilmap,
     calc_areal_percentage_in_cells,
 )
-from lulucf.emissions import (
+from lulucf.constants import (
     MAIN_BGT_UNITS,
     MAIN_SOILMAP_UNITS,
 )
@@ -29,43 +29,59 @@ def grouped_soilmap(simple_soilmap):
     return simple_soilmap
 
 
-@pytest.mark.unittest
-def test_calc_areal_percentage_in_cells(bgt_gdf, lasso_grid):
+@pytest.fixture
+def grouped_bgt(bgt_gdf):
+    bgt_gdf["layer"] = [
+        "percelen",
+        "openbare_ruimte",
+        "stedelijk_groen",
+        "openbare_ruimte",
+        "sloten",
+        "panden",
+        "percelen",
+        "overig_groen",
+        "sloten",
+        "stedelijk_groen",
+        "percelen",
+        "overig",
+        "overig_groen",
+        "overig",
+    ]
     bgt_gdf = _add_layer_idx_column(bgt_gdf, MAIN_BGT_UNITS)
+    return bgt_gdf
 
-    result = calc_areal_percentage_in_cells(bgt_gdf, lasso_grid, MAIN_BGT_UNITS)
+
+@pytest.mark.unittest
+def test_calc_areal_percentage_in_cells(grouped_bgt, lasso_grid):
+    result = calc_areal_percentage_in_cells(grouped_bgt, lasso_grid, MAIN_BGT_UNITS)
 
     assert np.all((result == 0).any(dim="layer"))
 
     # Test result at sample locations.
     assert_array_almost_equal(
-        result[0, 0], [0, 0, 0, 0, 0, 0.39914224, 0.60085773, 0, 0]
+        result[0, 0], [0.00660393, 0.39253831, 0, 0.60085773, 0, 0, 0, 0, 0]
     )
     assert_array_almost_equal(
-        result[0, 1], [0, 0, 0, 0, 0, 0.8545455, 0.14545455, 0, 0]
+        result[0, 1], [0.85454547, 0, 0, 0.14545454, 0, 0, 0, 0, 0]
     )
-    assert_array_almost_equal(result[3, 2], [0.9, 0, 0, 0, 0, 0.1, 0, 0, 0])
+    assert_array_almost_equal(result[3, 2], [0.1, 0, 0, 0, 0.9, 0, 0, 0, 0])
 
 
 @pytest.mark.unittest
-def test_areal_percentage_bgt_soilmap(lasso_grid, bgt_gdf, grouped_soilmap):
-    bgt_gdf = _add_layer_idx_column(bgt_gdf, MAIN_BGT_UNITS)
-
+def test_areal_percentage_bgt_soilmap(lasso_grid, grouped_bgt, grouped_soilmap):
     areal = areal_percentage_bgt_soilmap(
-        lasso_grid, bgt_gdf, grouped_soilmap, MAIN_BGT_UNITS, MAIN_SOILMAP_UNITS
+        lasso_grid, grouped_bgt, grouped_soilmap, MAIN_BGT_UNITS, MAIN_SOILMAP_UNITS
     )
     areal = areal.reshape(4, 4, 36)
-    expected_idx0 = [0, 0.11647059, 0.637315, 0, 0, 0.24621446] + [0] * 30
+    expected_idx0 = [0.0153125, 0, 0.23090196, 0.11647059, 0, 0, 0.63731498] + [0] * 29
     assert_array_almost_equal(areal[1, 2], expected_idx0)
 
     expected_idx1 = (
-        [0] * 2
-        + [0.02405282, 0.06311382, 0.06317346, 0.00474962]
-        + [0] * 5
-        + [0.06792308, 0.17822795, 0.17839636, 0.01341252]
-        + [0] * 5
-        + [0.06311382, 0.16560861, 0.16576509, 0.01246286]
-        + [0] * 12
+        [0.00474962, 0, 0.06311382, 0, 0, 0]
+        + [0.08722627, 0, 0, 0.01341252, 0, 0.17822795]
+        + [0, 0, 0, 0.24631943, 0, 0]
+        + [0.01246286, 0, 0.16560862, 0, 0, 0, 0.22887891]
+        + [0] * 11
     )
     assert_array_almost_equal(areal[2, 1], expected_idx1)
 

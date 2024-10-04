@@ -1,17 +1,18 @@
 MAIN_SOILMAP_UNITS = ["peat", "moerig", "buried", "other"]
+
 MAIN_BGT_UNITS = [
-    "pand",  # Panden
-    "wegdeel",  # Wegen
-    "waterdeel",  # Grote wateren
-    "ondersteunendwegdeel",  # Overig
-    "ondersteunendwaterdeel",  # Overig
-    "begroeidterreindeel",  # Percelen, Natuur
-    "onbegroeidterreindeel",  # Erven, Functioneel gebied
-    "scheiding",  # Overig
-    "overigbouwwerk",  # Panden
+    "percelen",
+    "overig_groen",
+    "stedelijk_groen",
+    "openbare_ruimte",
+    "panden",
+    "erven",
+    "sloten",
+    "grote_wateren",
+    "overig",
 ]
 
-EMISSION_FACTORS = { # ton / ha
+EMISSION_FACTORS = {  # ton / ha
     "pand_peat": 10.25,
     "wegdeel_peat": 10.25,
     "waterdeel_peat": 0.0,
