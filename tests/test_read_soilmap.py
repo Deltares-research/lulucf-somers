@@ -1,5 +1,6 @@
 import geopandas as gpd
 import pytest
+from numpy.testing import assert_array_equal
 
 from lulucf.readers import BroSoilmap, read_soilmap_geopackage
 
@@ -19,3 +20,8 @@ def test_read_soilmap_geopackage(simple_soilmap_path):
 
     expected_columns = ["maparea_id", "soilunit_code"]
     assert all([col in soilmap.columns for col in expected_columns])
+
+    # Test with bounding box selection
+    soilmap = read_soilmap_geopackage(simple_soilmap_path, bbox=(1, 1, 3, 3))
+    assert isinstance(soilmap, gpd.GeoDataFrame)
+    assert_array_equal(soilmap.total_bounds, [1, 1, 3, 3])

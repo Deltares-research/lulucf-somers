@@ -2,6 +2,7 @@ from enum import StrEnum
 from pathlib import Path, WindowsPath
 
 import geopandas as gpd
+from shapely.geometry import box
 
 from lulucf.readers import Geopackage
 
@@ -45,7 +46,9 @@ class BroSoilmap(Geopackage):
         return gpd.read_file(self.file, layer=SoilmapLayers.SOILAREA)
 
 
-def read_soilmap_geopackage(soilmap_path: str | WindowsPath) -> gpd.GeoDataFrame:
+def read_soilmap_geopackage(
+    soilmap_path: str | WindowsPath, bbox: tuple = None
+) -> gpd.GeoDataFrame:
     """
     Read and combine the required tables for LULUCF from the BRO soilmap into a single
     GeoDataFrame.
@@ -57,6 +60,8 @@ def read_soilmap_geopackage(soilmap_path: str | WindowsPath) -> gpd.GeoDataFrame
     ----------
     soilmap_path : str | WindowsPath
         Path to GeoPackage of the BRO Soilmap.
+    bbox : tuple, optional
+        Bounding box tuple (xmin, ymin, xmax, ymax) to return data for a selected area.
 
     Returns
     -------
@@ -69,4 +74,8 @@ def read_soilmap_geopackage(soilmap_path: str | WindowsPath) -> gpd.GeoDataFrame
         soilunits = sm.read_table(SoilmapLayers.SOILAREA_SOILUNIT)
 
     soilmap = soilmap.merge(soilunits, on="maparea_id", how="left")
+
+    if bbox:
+        soilmap = soilmap.clip(box(*bbox))
+
     return soilmap
