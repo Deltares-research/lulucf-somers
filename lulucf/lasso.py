@@ -90,6 +90,10 @@ class LassoGrid:
         xmin, ymin, xmax, ymax = da.rio.bounds()
         return cls(xmin, ymin, xmax, ymax, xsize, ysize)
 
+    @property
+    def bounds(self):
+        return self.xmin, self.ymin, self.xmax, self.ymax
+
     def xcoordinates(self):
         """
         Return an array of increasing x-coordinates of the LASSO grid.
