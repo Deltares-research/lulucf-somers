@@ -2,12 +2,12 @@ import pandas as pd
 import pytest
 from numpy.testing import assert_array_equal
 
-from lulucf.preprocessing import calc_somers_emission_per_m2, group_soilmap_units
+from lulucf import preprocessing as pr
 
 
 @pytest.mark.unittest
 def test_group_soilmap_units(simple_soilmap):
-    simple_soilmap = group_soilmap_units(simple_soilmap)
+    simple_soilmap = pr.group_soilmap_units(simple_soilmap)
 
     expected_result = [
         "peat",
@@ -30,5 +30,27 @@ def test_group_soilmap_units(simple_soilmap):
 
 @pytest.mark.unittest
 def test_calc_somers_emission_per_m2(somers_parcels):
-    ef_per_ha = calc_somers_emission_per_m2(somers_parcels)
+    ef_per_ha = pr.calc_somers_emission_per_m2(somers_parcels)
     assert isinstance(ef_per_ha, pd.Series)
+
+
+@pytest.mark.unittest
+def test_group_bgt_units(bgt_gdf):
+    bgt_gdf = pr.group_bgt_units(bgt_gdf)
+    expected_groups = [
+        "percelen",
+        "openbare_ruimte",
+        "stedelijk_groen",
+        "openbare_ruimte",
+        "sloten",
+        "panden",
+        "percelen",
+        "overig_groen",
+        "sloten",
+        "stedelijk_groen",
+        "percelen",
+        "overig",
+        "overig_groen",
+        "overig",
+    ]
+    assert_array_equal(bgt_gdf["layer"], expected_groups)

@@ -94,7 +94,24 @@ def bgt_gdf():
         "overigbouwwerk",
     ]
 
-    bgt_data = {"layer": layers, "geometry": polygons}
+    bgt_type = [
+        "grasland agrarisch",
+        "half verhard",
+        "groenvoorziening",
+        "rijbaan regionale weg",
+        "waterloop",
+        "",
+        "grasland agrarisch",
+        "loofbos",
+        "oever, slootkant",
+        "berm",
+        "bouwland",
+        "kademuur",
+        "rietland",
+        "open loods",
+    ]
+
+    bgt_data = {"layer": layers, "bgt_type": bgt_type, "geometry": polygons}
     return gpd.GeoDataFrame(bgt_data)
 
 

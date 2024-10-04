@@ -17,7 +17,7 @@ BGT_LAYERS_FOR_LULUCF = {
 
 
 BGT_MAPPING = {
-    "pand_": "openbare_ruimte",
+    "pand_": "panden",
     "wegdeel_rijbaan lokale weg": "openbare_ruimte",
     "wegdeel_inrit": "openbare_ruimte",
     "wegdeel_rijbaan regionale weg": "openbare_ruimte",
@@ -65,13 +65,13 @@ BGT_MAPPING = {
     "onbegroeidterreindeel_zand": "openbare_ruimte",
     "scheiding_muur": "overig",
     "scheiding_kademuur": "overig",
+    "overigbouwwerk_bassin": "grote_wateren",
+    "overigbouwwerk_bezinkbak": "grote_wateren",
     "overigbouwwerk_lage trafo": "overig",
     "overigbouwwerk_overkapping": "overig",
     "overigbouwwerk_open loods": "overig",
     "overigbouwwerk_niet-bgt": "overig",
-    "overigbouwwerk_bassin": "overig",
     "overigbouwwerk_opslagtank": "overig",
-    "overigbouwwerk_bezinkbak": "overig",
     "overigbouwwerk_windturbine": "overig",
 }
 
@@ -117,6 +117,23 @@ def combine_bgt_layers(
 
 
 def group_bgt_units(bgt: gpd.GeoDataFrame):
+    """
+    Add a column to the BGT GeoDataFrame containing main BGT groups based on the ids of
+    the combined IDs of the "layer" and "bgt_type" columns in the BGT geodataframe. The
+    main groups will be the "layer" dimension in the DataArray to calculate areal
+    statistics with.
+
+    Parameters
+    ----------
+    bgt : gpd.GeoDataFrame
+        GeoDataFrame containing the BGT data and relevant information.
+
+    Returns
+    -------
+    gpd.GeoDataFrame
+        GeoDataFrame of the BGT data with the added column.
+
+    """
     bgt["bgt_type"] = bgt["bgt_type"].fillna("")
     combined_layers = bgt["layer"] + "_" + bgt["bgt_type"]
 
