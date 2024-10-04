@@ -70,6 +70,7 @@ BGT_MAPPING = {
     "overigbouwwerk_bezinkbak": "grote_wateren",
     "overigbouwwerk_lage trafo": "overig",
     "overigbouwwerk_open loods": "overig",
+    "overigbouwwerk_opslagtank": "overig",
     "overigbouwwerk_overkapping": "overig",
     "overigbouwwerk_windturbine": "overig",
     "overigbouwwerk_bunker": "overig",
