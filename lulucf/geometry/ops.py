@@ -15,35 +15,40 @@ class PolygonGridArea(NamedTuple):
     area: np.ndarray
 
 
-def polygon_coords(polygons: gpd.GeoDataFrame):
-    coords, index = shapely.get_coordinates(
-        polygons["geometry"].exterior.to_numpy(), return_index=True
-    )
-    return coords, index
-
-
-def triangulate(coords: np.ndarray, index: np.ndarray):
-    polygon_split_indices = np.flatnonzero(np.diff(index)) + 1
-    vertices = np.split(coords, polygon_split_indices)
-
+def triangulate(polygons: gpd.GeoDataFrame):
     triangles = []
     index = []
+    coords = []
 
     increment = 0
-    for ii, verts in enumerate(vertices):
-        connectivity = earcut.triangulate_float64(verts, [len(verts)])
+    for ii, polygon in enumerate(polygons["geometry"]):
+        vertices = shapely.get_coordinates(polygon)
+        n_vertices = len(vertices)
+        interior_verts = shapely.get_num_coordinates(polygon.interiors)
+
+        if interior_verts.any():
+            end_of_exterior = n_vertices - np.sum(interior_verts)
+            vert_indices = np.append(
+                end_of_exterior, np.cumsum(interior_verts) + end_of_exterior
+            )
+        else:
+            vert_indices = [n_vertices]
+
+        connectivity = earcut.triangulate_float64(vertices, vert_indices)
+
         triangles.append(connectivity + increment)
+        coords.append(vertices)
         index.append(np.full(len(connectivity) // 3, ii))
-        increment += len(verts)
+        increment += len(vertices)
 
     triangles = np.concatenate(triangles).reshape((-1, 3))
     index = np.concatenate(index)
-    return triangles, index
+    coords = np.concatenate(coords)
+    return triangles, index, coords
 
 
 def polygon_area_in_grid(polygons: gpd.GeoDataFrame, grid: xr.DataArray):
-    coords, index = polygon_coords(polygons)
-    triangles, index = triangulate(coords, index)
+    triangles, index, coords = triangulate(polygons)
 
     ugrid = xu.Ugrid2d(*coords.T, -1, triangles)
     regridder = xu.OverlapRegridder(source=ugrid, target=grid)
