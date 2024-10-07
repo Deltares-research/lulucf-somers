@@ -3520,12 +3520,14 @@ packages:
   name: lulucf
   version: 0.1.0
   path: .
-  sha256: 78dcf46db6f419a06dc840405360d1777bad6c3be793c5a09f1f3824b92d2ace
+  sha256: 7a28efab907e92a16d9e86ff53b2a1e6f1ed24bc631a8acbfd02902ab63c0490
   requires_dist:
   - dask
   - fiona
   - geopandas
+  - h5netcdf
   - mapbox-earcut
+  - netcdf4
   - numba
   - numba-celltree
   - numpy
