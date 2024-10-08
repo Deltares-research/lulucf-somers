@@ -34,11 +34,8 @@ def bgt_soilmap_coverage(
         3D DataArray with the areal percentages.
 
     """
-    bgt = group_bgt_units(bgt)
-    soilmap = group_soilmap_units(soilmap)
-
-    bgt = _add_layer_idx_column(bgt, MAIN_BGT_UNITS)
-    soilmap = _add_layer_idx_column(soilmap, MAIN_SOILMAP_UNITS)
+    bgt = _prepare_bgt(bgt, MAIN_BGT_UNITS)
+    soilmap = _prepare_soilmap(soilmap, MAIN_SOILMAP_UNITS)
 
     area = areal_percentage_bgt_soilmap(
         grid, bgt, soilmap, MAIN_BGT_UNITS, MAIN_SOILMAP_UNITS
@@ -57,3 +54,16 @@ def bgt_soilmap_coverage(
 
 def _combine_bgt_soilmap_names(bgt_layers, soilmap_layers):
     return [f"{b}_{s}" for s, b in itertools.product(soilmap_layers, bgt_layers)]
+
+
+def _prepare_bgt(bgt: gpd.GeoDataFrame, main_bgt_units: list):
+    bgt = group_bgt_units(bgt)
+    bgt = _add_layer_idx_column(bgt, main_bgt_units)
+    return bgt
+
+
+def _prepare_soilmap(soilmap: gpd.GeoDataFrame, main_soilmap_units: list):
+    soilmap = group_soilmap_units(soilmap)
+    soilmap = _add_layer_idx_column(soilmap, main_soilmap_units)
+    soilmap.sort_values(by=["maparea_id", "soilunit_sequencenumber"], inplace=True)
+    return soilmap.drop_duplicates(subset="maparea_id")
