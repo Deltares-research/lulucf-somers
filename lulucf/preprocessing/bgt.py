@@ -66,6 +66,7 @@ BGT_MAPPING = {
     "onbegroeidterreindeel_zand": "openbare_ruimte",
     "scheiding_muur": "overig",
     "scheiding_kademuur": "overig",
+    "scheiding_niet-bgt": "overig",
     "overigbouwwerk_bassin": "grote_wateren",
     "overigbouwwerk_bezinkbak": "grote_wateren",
     "overigbouwwerk_lage trafo": "overig",
