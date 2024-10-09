@@ -1,5 +1,5 @@
 from enum import StrEnum
-from pathlib import Path, WindowsPath
+from pathlib import WindowsPath
 
 import geopandas as gpd
 from shapely.geometry import box
@@ -76,6 +76,6 @@ def read_soilmap_geopackage(
     soilmap = soilmap.merge(soilunits, on="maparea_id", how="left")
 
     if bbox:
-        soilmap = soilmap.clip(box(*bbox))
+        soilmap = soilmap[soilmap.intersects(box(*bbox))].reset_index(drop=True)
 
     return soilmap
