@@ -18,7 +18,7 @@ def validate_somers(func):
         expected_crs = 28992
         if gdf.crs != expected_crs:
             warnings.warn(
-                "crs of SOMERS input is not 'epsg:28992'. LULUCF calculations assume"
+                "crs of SOMERS input is not 'epsg:28992'. LULUCF calculations assume "
                 "this crs in calculations with area. This may impact the results."
             )
 

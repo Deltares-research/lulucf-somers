@@ -22,4 +22,4 @@ def calc_somers_emission_per_m2(somers: gpd.GeoDataFrame) -> pd.Series:
 
     """
     to_m2 = 10_000
-    return somers["median"] / (to_m2 * somers["geometry"].area)
+    return somers["median"] / to_m2
