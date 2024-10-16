@@ -11,8 +11,8 @@ dependencies = [
 	"h5netcdf",
 	"mapbox-earcut",
 	"netcdf4",
-	"numba",
-	"numba_celltree<0.2.2",
+	"numba<0.60.0",
+	"numba_celltree",
 	"numpy",
 	"pandas",
 	"pyarrow",
@@ -53,8 +53,8 @@ pytest = "*"
 dask = "*"
 xugrid = "*"
 mapbox_earcut = "*"
-numba = "*"
-numba_celltree = "<0.2.2"
+numba = "<0.60.0"
+numba_celltree = "*"
 netcdf4 = "*"
 h5netcdf = "*"
 more-itertools = "*"
