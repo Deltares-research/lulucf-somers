@@ -3,6 +3,7 @@ import pytest
 from numpy.testing import assert_array_almost_equal, assert_array_equal
 
 from lulucf.area_statistics import (
+    _weighted_average,
     area_to_grid3d,
     areal_percentage_bgt_soilmap,
     calc_areal_percentage_in_cells,
@@ -99,3 +100,10 @@ def test_area_to_grid3d(area_tuple):
         [[1], [nan], [nan], [nan]],
     ]
     assert_array_equal(grid, expected_grid)
+
+
+@pytest.mark.unittest
+def test_weighted_average():
+    values = np.array([1, 2])
+    weights = np.array([2, 3])
+    assert _weighted_average(values, weights) == 1.6
