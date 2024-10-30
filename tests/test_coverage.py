@@ -7,6 +7,7 @@ from lulucf import bgt_soilmap_coverage
 
 @pytest.mark.unittest
 def test_bgt_soilmap_coverage(bgt_gdf, simple_soilmap, lasso_grid):
+    simple_soilmap["soilunit_sequencenumber"] = 1  # Add for _prepare_soilmap
     coverage = bgt_soilmap_coverage(bgt_gdf, simple_soilmap, lasso_grid)
     assert isinstance(coverage, xr.DataArray)
     assert coverage.dims == ("y", "x", "layer")
