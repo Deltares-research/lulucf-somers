@@ -1,8 +1,32 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
 name = "lulucf"
-version = "0.1.0"
-description = "Add a short description here"
+dynamic = ["version"]
 authors = [{name = "smknaake", email = "bas.knaake@deltares.nl"}]
+description = "Spatial calculation of GHG emissions from SOMERS modelling results"
+readme = "README.md"
+license = {file = "LICENSE"}
+keywords = [
+    "LULUCF",
+    "SOMERS",
+	"Greenhouse gas emission",
+	"Basis Registratie Grootschalige Topografie",
+    "BRO Bodemkaart",
+    "Lasso",
+	"Deltares", 
+]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Science/Research",
+	"Topic :: Scientific/Engineering",
+	"License :: OSI Approved :: MIT License",
+	"Operating System :: OS Independent",
+	"Programming Language :: Python",
+	"Programming Language :: Python :: 3.12",
+]
 requires-python = ">= 3.11"
 dependencies = [
 	"dask",
@@ -21,24 +45,31 @@ dependencies = [
 	"xugrid",
 ]
 
-[build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
+[project.urls]
+Homepage = "https://github.com/Deltares-research/lulucf"
+Repository = "https://github.com/Deltares-research/lulucf"
+Issues = "https://github.com/Deltares-research/lulucf/issues"
 
-[tool.setuptools.packages.find]
-include = ["lulucf", "lulucf.*"]
+[tool.hatch.version]
+path = "lulucf/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+only-include = ["lulucf", "tests"]
 
 [tool.pixi.project]
 channels = ["conda-forge"]
-platforms = ["win-64"]
+platforms = ["win-64", "linux-64", "osx-64", "osx-arm64"]
 
 [tool.pixi.pypi-dependencies]
 lulucf = { path = ".", editable = true }
 
 [tool.pixi.tasks]
+test = "python -m pytest --verbose --cov=lulucf --cov-report xml --cov-report term"
+format = "black ."
+lint = "ruff check --fix ./lulucf"
 
 [tool.pixi.dependencies]
-python = "3.12.*"
+python = ">=3.11,<3.13"
 pip = "*"
 numpy = "*"
 pandas = "*"
@@ -58,6 +89,20 @@ numba_celltree = "*"
 netcdf4 = "*"
 h5netcdf = "*"
 more-itertools = "*"
+pytest-cov = "*"
+black = "*"
+ruff = "*"
+
+[tool.pixi.feature.py311.dependencies]
+python = "3.11.*"
+
+[tool.pixi.feature.py312.dependencies]
+python = "3.12.*"
+
+[tool.pixi.environments]
+default = { features = ["py312"], solve-group = "py312" }
+py311 = { features = ["py311"], solve-group = "py311" }
+py312 = { features = ["py312"], solve-group = "py312" }
 
 [tool.pytest.ini_options]
 testpaths = [
