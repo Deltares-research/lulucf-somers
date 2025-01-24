@@ -65,8 +65,14 @@ lulucf = { path = ".", editable = true }
 
 [tool.pixi.tasks]
 test = "NUMBA_DISABLE_JIT=1 pytest --cov=lulucf --cov-report xml --cov-report term"
+test_local = "NUMBA_DISABLE_JIT=1 pytest -v --cov"
 format = "black ."
 lint = "ruff check --fix ./lulucf"
+build_docs = "sphinx-build -b html docs ./docs/build"
+rm_jupyter = "rm -r ./docs/jupyter_execute"
+rm_build = "rm -r ./docs/build"
+rm_generated = "rm -r ./docs/api_reference/generated"
+rebuild_docs = { depends-on = ["rm_jupyter", "rm_build", "rm_generated", "build_docs"] }
 
 [tool.pixi.dependencies]
 python = ">=3.12,<3.13"
@@ -92,6 +98,10 @@ more-itertools = "*"
 pytest-cov = "*"
 black = "*"
 ruff = "*"
+sphinx = "*"
+pydata-sphinx-theme = "*"
+sphinx-design = "*"
+myst-nb = "*"
 
 [tool.pixi.feature.py312.dependencies]
 python = "3.12.*"
