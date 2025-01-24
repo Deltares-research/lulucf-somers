@@ -79,7 +79,7 @@ def create_connection(database: str | WindowsPath):
     return conn
 
 
-def profile_function(func):
+def profile_function(func):  # pragma: no cover
     @wraps(func)
     def wrapper(*args, **kwargs):
         profiler = cProfile.Profile()

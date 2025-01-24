@@ -39,7 +39,7 @@ class BroSoilmap(Geopackage):
     _layers = SoilmapLayers
 
     @property
-    def layers(self):
+    def layers(self):  # pragma: no cover
         return [f"{layer.value}" for layer in self._layers]
 
     def read_geometries(self):

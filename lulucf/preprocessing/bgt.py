@@ -87,7 +87,7 @@ def _read_layers(bgt_gpkg: str | WindowsPath, layers: dict):
     information for LULUCF. Returns a generator with GeoDataFrames for each layer.
 
     """
-    for layer in layers.keys():
+    for layer in layers:
         print(f"Read layer: {layer}")
         layer_gdf = gpd.read_file(
             bgt_gpkg, layer=layer, columns=[layers[layer], "geometry"]

@@ -35,6 +35,13 @@ def mask_array(somers_parcels, lasso_grid):
     return rasterize_as_mask(somers_parcels, da, invert=True)
 
 
+@pytest.fixture
+def somers_parcels_shapefile(tmp_path, somers_parcels):
+    outfile = tmp_path / "parcels.shp"
+    somers_parcels.to_file(outfile)
+    return outfile
+
+
 @pytest.mark.parametrize(
     "cellsize", ["cellsize_negative_y", "cellsize_negative_x", "cellsize_positive"]
 )
@@ -57,10 +64,10 @@ def test_create_connection(simple_soilmap_path):
 
 
 @pytest.mark.unittest
-def test_rasterize_like(lasso_grid, somers_parcels):
+def test_rasterize_like(lasso_grid, somers_parcels_shapefile):
     da = lasso_grid.dataarray()
 
-    raster = rasterize_like(somers_parcels, da, "parcel_id", fill=-9999)
+    raster = rasterize_like(somers_parcels_shapefile, da, "parcel_id", fill=-9999)
 
     expected_values = [
         [1, 0, 0, -9999],
@@ -75,14 +82,16 @@ def test_rasterize_like(lasso_grid, somers_parcels):
     assert raster.sizes == {"y": 4, "x": 4}
     assert_array_equal(raster.values, expected_values)
 
-    raster = rasterize_like(somers_parcels, da)  # Test without input attribute
+    raster = rasterize_like(
+        somers_parcels_shapefile, da
+    )  # Test without input attribute
     assert_array_equal(np.unique(raster), [0, 1])
 
 
-def test_rasterize_as_mask(lasso_grid, somers_parcels):
+def test_rasterize_as_mask(lasso_grid, somers_parcels_shapefile):
     da = lasso_grid.dataarray()
 
-    mask = rasterize_as_mask(somers_parcels, da, invert=True)
+    mask = rasterize_as_mask(somers_parcels_shapefile, da, invert=True)
 
     expected_values = [
         [True, True, True, False],

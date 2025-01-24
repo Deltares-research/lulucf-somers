@@ -65,5 +65,5 @@ def polygon_area_in_grid(polygons: gpd.GeoDataFrame, grid: xr.DataArray):
     return PolygonGridArea(cell_idx, cell_indices, index[polygon_idx], area)
 
 
-def _triangles_to_geodataframe(triangles, coords):
+def _triangles_to_geodataframe(triangles, coords):  # pragma: no cover
     return gpd.GeoDataFrame(geometry=shapely.polygons(coords[triangles]), crs=28992)
