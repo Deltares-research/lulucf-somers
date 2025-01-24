@@ -23,7 +23,7 @@ jobs:
         with: 
           manifest-path: pyproject.toml
       - name: Build docs
-        run: pixi run docs
+        run: pixi run build_docs
       - name: Deploy to Github Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
