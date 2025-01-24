@@ -1,4 +1,4 @@
-from pathlib import WindowsPath
+from pathlib import Path
 
 import dask.array as darray
 import numpy as np
@@ -58,13 +58,13 @@ class LassoGrid:
         return f"{name}({xmin=}, {ymin=}, {xmax=}, {ymax=}, {xsize=}, {ysize=})"
 
     @classmethod
-    def from_raster(cls, raster: str | WindowsPath, bbox: tuple = None):
+    def from_raster(cls, raster: str | Path, bbox: tuple = None):
         """
         Initialize a LassoGrid instance from a raster file.
 
         Parameters
         ----------
-        raster : str | WindowsPath
+        raster : str | Path
             Path to the raster file to base the grid extent on.
         bbox : tuple, optional
             Tuple (xmin, ymin, xmax, ymax) to return a LassoGrid for a selected area.

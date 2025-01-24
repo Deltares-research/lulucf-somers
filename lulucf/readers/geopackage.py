@@ -1,4 +1,4 @@
-from pathlib import WindowsPath
+from pathlib import Path
 
 import fiona
 import pandas as pd
@@ -7,7 +7,7 @@ from lulucf.utils import create_connection
 
 
 class Geopackage:
-    def __init__(self, file: str | WindowsPath):
+    def __init__(self, file: str | Path):
         self.file = file
         self.connection = None
 

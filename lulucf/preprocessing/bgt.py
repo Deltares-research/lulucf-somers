@@ -1,4 +1,4 @@
-from pathlib import WindowsPath
+from pathlib import Path
 
 import geopandas as gpd
 import pandas as pd
@@ -81,7 +81,7 @@ BGT_MAPPING = {
 }
 
 
-def _read_layers(bgt_gpkg: str | WindowsPath, layers: dict):
+def _read_layers(bgt_gpkg: str | Path, layers: dict):
     """
     Helper function for combine_bgt_layers to read the BGT layers and add the required
     information for LULUCF. Returns a generator with GeoDataFrames for each layer.
@@ -98,7 +98,7 @@ def _read_layers(bgt_gpkg: str | WindowsPath, layers: dict):
 
 
 def combine_bgt_layers(
-    bgt_gpkg: str | WindowsPath, layers: dict = BGT_LAYERS_FOR_LULUCF
+    bgt_gpkg: str | Path, layers: dict = BGT_LAYERS_FOR_LULUCF
 ) -> gpd.GeoDataFrame:
     """
     Combine layers from a BGT (Basisregistratie Grootschalige Topografie) geopackage into
@@ -106,7 +106,7 @@ def combine_bgt_layers(
 
     Parameters
     ----------
-    bgt_gpkg : str | WindowsPath
+    bgt_gpkg : str | Path
         Path to the geopackage (.gpkg file) to combine the layers from.
     layers : list
         Layers in the geopackage to combine.
