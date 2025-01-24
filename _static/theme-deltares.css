@@ -1,0 +1,12 @@
+/* enlarge deltares & github icon size; only works with local/url svg files; not with fa icons */
+img.icon-link-image {
+    height: 2.5em !important;
+}
+
+[data-theme="dark"] img.icon-link-image[src*="deltares-blue.svg"] {
+    filter: brightness(0) saturate(100%) invert(100%);
+}
+
+[data-theme="dark"] img.icon-link-image[src*="Octicons-mark-github.svg"] {
+    filter: brightness(0) saturate(100%) invert(100%);
+}
