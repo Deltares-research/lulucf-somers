@@ -1,9 +1,6 @@
 # pixi environments
 .pixi
 
-# Remove the line below when docs will be published
-.github/workflows/docs.yml
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
