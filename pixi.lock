@@ -9393,7 +9393,7 @@ packages:
 - pypi: .
   name: lulucf
   version: 0.1.0
-  sha256: 88201ad90160d8ca61376bdee409243d600baa3a81c932216d58f6f7d93f504b
+  sha256: 9ba1c4aa3becf2fb1fb04652a3a5103b2ec83121c1803f1372a0c5f7c245a6fa
   requires_dist:
   - dask
   - fiona
