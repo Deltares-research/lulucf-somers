@@ -1,7 +1,7 @@
 import cProfile
 import sqlite3
 from functools import wraps
-from pathlib import WindowsPath
+from pathlib import Path
 
 import geopandas as gpd
 import numpy as np
@@ -55,7 +55,7 @@ def _add_layer_idx_column(gdf: gpd.GeoDataFrame, layers: list):
     return gdf
 
 
-def create_connection(database: str | WindowsPath):
+def create_connection(database: str | Path):
     """
     Create a database connection to an SQLite database.
 
@@ -93,7 +93,7 @@ def profile_function(func):  # pragma: no cover
 
 
 def rasterize_like(
-    shapefile: str | WindowsPath | gpd.GeoDataFrame,
+    shapefile: str | Path | gpd.GeoDataFrame,
     da: xr.DataArray,
     attribute: str = None,
     **features_kwargs,
@@ -103,7 +103,7 @@ def rasterize_like(
 
     Parameters
     ----------
-    shapefile : str | WindowsPath | gpd.GeoDataFrame
+    shapefile : str | Path | gpd.GeoDataFrame
         Input shapefile to rasterize. Can be a path to the shapefile or an in
         memory GeoDataFrame.
     da : xr.DataArray,
@@ -129,7 +129,7 @@ def rasterize_like(
     >>> rasterize_like(shapefile, da, "attribute", fill=np.nan, all_touched=True)
 
     """
-    if isinstance(shapefile, (str, WindowsPath)):
+    if isinstance(shapefile, (str, Path)):
         shapefile = gpd.read_file(shapefile)
 
     if attribute:
@@ -151,7 +151,7 @@ def rasterize_like(
 
 
 def rasterize_as_mask(
-    shapefile: str | WindowsPath | gpd.GeoDataFrame,
+    shapefile: str | Path | gpd.GeoDataFrame,
     da: xr.DataArray,
     **features_kwargs,
 ):
@@ -162,7 +162,7 @@ def rasterize_as_mask(
 
     Parameters
     ----------
-    shapefile : str | WindowsPath | gpd.GeoDataFrame
+    shapefile : str | Path | gpd.GeoDataFrame
         Input shapefile to rasterize. Can be a path to the shapefile or an in
         memory GeoDataFrame.
     da : xr.DataArray,
@@ -185,7 +185,7 @@ def rasterize_as_mask(
     >>> rasterize_as_mask(shapefile, da, invert=True)
 
     """
-    if isinstance(shapefile, (str, WindowsPath)):
+    if isinstance(shapefile, (str, Path)):
         shapefile = gpd.read_file(shapefile)
 
     shapes = (geom for geom in shapefile["geometry"])
