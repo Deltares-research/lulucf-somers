@@ -112,7 +112,7 @@ def bgt_gdf():
     ]
 
     bgt_data = {"layer": layers, "bgt_type": bgt_type, "geometry": polygons}
-    return gpd.GeoDataFrame(bgt_data)
+    return gpd.GeoDataFrame(bgt_data, crs=28992)
 
 
 @pytest.fixture
@@ -152,7 +152,9 @@ def simple_soilmap_path(tmp_path):
         "Mv81A",  # Buried type
         "bEZ23",  # Other type
     ]
-    geometries = gpd.GeoDataFrame({"maparea_id": maparea_id, "geometry": polygons})
+    geometries = gpd.GeoDataFrame(
+        {"maparea_id": maparea_id, "geometry": polygons}, crs=28992
+    )
     soilcodes = gpd.GeoDataFrame({"maparea_id": maparea_id, "soilunit_code": soilunits})
 
     layers = ["soilarea", "soilarea_soilunit"]

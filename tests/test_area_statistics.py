@@ -18,7 +18,9 @@ from lulucf.utils import _add_layer_idx_column
 
 @pytest.fixture
 def area_tuple():
-    return PolygonGridArea([12], [2], [0, 0], [0.5, 0.5])
+    return PolygonGridArea(
+        np.array([12]), np.array([2]), np.array([0, 0]), np.array([0.5, 0.5])
+    )
 
 
 @pytest.fixture
