@@ -73,6 +73,7 @@ rm_jupyter = "rm -r ./docs/jupyter_execute"
 rm_build = "rm -r ./docs/build"
 rm_generated = "rm -r ./docs/api_reference/generated"
 rebuild_docs = { depends-on = ["rm_jupyter", "rm_build", "rm_generated", "build_docs"] }
+pypi-publish = "rm --recursive --force dist && python -m build && twine check dist/* && twine upload dist/*"
 
 [tool.pixi.dependencies]
 python = ">=3.12,<3.13"
@@ -102,6 +103,8 @@ sphinx = "*"
 pydata-sphinx-theme = "*"
 sphinx-design = "*"
 myst-nb = "*"
+python-build = "*"
+twine = "*"
 
 [tool.pixi.feature.py312.dependencies]
 python = "3.12.*"
