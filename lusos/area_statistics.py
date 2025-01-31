@@ -5,7 +5,7 @@ import numba
 import numpy as np
 import xarray as xr
 
-from lulucf.geometry import ops
+from lusos.geometry import ops
 
 LassoGrid = TypeVar("LassoGrid")
 

@@ -1,7 +1,7 @@
 import pytest
 
-from lulucf.lasso import LassoGrid
-from lulucf.validation.exceptions import InvalidLassoError
+from lusos.lasso import LassoGrid
+from lusos.validation.exceptions import InvalidLassoError
 
 
 @pytest.mark.unittest

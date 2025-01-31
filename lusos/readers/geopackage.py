@@ -3,7 +3,7 @@ from pathlib import Path
 import fiona
 import pandas as pd
 
-from lulucf.utils import create_connection
+from lusos.utils import create_connection
 
 
 class Geopackage:

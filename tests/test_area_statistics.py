@@ -2,18 +2,18 @@ import numpy as np
 import pytest
 from numpy.testing import assert_array_almost_equal, assert_array_equal
 
-from lulucf.area_statistics import (
+from lusos.area_statistics import (
     _weighted_average,
     area_to_grid3d,
     areal_percentage_bgt_soilmap,
     calc_areal_percentage_in_cells,
 )
-from lulucf.constants import (
+from lusos.constants import (
     MAIN_BGT_UNITS,
     MAIN_SOILMAP_UNITS,
 )
-from lulucf.geometry.ops import PolygonGridArea
-from lulucf.utils import _add_layer_idx_column
+from lusos.geometry.ops import PolygonGridArea
+from lusos.utils import _add_layer_idx_column
 
 
 @pytest.fixture

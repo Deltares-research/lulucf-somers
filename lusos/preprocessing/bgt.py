@@ -3,7 +3,7 @@ from pathlib import Path
 import geopandas as gpd
 import pandas as pd
 
-BGT_LAYERS_FOR_LULUCF = {
+BGT_LAYERS_FOR_LUSOS = {
     "pand_polygon": "bgt_functie",
     "wegdeel_polygon": "bgt_functie",
     "waterdeel_polygon": "bgt_type",
@@ -97,9 +97,7 @@ def _read_layers(bgt_gpkg: str | Path, layers: dict):
         yield layer_gdf
 
 
-def combine_bgt_layers(
-    bgt_gpkg: str | Path, layers: dict = BGT_LAYERS_FOR_LULUCF
-) -> gpd.GeoDataFrame:
+def combine_bgt_layers(bgt_gpkg: str | Path, layers: dict = None) -> gpd.GeoDataFrame:
     """
     Combine layers from a BGT (Basisregistratie Grootschalige Topografie) geopackage into
     a single GeoDataFrame.
@@ -108,7 +106,7 @@ def combine_bgt_layers(
     ----------
     bgt_gpkg : str | Path
         Path to the geopackage (.gpkg file) to combine the layers from.
-    layers : list
+    layers : dict
         Layers in the geopackage to combine.
 
     Returns
@@ -117,6 +115,8 @@ def combine_bgt_layers(
         GeoDataFrame of the combined layers.
 
     """
+    if layers is None:
+        layers = BGT_LAYERS_FOR_LUSOS
     combined = pd.concat(_read_layers(bgt_gpkg, layers), ignore_index=True)
     return combined
 

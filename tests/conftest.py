@@ -8,9 +8,9 @@ from scipy.spatial import Voronoi
 from shapely.geometry import LineString, MultiPolygon, box
 from shapely.ops import polygonize
 
-from lulucf.lasso import LassoGrid
-from lulucf.preprocessing.bgt import BGT_LAYERS_FOR_LULUCF
-from lulucf.readers import read_soilmap_geopackage
+from lusos.lasso import LassoGrid
+from lusos.preprocessing.bgt import BGT_LAYERS_FOR_LUSOS
+from lusos.readers import read_soilmap_geopackage
 
 
 def create_polygons():
@@ -117,7 +117,7 @@ def bgt_gdf():
 
 @pytest.fixture
 def empty_bgt_array(lasso_grid):
-    bgt_layers = [layer.replace("_polygon", "") for layer in BGT_LAYERS_FOR_LULUCF]
+    bgt_layers = [layer.replace("_polygon", "") for layer in BGT_LAYERS_FOR_LUSOS]
     return lasso_grid.empty_array(bgt_layers, dask=False)
 
 

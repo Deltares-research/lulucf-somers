@@ -6,8 +6,8 @@ import xarray as xr
 from numpy.testing import assert_array_equal
 from shapely.geometry import Polygon
 
-from lulucf import LassoGrid
-from lulucf.preprocessing.bgt import BGT_LAYERS_FOR_LULUCF
+from lusos import LassoGrid
+from lusos.preprocessing.bgt import BGT_LAYERS_FOR_LUSOS
 
 
 class TestLassoGrid:
@@ -86,7 +86,7 @@ class TestLassoGrid:
 
     @pytest.mark.unittest
     def test_empty_array(self):
-        layers = [layer.replace("_polygon", "") for layer in BGT_LAYERS_FOR_LULUCF]
+        layers = [layer.replace("_polygon", "") for layer in BGT_LAYERS_FOR_LUSOS]
 
         grid = LassoGrid(0, 300_000, 280_000, 625_000, 25, 25)
         da = grid.empty_array(layers)

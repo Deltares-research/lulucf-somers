@@ -1,8 +1,8 @@
 import geopandas as gpd
 
-from lulucf.area_statistics import calculate_model_flux
-from lulucf.lasso import LassoGrid
-from lulucf.preprocessing import calc_somers_emission_per_m2
+from lusos.area_statistics import calculate_model_flux
+from lusos.lasso import LassoGrid
+from lusos.preprocessing import calc_somers_emission_per_m2
 
 
 def calculate_somers_emissions(

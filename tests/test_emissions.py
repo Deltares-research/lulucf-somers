@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 from numpy.testing import assert_array_almost_equal
 
-from lulucf import calculate_somers_emissions
+from lusos import calculate_somers_emissions
 
 
 @pytest.mark.unittest

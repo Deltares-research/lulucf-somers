@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "lulucf"
+name = "lusos"
 dynamic = ["version"]
 authors = [{name = "smknaake", email = "bas.knaake@deltares.nl"}]
 description = "Spatial calculation of GHG emissions from SOMERS modelling results"
@@ -46,28 +46,28 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/Deltares-research/lulucf"
-Repository = "https://github.com/Deltares-research/lulucf"
-Issues = "https://github.com/Deltares-research/lulucf/issues"
+Homepage = "https://github.com/Deltares-research/lusos"
+Repository = "https://github.com/Deltares-research/lusos"
+Issues = "https://github.com/Deltares-research/lusos/issues"
 
 [tool.hatch.version]
-path = "lulucf/__init__.py"
+path = "lusos/__init__.py"
 
 [tool.hatch.build.targets.sdist]
-only-include = ["lulucf", "tests"]
+only-include = ["lusos", "tests"]
 
 [tool.pixi.project]
 channels = ["conda-forge"]
 platforms = ["win-64", "linux-64", "osx-64", "osx-arm64"]
 
 [tool.pixi.pypi-dependencies]
-lulucf = { path = ".", editable = true }
+lusos = { path = ".", editable = true }
 
 [tool.pixi.tasks]
-test = "NUMBA_DISABLE_JIT=1 pytest --cov=lulucf --cov-report xml --cov-report term"
+test = "NUMBA_DISABLE_JIT=1 pytest --cov=lusos --cov-report xml --cov-report term"
 test_local = "NUMBA_DISABLE_JIT=1 pytest -v --cov"
 format = "black ."
-lint = "ruff check --fix ./lulucf"
+lint = "ruff check --fix ./lusos"
 build_docs = "sphinx-build -b html docs ./docs/build"
 rm_jupyter = "rm -r ./docs/jupyter_execute"
 rm_build = "rm -r ./docs/build"

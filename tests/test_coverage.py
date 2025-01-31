@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 import xarray as xr
 
-from lulucf import bgt_soilmap_coverage
+from lusos import bgt_soilmap_coverage
 
 
 @pytest.mark.unittest

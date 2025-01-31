@@ -2,7 +2,7 @@ import geopandas as gpd
 import pytest
 from numpy.testing import assert_array_almost_equal, assert_array_equal
 
-from lulucf.readers import BroSoilmap, read_soilmap_geopackage
+from lusos.readers import BroSoilmap, read_soilmap_geopackage
 
 
 class TestBroSoilmap:

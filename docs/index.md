@@ -2,7 +2,7 @@
 html_theme.sidebar_secondary.remove:
 ---
 
-# LULUCF Emissions
+# LULUCF SOMERS Shell (LUSOS)
 
 This page is a work in progress. 
 
@@ -12,7 +12,7 @@ This page is a work in progress.
 The package is not yet available on the Python Package Index (PyPI). The package can be installed directly from the repository with `pip` using the following command:
 
 ```powershell
-pip install git+pip install git+https://github.com/Deltares-research/lulucf.git
+pip install git+pip install git+https://github.com/Deltares-research/lusos.git
 ```
 
 

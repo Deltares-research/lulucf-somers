@@ -11,20 +11,20 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 
-import lulucf
+import lusos
 
 # sys.path.insert(0, os.path.abspath(".."))  # isort:skip
 
 # -- Project information -----------------------------------------------------
 
-project = "SOMERS LULUCF"
+project = "LULUCF SOMERS Shell (LUSOS)"
 copyright = "2025, Deltares"
 author = "Deltares"
 
 # The full version, including alpha/beta/rc tags
 
 
-version = lulucf.__version__
+version = lusos.__version__
 
 
 # -- General configuration ---------------------------------------------------
@@ -76,7 +76,7 @@ html_theme_options = {
     "icon_links": [
         {
             "name": "GitHub",
-            "url": "https://github.com/Deltares-research/lulucf",
+            "url": "https://github.com/Deltares-research/lusos",
             "icon": "fa-brands fa-square-github",
             "type": "fontawesome",
         },
@@ -94,8 +94,8 @@ html_theme_options = {
         },
     ],
     "logo": {
-        "text": "SOMERS LULUCF",
-        "image_light": "lulucf_logo.svg",
-        "image_dark": "lulucf_logo.svg",
+        "text": "LULUCF SOMERS Shell (LUSOS)",
+        "image_light": "lusos_logo.svg",
+        "image_dark": "lusos_logo.svg",
     },
 }

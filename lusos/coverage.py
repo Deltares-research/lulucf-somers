@@ -3,11 +3,11 @@ import itertools
 import geopandas as gpd
 import xarray as xr
 
-from lulucf.area_statistics import areal_percentage_bgt_soilmap
-from lulucf.constants import MAIN_BGT_UNITS, MAIN_SOILMAP_UNITS
-from lulucf.lasso import LassoGrid
-from lulucf.preprocessing import group_bgt_units, group_soilmap_units
-from lulucf.utils import _add_layer_idx_column
+from lusos.area_statistics import areal_percentage_bgt_soilmap
+from lusos.constants import MAIN_BGT_UNITS, MAIN_SOILMAP_UNITS
+from lusos.lasso import LassoGrid
+from lusos.preprocessing import group_bgt_units, group_soilmap_units
+from lusos.utils import _add_layer_idx_column
 
 
 def bgt_soilmap_coverage(

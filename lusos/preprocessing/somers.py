@@ -1,7 +1,7 @@
 import geopandas as gpd
 import pandas as pd
 
-from lulucf.validation import validate_somers
+from lusos.validation import validate_somers
 
 
 @validate_somers

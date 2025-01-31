@@ -8,4 +8,4 @@ hidden:
 ---
 ```
 
-This is the about page with background on LULUCF.
+This is the about page with background on Lusos.

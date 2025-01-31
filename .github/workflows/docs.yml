@@ -1,4 +1,4 @@
-name: Publish Lulucf GH-pages
+name: Publish Lusos GH-pages
 
 on:
   push:

@@ -4,7 +4,7 @@ from pathlib import Path
 import geopandas as gpd
 from shapely.geometry import box
 
-from lulucf.readers import Geopackage
+from lusos.readers import Geopackage
 
 
 class SoilmapLayers(StrEnum):

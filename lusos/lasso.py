@@ -6,7 +6,7 @@ import rioxarray as rio
 import xarray as xr
 from pyproj import CRS
 
-from lulucf.validation import LassoValidator
+from lusos.validation import LassoValidator
 
 
 class LassoGrid:

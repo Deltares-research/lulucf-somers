@@ -2,7 +2,7 @@ import pandas as pd
 import pytest
 from numpy.testing import assert_array_equal
 
-from lulucf import preprocessing as pr
+from lusos import preprocessing as pr
 
 
 @pytest.mark.unittest

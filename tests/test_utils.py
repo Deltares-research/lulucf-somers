@@ -5,7 +5,7 @@ import pytest
 from numpy.testing import assert_array_equal
 from shapely.geometry import Polygon
 
-from lulucf.utils import (
+from lusos.utils import (
     cell_as_geometry,
     create_connection,
     get_valid_indices,
