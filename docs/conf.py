@@ -82,7 +82,7 @@ html_theme_options = {
         },
         # {
         #     "name": "PyPI",
-        #     "url": "https://pypi.org/project/geost",
+        #     "url": "https://pypi.org/project/lusos",
         #     "icon": "fa-solid fa-cubes",
         #     "type": "fontawesome",
         # },
@@ -94,7 +94,7 @@ html_theme_options = {
         },
     ],
     "logo": {
-        "text": "LULUCF SOMERS Shell (LUSOS)",
+        "text": "LULUCF SOMERS Shell",
         "image_light": "lusos_logo.svg",
         "image_dark": "lusos_logo.svg",
     },
