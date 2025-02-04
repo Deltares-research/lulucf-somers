@@ -1,4 +1,5 @@
 # LULUCF SOMERS Shell (LUSOS)
+[![PyPI version](https://img.shields.io/pypi/v/geost.svg)](https://pypi.org/project/lulucf-somers)
 [![License: MIT](https://img.shields.io/pypi/l/imod)](https://choosealicense.com/licenses/mit)
 [![Lifecycle: experimental](https://lifecycle.r-lib.org/articles/figures/lifecycle-experimental.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![Build: status](https://img.shields.io/github/actions/workflow/status/deltares-research/lusos/ci.yml)](https://github.com/Deltares-research/lusos/actions)
