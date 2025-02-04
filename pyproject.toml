@@ -103,8 +103,6 @@ sphinx = "*"
 pydata-sphinx-theme = "*"
 sphinx-design = "*"
 myst-nb = "*"
-python-build = "*"
-twine = "*"
 
 [tool.pixi.feature.py312.dependencies]
 python = "3.12.*"
