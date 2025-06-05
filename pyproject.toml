@@ -51,10 +51,10 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.version]
-path = "src/lusos/__init__.py"
+path = "lusos/__init__.py"
 
 [tool.hatch.build.targets.sdist]
-only-include = ["src/lusos", "tests"]
+only-include = ["lusos", "tests"]
 
 [tool.pixi.project]
 channels = ["conda-forge"]
@@ -65,9 +65,9 @@ lusos = { path = ".", editable = true }
 
 [tool.pixi.tasks]
 test = "NUMBA_DISABLE_JIT=1 python -m pytest --cov=lusos --cov-report xml --cov-report term"
-test-local = "PYTHONPATH=src NUMBA_DISABLE_JIT=1 python -m pytest -v --cov"
+test-local = "NUMBA_DISABLE_JIT=1 python -m pytest -v --cov"
 format = "black ."
-lint = "ruff check --fix ./src/lusos"
+lint = "ruff check --fix ./lusos"
 build-docs = "sphinx-build -b html docs ./docs/build"
 rm-jupyter = "rm -r ./docs/jupyter_execute"
 rm-build = "rm -r ./docs/build"
@@ -102,7 +102,6 @@ sphinx = "*"
 pydata-sphinx-theme = "*"
 sphinx-design = "*"
 myst-nb = "*"
-pooch = "*"
 
 [tool.pixi.feature.py313.dependencies]
 python = "3.13.*"
