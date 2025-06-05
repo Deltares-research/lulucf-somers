@@ -27,7 +27,7 @@ classifiers = [
 	"Programming Language :: Python",
 	"Programming Language :: Python :: 3.12",
 ]
-requires-python = ">=3.12,<3.13"
+requires-python = ">=3.12"
 dependencies = [
 	"dask",
 	"fiona",
@@ -35,7 +35,7 @@ dependencies = [
 	"h5netcdf",
 	"mapbox-earcut",
 	"netcdf4",
-	"numba<0.60.0",
+	"numba",
 	"numba_celltree",
 	"numpy",
 	"pandas",
@@ -51,10 +51,10 @@ Repository = "https://github.com/Deltares-research/lusos"
 Issues = "https://github.com/Deltares-research/lusos/issues"
 
 [tool.hatch.version]
-path = "lusos/__init__.py"
+path = "src/lusos/__init__.py"
 
 [tool.hatch.build.targets.sdist]
-only-include = ["lusos", "tests"]
+only-include = ["src/lusos", "tests"]
 
 [tool.pixi.project]
 channels = ["conda-forge"]
@@ -64,19 +64,18 @@ platforms = ["win-64", "linux-64", "osx-64", "osx-arm64"]
 lusos = { path = ".", editable = true }
 
 [tool.pixi.tasks]
-test = "NUMBA_DISABLE_JIT=1 pytest --cov=lusos --cov-report xml --cov-report term"
-test_local = "NUMBA_DISABLE_JIT=1 pytest -v --cov"
+test = "NUMBA_DISABLE_JIT=1 python -m pytest --cov=lusos --cov-report xml --cov-report term"
+test-local = "PYTHONPATH=src NUMBA_DISABLE_JIT=1 python -m pytest -v --cov"
 format = "black ."
-lint = "ruff check --fix ./lusos"
-build_docs = "sphinx-build -b html docs ./docs/build"
-rm_jupyter = "rm -r ./docs/jupyter_execute"
-rm_build = "rm -r ./docs/build"
-rm_generated = "rm -r ./docs/api_reference/generated"
-rebuild_docs = { depends-on = ["rm_jupyter", "rm_build", "rm_generated", "build_docs"] }
-pypi-publish = "rm --recursive --force dist && python -m build && twine check dist/* && twine upload dist/*"
+lint = "ruff check --fix ./src/lusos"
+build-docs = "sphinx-build -b html docs ./docs/build"
+rm-jupyter = "rm -r ./docs/jupyter_execute"
+rm-build = "rm -r ./docs/build"
+rm-generated = "rm -r ./docs/api_reference/generated"
+rebuild-docs = { depends-on = ["rm-jupyter", "rm-build", "rm-generated", "build-docs"] }
 
 [tool.pixi.dependencies]
-python = ">=3.12,<3.13"
+python = "*"
 pip = "*"
 numpy = "*"
 pandas = "*"
@@ -91,7 +90,7 @@ pytest = "*"
 dask = "*"
 xugrid = "*"
 mapbox_earcut = "*"
-numba = "<0.60.0"
+numba = "*"
 numba_celltree = "*"
 netcdf4 = "*"
 h5netcdf = "*"
@@ -103,13 +102,17 @@ sphinx = "*"
 pydata-sphinx-theme = "*"
 sphinx-design = "*"
 myst-nb = "*"
+pooch = "*"
+
+[tool.pixi.feature.py313.dependencies]
+python = "3.13.*"
 
 [tool.pixi.feature.py312.dependencies]
 python = "3.12.*"
 
 [tool.pixi.environments]
-default = { features = ["py312"], solve-group = "py312" }
-py312 = { features = ["py312"], solve-group = "py312" }
+py312 = { features = ["py312"] }
+py313 = { features = ["py313"] }
 
 [tool.pytest.ini_options]
 testpaths = [

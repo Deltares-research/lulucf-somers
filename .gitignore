@@ -107,25 +107,20 @@ ENV/
 # mypy
 .mypy_cache/
 
+# data
 *.vtk
 *.nc
 *.TIF
 *.gml
 *.dbf
+*.csv
+*.cpg
+*.dbf
+*.prj
+*.shp
+*.shx
 
-
-# data
-#*.xml
-#*.pdf
-#*.tif
-#*.cpg
-#*.dbf
-#*.prj
-#*.shp
-#*.shx
-#*.jpg
-#*.kml
-#*.zip
+!data/*.csv
 
 # VS-Code
 *.code-workspace

@@ -25,7 +25,7 @@ jobs:
       - name: Install ruff
         run: pip install ruff
       - name: Run linter
-        run: ruff check ./lusos
+        run: ruff check ./src/lusos
 
   test:
     name: ${{ matrix.pixi-environment }} - ${{ matrix.os }}
@@ -39,6 +39,7 @@ jobs:
           - windows-latest
         pixi-environment: 
           - py312
+          - py313
     steps:
       - name: Check out repo
         uses: actions/checkout@v4
@@ -64,5 +65,3 @@ jobs:
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-      - name: Build docs
-        run: pixi run build_docs
