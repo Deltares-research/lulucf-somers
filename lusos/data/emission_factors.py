@@ -5,7 +5,7 @@ import pooch
 
 REGISTRY = pooch.create(
     path=pooch.os_cache("lusos"),
-    base_url="https://github.com/Deltares-research/lulucf-somers/raw/feature/pooch/data",
+    base_url="https://github.com/Deltares-research/lulucf-somers/raw/main/data",
     version=None,
     env="LUSOS_DATA_DIR",
 )
