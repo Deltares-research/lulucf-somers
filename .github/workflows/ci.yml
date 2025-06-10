@@ -42,7 +42,7 @@ jobs:
       - name: Check out repo
         uses: actions/checkout@v4
       - name: Setup Pixi
-        uses: prefix-dev/setup-pixi@v0.8.8
+        uses: prefix-dev/setup-pixi@v0.8.3
         with: 
           manifest-path: pyproject.toml
       - name: Ensure lock file is up-to-date
