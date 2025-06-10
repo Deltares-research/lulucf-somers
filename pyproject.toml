@@ -35,17 +35,17 @@ dependencies = [
 	"numba_celltree",
 	"numpy",
 	"pandas",
-	"pooch",
 	"pyarrow",
 	"rioxarray",
 	"xarray",
 	"xugrid",
+	"pooch",
 ]
 
 [project.urls]
-Homepage = "https://github.com/Deltares-research/lusos"
-Repository = "https://github.com/Deltares-research/lusos"
-Issues = "https://github.com/Deltares-research/lusos/issues"
+Homepage = "https://github.com/Deltares-research/lulucf-somers"
+Repository = "https://github.com/Deltares-research/lulucf-somers"
+Issues = "https://github.com/Deltares-research/lulucf-somers/issues"
 
 [build-system]
 requires = ["hatchling"]
