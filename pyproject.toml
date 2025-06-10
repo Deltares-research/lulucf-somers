@@ -102,6 +102,7 @@ sphinx = "*"
 pydata-sphinx-theme = "*"
 sphinx-design = "*"
 myst-nb = "*"
+pooch = "*"
 
 [tool.pixi.feature.py313.dependencies]
 python = "3.13.*"
