@@ -1,2 +1,5 @@
 # GitHub syntax highlighting
 pixi.lock linguist-language=YAML linguist-generated=true
+
+# Treat csv files as text files with LF line endings
+*.csv text eol=lf

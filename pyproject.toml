@@ -43,9 +43,9 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/Deltares-research/lusos"
-Repository = "https://github.com/Deltares-research/lusos"
-Issues = "https://github.com/Deltares-research/lusos/issues"
+Homepage = "https://github.com/Deltares-research/lulucf-somers"
+Repository = "https://github.com/Deltares-research/lulucf-somers"
+Issues = "https://github.com/Deltares-research/lulucf-somers/issues"
 
 [build-system]
 requires = ["hatchling"]
@@ -76,7 +76,7 @@ rm-generated = "rm -r ./docs/api_reference/generated"
 rebuild-docs = { depends-on = ["rm-jupyter", "rm-build", "rm-generated", "build-docs"] }
 
 [tool.pixi.dependencies]
-python = "*"
+python = ">=3.12"
 pip = "*"
 numpy = "*"
 pandas = "*"
