@@ -12374,7 +12374,7 @@ packages:
 - pypi: .\
   name: lusos
   version: 0.2.3
-  sha256: 776e7b82cd4a62b0ea85f33976980f3f6615dd42635d1d59cfe478efb88ff10e
+  sha256: 93cf1af4919872ca093971b8b6adbbf5567eb96e9428ac1190c96cbc97c04997
   requires_dist:
   - dask
   - fiona
@@ -12386,6 +12386,7 @@ packages:
   - numba-celltree
   - numpy
   - pandas
+  - pooch
   - pyarrow
   - rioxarray
   - xarray
