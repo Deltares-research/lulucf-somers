@@ -76,7 +76,7 @@ rm-generated = "rm -r ./docs/api_reference/generated"
 rebuild-docs = { depends-on = ["rm-jupyter", "rm-build", "rm-generated", "build-docs"] }
 
 [tool.pixi.dependencies]
-python = "*"
+python = ">=3.12"
 pip = "*"
 numpy = "*"
 pandas = "*"
@@ -112,8 +112,9 @@ python = "3.13.*"
 python = "3.12.*"
 
 [tool.pixi.environments]
-py312 = { features = ["py312"] }
-py313 = { features = ["py313"] }
+default = { features = ["py313"], solve-group = "py313" }
+py312 = { features = ["py312"], solve-group = "py312" }
+py313 = { features = ["py313"], solve-group = "py313" }
 
 [tool.pytest.ini_options]
 testpaths = [
