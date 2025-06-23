@@ -18,8 +18,9 @@ class TestGeopackage:
     def test_layers(self, simple_soilmap_path):
         gp = Geopackage(simple_soilmap_path)
         layers = gp.layers()
-        expected_layers = ["soilarea", "soilarea_soilunit"]
-        assert_array_equal(layers, expected_layers)
+        assert isinstance(layers, pd.DataFrame)
+        assert_array_equal(layers["name"], ["soilarea", "soilarea_soilunit"])
+        assert_array_equal(layers["geometry_type"], ["Polygon", None])
 
     @pytest.mark.unittest
     def test_context_manager(self, simple_soilmap_path):
@@ -32,7 +33,7 @@ class TestGeopackage:
     @pytest.mark.unittest
     def test_get_cursor(self, simple_soilmap_path):
         with Geopackage(simple_soilmap_path) as gp:
-            cursor = gp.get_cursor()
+            cursor = gp._get_cursor()
             assert isinstance(cursor, sqlite3.Cursor)
 
     @pytest.mark.unittest
