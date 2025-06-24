@@ -88,6 +88,7 @@ def test_rasterize_like(lasso_grid, somers_parcels_shapefile):
     assert_array_equal(np.unique(raster), [0, 1])
 
 
+@pytest.mark.unittest
 def test_rasterize_as_mask(lasso_grid, somers_parcels_shapefile):
     da = lasso_grid.dataarray()
 

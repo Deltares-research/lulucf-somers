@@ -1,13 +1,35 @@
-from pathlib import Path
-
 import numpy as np
 import pytest
 import xarray as xr
 from numpy.testing import assert_array_equal
-from shapely.geometry import Polygon
 
 from lusos import LassoGrid
 from lusos.preprocessing.bgt import BGT_LAYERS_FOR_LUSOS
+
+
+@pytest.fixture
+def raster_file(lasso_grid, tmp_path):
+    """
+    Temporary raster file from the lasso_grid fixture.
+
+    """
+    outfile = tmp_path / r"temp.tif"
+    da = lasso_grid.dataarray()
+    da.rio.to_raster(outfile)
+    return outfile
+
+
+@pytest.fixture
+def raster_file_flipped_coordinates(lasso_grid, tmp_path):
+    """
+    Temporary raster file with flipped coordinates from the lasso_grid fixture.
+
+    """
+    outfile = tmp_path / r"temp_flipped.tif"
+    da = lasso_grid.dataarray()
+    da = da.assign_coords(y=da["y"][::-1], x=da["x"][::-1])
+    da.rio.to_raster(outfile)
+    return outfile
 
 
 class TestLassoGrid:
@@ -71,6 +93,19 @@ class TestLassoGrid:
         assert grid.crs == 28992
 
     @pytest.mark.unittest
+    def test_from_raster_flipped(self, raster_file_flipped_coordinates):
+        bbox = (1, 1, 3, 3)
+        grid = LassoGrid.from_raster(raster_file_flipped_coordinates, bbox=bbox)
+
+        assert grid.xmin == 1
+        assert grid.ymin == 1
+        assert grid.xmax == 3
+        assert grid.ymax == 3
+        assert grid.xsize == 1
+        assert grid.ysize == -1
+        assert grid.crs == 28992
+
+    @pytest.mark.unittest
     def test_from_dataarray(self, lasso_grid):
         da = lasso_grid.dataarray()
         lasso = LassoGrid.from_dataarray(da)
@@ -82,7 +117,6 @@ class TestLassoGrid:
         assert lasso.xsize == 1
         assert lasso.ysize == -1
         assert lasso.crs == 28992
-
 
     @pytest.mark.unittest
     def test_empty_array(self):

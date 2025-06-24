@@ -73,12 +73,7 @@ class LassoGrid:
         raster = rio.open_rasterio(raster).squeeze()
 
         if bbox is not None:
-            xmin, ymin, xmax, ymax = bbox
-            if raster["y"][1] > raster["y"][0]:  # Check if coordinates are descending.
-                ymax, ymin = ymin, ymax
-            if raster["x"][1] < raster["x"][0]:
-                xmax, xmin = xmin, xmax
-            raster = raster.sel(x=slice(xmin, xmax), y=slice(ymax, ymin))
+            raster = raster.rio.clip_box(*bbox)
 
         xsize, ysize = raster.rio.resolution()
         xmin, ymin, xmax, ymax = raster.rio.bounds()

@@ -57,18 +57,6 @@ def lasso_grid() -> LassoGrid:
 
 
 @pytest.fixture
-def raster_file(lasso_grid, tmp_path):
-    """
-    Temporary raster file from the lasso_grid fixture.
-
-    """
-    outfile = tmp_path / r"temp.tif"
-    da = lasso_grid.dataarray()
-    da.rio.to_raster(outfile)
-    return outfile
-
-
-@pytest.fixture
 def bgt_gdf():
     """
     GeoDataFrame containing simple polygons in the area of the lasso_grid fixture to test
