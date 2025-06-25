@@ -8,6 +8,7 @@ maxdepth: 2
 caption: Table of contents
 ---
 
-Concept <user_guide/lusos_method>
+Concept <user_guide/concept>
+Calculate coverage <user_guide/coverage>
 ```
 
