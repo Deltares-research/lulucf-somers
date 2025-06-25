@@ -1,9 +1,13 @@
 # User guide
 
+This is the user guide.
+
 ```{toctree}
 ---
 maxdepth: 2
-caption: User guide
+caption: Table of contents
 ---
 
-This is the user guide.
+Concept <user_guide/lusos_method>
+```
+
