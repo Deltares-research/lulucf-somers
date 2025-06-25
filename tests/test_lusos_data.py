@@ -1,3 +1,4 @@
+import geopandas as gpd
 import pandas as pd
 import pytest
 from numpy.testing import assert_array_equal
@@ -189,3 +190,21 @@ def test_ef_high_netherlands():
             [0.0, 0.0, 0.0, 0.0],
         ],
     )
+
+
+@pytest.mark.unittest
+def test_sample_bgt():
+    bgt = lusos.data.sample_bgt()
+    assert isinstance(bgt, gpd.GeoDataFrame)
+
+
+@pytest.mark.unittest
+def test_sample_soilmap():
+    soilmap = lusos.data.sample_soilmap()
+    assert isinstance(soilmap, gpd.GeoDataFrame)
+
+
+@pytest.mark.unittest
+def test_sample_emissions():
+    emissions = lusos.data.sample_emissions()
+    assert isinstance(emissions, gpd.GeoDataFrame)
