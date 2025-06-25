@@ -60,7 +60,7 @@ def test_triangulate(polygon_gdf):
 def test_polygon_area_in_grid(polygon_gdf, lasso_grid):
     area = ops.polygon_area_in_grid(polygon_gdf, lasso_grid.dataarray())
     assert_array_equal(area.cell_idx, [12])
-    assert_array_equal(area.cell_indices, [10])
+    assert_array_equal(area.nitems, [10])
     assert_array_equal(area.polygon, [1, 1, 1, 1, 0, 0, 1, 1, 1, 1])
     assert_array_almost_equal(
         area.area, [0.06, 0.15, 0.15, 0.06, 0.08, 0.08, 0.06, 0.15, 0.06, 0.15]

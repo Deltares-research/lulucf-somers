@@ -9,8 +9,26 @@ import xugrid as xu
 
 
 class PolygonGridArea(NamedTuple):
+    """
+    Sparse matrix-like structure for the result of `polygon_area_in_grid` containing the
+    indices of the grid cells that overlap with polygons, the number of polygons that
+    overlap with those grid cells, the index ids of the polygons and the corresponding
+    area in the grid cell.
+
+    Parameters
+    ----------
+    cell_idx : np.ndarray
+        Indices of the grid cells that overlap with polygons.
+    nitems : np.ndarray
+        Number of polygons that overlap with the grid cell.
+    polygon : np.ndarray
+        Index id of the polygon that overlaps with the grid cell.
+    area : np.ndarray
+        Area of the polygon in the grid cell.
+    """
+
     cell_idx: np.ndarray
-    cell_indices: np.ndarray
+    nitems: np.ndarray
     polygon: np.ndarray
     area: np.ndarray
 
@@ -60,9 +78,9 @@ def polygon_area_in_grid(polygons: gpd.GeoDataFrame, grid: xr.DataArray):
 
     nonzero_per_row = np.diff(cell_idx_pointer)
     cell_idx = np.flatnonzero(nonzero_per_row)
-    cell_indices = nonzero_per_row[cell_idx]
+    nitems = nonzero_per_row[cell_idx]
 
-    return PolygonGridArea(cell_idx, cell_indices, index[polygon_idx], area)
+    return PolygonGridArea(cell_idx, nitems, index[polygon_idx], area)
 
 
 def _triangles_to_geodataframe(triangles, coords):  # pragma: no cover

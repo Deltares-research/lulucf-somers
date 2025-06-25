@@ -2,6 +2,7 @@ from . import data
 from .area_statistics import calculate_model_flux
 from .coverage import bgt_soilmap_coverage
 from .emissions import calculate_somers_emissions
+from .geometry import ops
 from .lasso import LassoGrid
 
 __version__ = "0.2.4"

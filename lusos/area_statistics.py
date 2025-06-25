@@ -132,7 +132,7 @@ def area_to_grid3d(
     min_idx = 0
     for i in range(len(polygon_area.cell_idx)):
         cell_idx = polygon_area.cell_idx[i]
-        nitems = polygon_area.cell_indices[i]
+        nitems = polygon_area.nitems[i]
         max_idx = min_idx + nitems
 
         polygons = polygon_area.polygon[min_idx:max_idx]
@@ -173,7 +173,7 @@ def flux_to_grid(
     min_idx = 0
     for i in range(len(area.cell_idx)):
         cell_idx = area.cell_idx[i]
-        nitems = area.cell_indices[i]
+        nitems = area.nitems[i]
         max_idx = min_idx + nitems
 
         f = flux[min_idx:max_idx]
