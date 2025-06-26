@@ -67,7 +67,7 @@ html_static_path = ["_static"]
 html_css_files = ["theme-deltares.css"]
 html_theme_options = {
     "show_toc_level": 1,
-    "show_nav_level": 2,
+    "show_nav_level": 1,
     "navbar_align": "left",
     "use_edit_page_button": False,
     "header_links_before_dropdown": 6,
