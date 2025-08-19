@@ -1,0 +1,6 @@
+﻿lusos.data.ef\_high\_netherlands
+================================
+
+.. currentmodule:: lusos.data
+
+.. autofunction:: ef_high_netherlands

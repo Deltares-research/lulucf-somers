@@ -1,0 +1,6 @@
+﻿lusos.geometry.ops.triangulate
+==============================
+
+.. currentmodule:: lusos.geometry.ops
+
+.. autofunction:: triangulate

@@ -49,6 +49,8 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API Reference" href="../api_reference.html" />
+    <link rel="prev" title="Calculate spatial flux" href="flux.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.2.4" />
@@ -149,7 +151,7 @@
 </li>
 
 
-<li class="nav-item ">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../user_guide.html">
     User guide
   </a>
@@ -246,10 +248,8 @@
       
       
       
-        
-      
       <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -278,7 +278,7 @@
 </li>
 
 
-<li class="nav-item ">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../user_guide.html">
     User guide
   </a>
@@ -340,6 +340,22 @@
     
   </div>
   
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Table of contents</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="concept.html">Concept</a></li>
+<li class="toctree-l1"><a class="reference internal" href="coverage.html">Calculate coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="flux.html">Calculate spatial flux</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Combine coverage and flux</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
       <div class="sidebar-primary-item">
@@ -375,6 +391,9 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
+    
+    <li class="breadcrumb-item"><a href="../user_guide.html" class="nav-link">User guide</a></li>
+    
     <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Calculate spatial emissions</span></li>
   </ul>
 </nav>
@@ -398,7 +417,9 @@
 <p>First, we will load the data and define the grid.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">lusos</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">lusos</span>
 
 <span class="n">xresolution</span> <span class="o">=</span> <span class="n">yresolution</span> <span class="o">=</span> <span class="mi">25</span>
 <span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="mi">111_000</span><span class="p">,</span> <span class="mi">455_000</span><span class="p">,</span> <span class="mi">116_000</span><span class="p">,</span> <span class="mi">460_000</span>
@@ -425,18 +446,18 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">coverage</span> <span class="o">=</span> <span class="n">lusos</span><span class="o">.</span><span class="n">bgt_soilmap_coverage</span><span class="p">(</span><span class="n">bgt</span><span class="p">,</span> <span class="n">soilmap</span><span class="p">,</span> <span class="n">grid</span><span class="p">)</span>
-<span class="n">flux</span> <span class="o">=</span> <span class="n">lusos</span><span class="o">.</span><span class="n">calculate_somers_emissions</span><span class="p">(</span><span class="n">emissions</span><span class="p">,</span> <span class="n">grid</span><span class="p">)</span>
+<span class="n">flux</span> <span class="o">=</span> <span class="n">lusos</span><span class="o">.</span><span class="n">calculate_somers_emissions</span><span class="p">(</span><span class="n">emissions</span><span class="p">,</span> <span class="n">grid</span><span class="p">)</span> <span class="c1"># flux per m2</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\xugrid\regrid\structured.py:606: FutureWarning: In a future version of xarray the default value for compat will change from compat=&#39;no_conflicts&#39; to compat=&#39;override&#39;. This is likely to lead to different results when combining overlapping variables with the same name. To opt in to new defaults and get rid of these warnings now use `set_options(use_new_combine_kwarg_defaults=True) or set compat explicitly.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/runner/work/lulucf-somers/lulucf-somers/.pixi/envs/default/lib/python3.13/site-packages/xugrid/regrid/structured.py:606: FutureWarning: In a future version of xarray the default value for compat will change from compat=&#39;no_conflicts&#39; to compat=&#39;override&#39;. This is likely to lead to different results when combining overlapping variables with the same name. To opt in to new defaults and get rid of these warnings now use `set_options(use_new_combine_kwarg_defaults=True) or set compat explicitly.
   ds = xr.merge([ds_x, ds_y])
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\xugrid\regrid\structured.py:606: FutureWarning: In a future version of xarray the default value for compat will change from compat=&#39;no_conflicts&#39; to compat=&#39;override&#39;. This is likely to lead to different results when combining overlapping variables with the same name. To opt in to new defaults and get rid of these warnings now use `set_options(use_new_combine_kwarg_defaults=True) or set compat explicitly.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/runner/work/lulucf-somers/lulucf-somers/.pixi/envs/default/lib/python3.13/site-packages/xugrid/regrid/structured.py:606: FutureWarning: In a future version of xarray the default value for compat will change from compat=&#39;no_conflicts&#39; to compat=&#39;override&#39;. This is likely to lead to different results when combining overlapping variables with the same name. To opt in to new defaults and get rid of these warnings now use `set_options(use_new_combine_kwarg_defaults=True) or set compat explicitly.
   ds = xr.merge([ds_x, ds_y])
-D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\xugrid\regrid\structured.py:606: FutureWarning: In a future version of xarray the default value for compat will change from compat=&#39;no_conflicts&#39; to compat=&#39;override&#39;. This is likely to lead to different results when combining overlapping variables with the same name. To opt in to new defaults and get rid of these warnings now use `set_options(use_new_combine_kwarg_defaults=True) or set compat explicitly.
+/home/runner/work/lulucf-somers/lulucf-somers/.pixi/envs/default/lib/python3.13/site-packages/xugrid/regrid/structured.py:606: FutureWarning: In a future version of xarray the default value for compat will change from compat=&#39;no_conflicts&#39; to compat=&#39;override&#39;. This is likely to lead to different results when combining overlapping variables with the same name. To opt in to new defaults and get rid of these warnings now use `set_options(use_new_combine_kwarg_defaults=True) or set compat explicitly.
   ds = xr.merge([ds_x, ds_y])
 </pre></div>
 </div>
@@ -450,7 +471,7 @@ D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\xugrid\reg
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x171a16978c0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x7fbe7f98c590&gt;
 </pre></div>
 </div>
 <img alt="../_images/ba73b44774e9cd0d46efcc47bef5de881a093070503737e0ca215ff8e5cb2de2.png" src="../_images/ba73b44774e9cd0d46efcc47bef5de881a093070503737e0ca215ff8e5cb2de2.png" />
@@ -466,7 +487,7 @@ D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\xugrid\reg
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Downloading file &#39;emission_factors_low_nl.csv&#39; from &#39;https://github.com/Deltares-research/lulucf-somers/raw/main/data/emission_factors_low_nl.csv&#39; to &#39;C:\Users\runneradmin\AppData\Local\lusos\lusos\Cache&#39;.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Downloading file &#39;emission_factors_low_nl.csv&#39; from &#39;https://github.com/Deltares-research/lulucf-somers/raw/main/data/emission_factors_low_nl.csv&#39; to &#39;/home/runner/.cache/lusos&#39;.
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(36, 4)
@@ -543,6 +564,44 @@ D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\xugrid\reg
 </table>
 </div></div></div>
 </div>
+<p>We can multiply these emission factors with the coverage percentages and the cell area to get the flux per BGT-soilmap combination in each cell based on the emission factors. The result has a flux value for every x,y-location.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">flux_ef_factors</span> <span class="o">=</span> <span class="n">coverage</span> <span class="o">*</span> <span class="n">ef_factors</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">coverage</span><span class="p">[</span><span class="s2">&quot;layer&quot;</span><span class="p">],</span> <span class="s2">&quot;co2_uit&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We need to combine these fluxes with the previously calculated SOMERS fluxes. To do this, we must make sure that we do not double count the BGT-soilmap combinations that contain “percelen”. However, we still need to include the cells that contain any of those combinations but do not have a modelling result from SOMERS. We can do this in the steps shown below:</p>
+<ol class="arabic simple">
+<li><p>Sum the fluxes of BGT-soilmap combinations that contain “percelen”.</p></li>
+<li><p>Combine with the summed fluxes with the SOMERS fluxes -&gt; take the SOMERS fluxes when available, otherwise take the summed flux.</p></li>
+<li><p>Sum the fluxes of the remaining BGT-soilmap combinations and add these to the result of step 2.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Step 1</span>
+<span class="n">flux_parcels</span> <span class="o">=</span> <span class="n">flux_ef_factors</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">layer</span><span class="o">=</span><span class="n">coverage</span><span class="p">[</span><span class="s2">&quot;layer&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;percelen&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;layer&quot;</span><span class="p">)</span>
+
+<span class="c1"># Step 2</span>
+<span class="n">flux</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">flux</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">flux</span><span class="p">,</span> <span class="n">flux_parcels</span><span class="p">)</span>
+
+<span class="c1"># Step 3</span>
+<span class="n">flux_others</span> <span class="o">=</span> <span class="n">flux_ef_factors</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">layer</span><span class="o">=~</span><span class="n">coverage</span><span class="p">[</span><span class="s2">&quot;layer&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;percelen&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;layer&quot;</span><span class="p">)</span>
+<span class="n">flux_total</span> <span class="o">=</span> <span class="n">flux</span> <span class="o">+</span> <span class="n">flux_others</span>
+
+<span class="n">flux_total</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">imshow</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x7fbe7c3bb4d0&gt;
+</pre></div>
+</div>
+<img alt="../_images/a9bbaadaf275ff0f441fba10befe61c1bd5e83cfe64eb67408365d8cb0d2f067.png" src="../_images/a9bbaadaf275ff0f441fba10befe61c1bd5e83cfe64eb67408365d8cb0d2f067.png" />
+</div>
+</div>
+<p>The resulting grid is now a weighted average greenhouse gas flux based on the contributions of BGT-soilmap combinations and SOMERS modelling results.</p>
 </section>
 
 
@@ -555,6 +614,24 @@ D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\xugrid\reg
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="flux.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Calculate spatial flux</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../api_reference.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">API Reference</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               

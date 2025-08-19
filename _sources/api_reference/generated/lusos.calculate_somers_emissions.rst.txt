@@ -1,0 +1,6 @@
+﻿lusos.calculate\_somers\_emissions
+==================================
+
+.. currentmodule:: lusos
+
+.. autofunction:: calculate_somers_emissions

@@ -1,0 +1,6 @@
+﻿lusos.bgt\_soilmap\_coverage
+============================
+
+.. currentmodule:: lusos
+
+.. autofunction:: bgt_soilmap_coverage

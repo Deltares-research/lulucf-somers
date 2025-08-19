@@ -1,0 +1,6 @@
+﻿lusos.calculate\_model\_flux
+============================
+
+.. currentmodule:: lusos
+
+.. autofunction:: calculate_model_flux

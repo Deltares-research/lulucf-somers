@@ -1,0 +1,6 @@
+﻿lusos.geometry.ops.polygon\_area\_in\_grid
+==========================================
+
+.. currentmodule:: lusos.geometry.ops
+
+.. autofunction:: polygon_area_in_grid

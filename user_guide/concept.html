@@ -349,6 +349,8 @@
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Concept</a></li>
 <li class="toctree-l1"><a class="reference internal" href="coverage.html">Calculate coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="flux.html">Calculate spatial flux</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spatial_emissions.html">Combine coverage and flux</a></li>
 </ul>
 </div>
 </nav></div>
@@ -548,261 +550,48 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">area</span> <span class="o">=</span> <span class="n">lusos</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">polygon_area_in_grid</span><span class="p">(</span><span class="n">polygons</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">dataarray</span><span class="p">())</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="nb">print</span><span class="p">(</span><span class="n">area</span><span class="p">)</span>
-
-<span class="nn">File D:\a\lulucf-somers\lulucf-somers\lusos\geometry\ops.py:72,</span> in <span class="ni">polygon_area_in_grid</span><span class="nt">(polygons, grid)</span>
-<span class="g g-Whitespace">     </span><span class="mi">69</span> <span class="n">triangles</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">coords</span> <span class="o">=</span> <span class="n">triangulate</span><span class="p">(</span><span class="n">polygons</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">71</span> <span class="n">ugrid</span> <span class="o">=</span> <span class="n">xu</span><span class="o">.</span><span class="n">Ugrid2d</span><span class="p">(</span><span class="o">*</span><span class="n">coords</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">triangles</span><span class="p">)</span>
-<span class="ne">---&gt; </span><span class="mi">72</span> <span class="n">regridder</span> <span class="o">=</span> <span class="n">xu</span><span class="o">.</span><span class="n">OverlapRegridder</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">ugrid</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">grid</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">73</span> <span class="n">ds</span> <span class="o">=</span> <span class="n">regridder</span><span class="o">.</span><span class="n">to_dataset</span><span class="p">()</span>
-<span class="g g-Whitespace">     </span><span class="mi">75</span> <span class="n">cell_idx_pointer</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;__regrid_indptr&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-
-<span class="nn">File D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\xugrid\regrid\regridder.py:507,</span> in <span class="ni">OverlapRegridder.__init__</span><span class="nt">(self, source, target, method)</span>
-<span class="g g-Whitespace">    </span><span class="mi">501</span> <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">502</span>     <span class="bp">self</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">503</span>     <span class="n">source</span><span class="p">:</span> <span class="n">UgridDataArray</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">504</span>     <span class="n">target</span><span class="p">:</span> <span class="n">UgridDataArray</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">505</span>     <span class="n">method</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;mean&quot;</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">506</span> <span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">507</span>     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">508</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_setup_regrid</span><span class="p">(</span><span class="n">method</span><span class="p">)</span>
-
-<span class="nn">File D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\xugrid\regrid\regridder.py:108,</span> in <span class="ni">BaseRegridder.__init__</span><span class="nt">(self, source, target, tolerance)</span>
-<span class="g g-Whitespace">    </span><span class="mi">105</span> <span class="bp">self</span><span class="o">.</span><span class="n">_target</span> <span class="o">=</span> <span class="n">setup_grid</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">106</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="ne">--&gt; </span><span class="mi">108</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_weights</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_source</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">109</span> <span class="k">return</span>
-
-<span class="nn">File D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\xugrid\regrid\regridder.py:513,</span> in <span class="ni">OverlapRegridder._compute_weights</span><span class="nt">(self, source, target, tolerance)</span>
-<span class="g g-Whitespace">    </span><span class="mi">510</span> <span class="k">def</span><span class="w"> </span><span class="nf">_compute_weights</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">511</span>     <span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="g g-Whitespace">    </span><span class="mi">512</span> <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">513</span>     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_compute_weights</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">relative</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-<span class="nn">File D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\xugrid\regrid\regridder.py:426,</span> in <span class="ni">BaseOverlapRegridder._compute_weights</span><span class="nt">(self, source, target, relative)</span>
-<span class="g g-Whitespace">    </span><span class="mi">424</span> <span class="k">def</span><span class="w"> </span><span class="nf">_compute_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">relative</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">425</span>     <span class="n">source</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">convert_to_match</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">426</span>     <span class="n">source_index</span><span class="p">,</span> <span class="n">target_index</span><span class="p">,</span> <span class="n">weight_values</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">overlap</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">427</span>         <span class="n">target</span><span class="p">,</span> <span class="n">relative</span><span class="o">=</span><span class="n">relative</span>
-<span class="g g-Whitespace">    </span><span class="mi">428</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">429</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="o">=</span> <span class="n">MatrixCSR</span><span class="o">.</span><span class="n">from_triplet</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">430</span>         <span class="n">target_index</span><span class="p">,</span> <span class="n">source_index</span><span class="p">,</span> <span class="n">weight_values</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">target</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">source</span><span class="o">.</span><span class="n">size</span>
-<span class="g g-Whitespace">    </span><span class="mi">431</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">432</span>     <span class="k">return</span>
-
-<span class="nn">File D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\xugrid\regrid\unstructured.py:124,</span> in <span class="ni">UnstructuredGrid2d.overlap</span><span class="nt">(self, other, relative)</span>
-<span class="g g-Whitespace">    </span><span class="mi">105</span> <span class="k">def</span><span class="w"> </span><span class="nf">overlap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">relative</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">106</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">107</span><span class="sd">     Parameters</span>
-<span class="g g-Whitespace">    </span><span class="mi">108</span><span class="sd">     ----------</span>
-<span class="sd">   (...)    118     weights: 1d np.ndarray of float</span>
-<span class="g g-Whitespace">    </span><span class="mi">119</span><span class="sd">     &quot;&quot;&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">120</span>     <span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">121</span>         <span class="n">target_index</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">122</span>         <span class="n">source_index</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">123</span>         <span class="n">weights</span><span class="p">,</span>
-<span class="ne">--&gt; </span><span class="mi">124</span>     <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ugrid_topology</span><span class="o">.</span><span class="n">celltree</span><span class="o">.</span><span class="n">intersect_faces</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">125</span>         <span class="n">vertices</span><span class="o">=</span><span class="n">other</span><span class="o">.</span><span class="n">ugrid_topology</span><span class="o">.</span><span class="n">node_coordinates</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">126</span>         <span class="n">faces</span><span class="o">=</span><span class="n">other</span><span class="o">.</span><span class="n">ugrid_topology</span><span class="o">.</span><span class="n">face_node_connectivity</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">127</span>         <span class="n">fill_value</span><span class="o">=</span><span class="n">other</span><span class="o">.</span><span class="n">ugrid_topology</span><span class="o">.</span><span class="n">fill_value</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">128</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">129</span>     <span class="k">if</span> <span class="n">relative</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">130</span>         <span class="n">weights</span> <span class="o">/=</span> <span class="bp">self</span><span class="o">.</span><span class="n">area</span><span class="p">[</span><span class="n">source_index</span><span class="p">]</span>
-
-<span class="nn">File D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\numba_celltree\celltree.py:253,</span> in <span class="ni">CellTree2d.intersect_faces</span><span class="nt">(self, vertices, faces, fill_value)</span>
-<span class="g g-Whitespace">    </span><span class="mi">251</span> <span class="n">vertices</span> <span class="o">=</span> <span class="n">cast_vertices</span><span class="p">(</span><span class="n">vertices</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">252</span> <span class="n">faces</span> <span class="o">=</span> <span class="n">cast_faces</span><span class="p">(</span><span class="n">faces</span><span class="p">,</span> <span class="n">fill_value</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">253</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">locate_faces</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">254</span> <span class="n">area</span> <span class="o">=</span> <span class="n">area_of_intersection</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">255</span>     <span class="n">vertices_a</span><span class="o">=</span><span class="n">vertices</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">256</span>     <span class="n">vertices_b</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>    <span class="mi">260</span>     <span class="n">indices_b</span><span class="o">=</span><span class="n">j</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">261</span> <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">262</span> <span class="c1"># Separating axes declares polygons with shared edges as touching.</span>
-<span class="g g-Whitespace">    </span><span class="mi">263</span> <span class="c1"># Make sure we only include actual intersections.</span>
-
-<span class="nn">File D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\numba_celltree\celltree.py:214,</span> in <span class="ni">CellTree2d.locate_faces</span><span class="nt">(self, vertices, faces)</span>
-<span class="g g-Whitespace">    </span><span class="mi">210</span> <span class="n">n_chunks</span> <span class="o">=</span> <span class="n">nb</span><span class="o">.</span><span class="n">get_num_threads</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">211</span> <span class="n">shortlist_i</span><span class="p">,</span> <span class="n">shortlist_j</span> <span class="o">=</span> <span class="n">locate_boxes</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">212</span>     <span class="n">bbox_coords</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">celltree_data</span><span class="p">,</span> <span class="n">n_chunks</span>
-<span class="g g-Whitespace">    </span><span class="mi">213</span> <span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">214</span> <span class="n">intersects</span> <span class="o">=</span> <span class="n">polygons_intersect</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">215</span>     <span class="n">vertices_a</span><span class="o">=</span><span class="n">vertices</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">216</span>     <span class="n">vertices_b</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">217</span>     <span class="n">faces_a</span><span class="o">=</span><span class="n">faces</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">218</span>     <span class="n">faces_b</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">faces</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">219</span>     <span class="n">indices_a</span><span class="o">=</span><span class="n">shortlist_i</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">220</span>     <span class="n">indices_b</span><span class="o">=</span><span class="n">shortlist_j</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">221</span> <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">222</span> <span class="k">return</span> <span class="n">shortlist_i</span><span class="p">[</span><span class="n">intersects</span><span class="p">],</span> <span class="n">shortlist_j</span><span class="p">[</span><span class="n">intersects</span><span class="p">]</span>
-
-<span class="nn">File D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\numba\core\dispatcher.py:376,</span> in <span class="ni">_DispatcherBase._compile_for_args</span><span class="nt">(self, *args, **kws)</span>
-<span class="g g-Whitespace">    </span><span class="mi">374</span> <span class="n">return_val</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="g g-Whitespace">    </span><span class="mi">375</span> <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">376</span>     <span class="n">return_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">argtypes</span><span class="p">))</span>
-<span class="g g-Whitespace">    </span><span class="mi">377</span> <span class="k">except</span> <span class="n">errors</span><span class="o">.</span><span class="n">ForceLiteralArg</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">378</span>     <span class="c1"># Received request for compiler re-entry with the list of arguments</span>
-<span class="g g-Whitespace">    </span><span class="mi">379</span>     <span class="c1"># indicated by e.requested_args.</span>
-<span class="g g-Whitespace">    </span><span class="mi">380</span>     <span class="c1"># First, check if any of these args are already Literal-ized</span>
-<span class="g g-Whitespace">    </span><span class="mi">381</span>     <span class="n">already_lit_pos</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">requested_args</span>
-<span class="g g-Whitespace">    </span><span class="mi">382</span>                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">types</span><span class="o">.</span><span class="n">Literal</span><span class="p">)]</span>
-
-<span class="nn">File D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\numba\core\dispatcher.py:904,</span> in <span class="ni">Dispatcher.compile</span><span class="nt">(self, sig)</span>
-<span class="g g-Whitespace">    </span><span class="mi">902</span> <span class="k">with</span> <span class="n">ev</span><span class="o">.</span><span class="n">trigger_event</span><span class="p">(</span><span class="s2">&quot;numba:compile&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">ev_details</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">903</span>     <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">904</span>         <span class="n">cres</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compiler</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">return_type</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">905</span>     <span class="k">except</span> <span class="n">errors</span><span class="o">.</span><span class="n">ForceLiteralArg</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">906</span>         <span class="k">def</span><span class="w"> </span><span class="nf">folded</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">kws</span><span class="p">):</span>
-
-<span class="nn">File D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\numba\core\dispatcher.py:80,</span> in <span class="ni">_FunctionCompiler.compile</span><span class="nt">(self, args, return_type)</span>
-<span class="g g-Whitespace">     </span><span class="mi">79</span> <span class="k">def</span><span class="w"> </span><span class="nf">compile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">return_type</span><span class="p">):</span>
-<span class="ne">---&gt; </span><span class="mi">80</span>     <span class="n">status</span><span class="p">,</span> <span class="n">retval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compile_cached</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">return_type</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">81</span>     <span class="k">if</span> <span class="n">status</span><span class="p">:</span>
-<span class="g g-Whitespace">     </span><span class="mi">82</span>         <span class="k">return</span> <span class="n">retval</span>
-
-<span class="nn">File D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\numba\core\dispatcher.py:94,</span> in <span class="ni">_FunctionCompiler._compile_cached</span><span class="nt">(self, args, return_type)</span>
-<span class="g g-Whitespace">     </span><span class="mi">91</span>     <span class="k">pass</span>
-<span class="g g-Whitespace">     </span><span class="mi">93</span> <span class="k">try</span><span class="p">:</span>
-<span class="ne">---&gt; </span><span class="mi">94</span>     <span class="n">retval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compile_core</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">return_type</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">95</span> <span class="k">except</span> <span class="n">errors</span><span class="o">.</span><span class="n">TypingError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-<span class="g g-Whitespace">     </span><span class="mi">96</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_failed_cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">e</span>
-
-<span class="nn">File D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\numba\core\dispatcher.py:107,</span> in <span class="ni">_FunctionCompiler._compile_core</span><span class="nt">(self, args, return_type)</span>
-<span class="g g-Whitespace">    </span><span class="mi">104</span> <span class="n">flags</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_customize_flags</span><span class="p">(</span><span class="n">flags</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">106</span> <span class="n">impl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_implementation</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="p">{})</span>
-<span class="ne">--&gt; </span><span class="mi">107</span> <span class="n">cres</span> <span class="o">=</span> <span class="n">compiler</span><span class="o">.</span><span class="n">compile_extra</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targetdescr</span><span class="o">.</span><span class="n">typing_context</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">108</span>                               <span class="bp">self</span><span class="o">.</span><span class="n">targetdescr</span><span class="o">.</span><span class="n">target_context</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">109</span>                               <span class="n">impl</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">110</span>                               <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">return_type</span><span class="o">=</span><span class="n">return_type</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">111</span>                               <span class="n">flags</span><span class="o">=</span><span class="n">flags</span><span class="p">,</span> <span class="nb">locals</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">locals</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">112</span>                               <span class="n">pipeline_class</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pipeline_class</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">113</span> <span class="c1"># Check typing error if object mode is used</span>
-<span class="g g-Whitespace">    </span><span class="mi">114</span> <span class="k">if</span> <span class="n">cres</span><span class="o">.</span><span class="n">typing_error</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">flags</span><span class="o">.</span><span class="n">enable_pyobject</span><span class="p">:</span>
-
-<span class="nn">File D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\numba\core\compiler.py:739,</span> in <span class="ni">compile_extra</span><span class="nt">(typingctx, targetctx, func, args, return_type, flags, locals, library, pipeline_class)</span>
-<span class="g g-Whitespace">    </span><span class="mi">715</span><span class="w"> </span><span class="sd">&quot;&quot;&quot;Compiler entry point</span>
-<span class="g g-Whitespace">    </span><span class="mi">716</span><span class="sd"> </span>
-<span class="g g-Whitespace">    </span><span class="mi">717</span><span class="sd"> Parameter</span>
-<span class="sd">   (...)    735     compiler pipeline</span>
-<span class="g g-Whitespace">    </span><span class="mi">736</span><span class="sd"> &quot;&quot;&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">737</span> <span class="n">pipeline</span> <span class="o">=</span> <span class="n">pipeline_class</span><span class="p">(</span><span class="n">typingctx</span><span class="p">,</span> <span class="n">targetctx</span><span class="p">,</span> <span class="n">library</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">738</span>                           <span class="n">args</span><span class="p">,</span> <span class="n">return_type</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="nb">locals</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">739</span> <span class="k">return</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">compile_extra</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-
-<span class="nn">File D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\numba\core\compiler.py:439,</span> in <span class="ni">CompilerBase.compile_extra</span><span class="nt">(self, func)</span>
-<span class="g g-Whitespace">    </span><span class="mi">437</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">lifted</span> <span class="o">=</span> <span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">438</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">lifted_from</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="ne">--&gt; </span><span class="mi">439</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compile_bytecode</span><span class="p">()</span>
-
-<span class="nn">File D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\numba\core\compiler.py:505,</span> in <span class="ni">CompilerBase._compile_bytecode</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">501</span><span class="w"> </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">502</span><span class="sd"> Populate and run pipeline for bytecode input</span>
-<span class="g g-Whitespace">    </span><span class="mi">503</span><span class="sd"> &quot;&quot;&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">504</span> <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">func_ir</span> <span class="ow">is</span> <span class="kc">None</span>
-<span class="ne">--&gt; </span><span class="mi">505</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compile_core</span><span class="p">()</span>
-
-<span class="nn">File D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\numba\core\compiler.py:473,</span> in <span class="ni">CompilerBase._compile_core</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">471</span> <span class="n">res</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="g g-Whitespace">    </span><span class="mi">472</span> <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">473</span>     <span class="n">pm</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">474</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">cr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">475</span>         <span class="k">break</span>
-
-<span class="nn">File D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\numba\core\compiler_machinery.py:356,</span> in <span class="ni">PassManager.run</span><span class="nt">(self, state)</span>
-<span class="g g-Whitespace">    </span><span class="mi">354</span> <span class="n">pass_inst</span> <span class="o">=</span> <span class="n">_pass_registry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pss</span><span class="p">)</span><span class="o">.</span><span class="n">pass_inst</span>
-<span class="g g-Whitespace">    </span><span class="mi">355</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pass_inst</span><span class="p">,</span> <span class="n">CompilerPass</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">356</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_runPass</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">pass_inst</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">357</span> <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">358</span>     <span class="k">raise</span> <span class="ne">BaseException</span><span class="p">(</span><span class="s2">&quot;Legacy pass in use&quot;</span><span class="p">)</span>
-
-<span class="nn">File D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\numba\core\compiler_lock.py:35,</span> in <span class="ni">_CompilerLock.__call__.&lt;locals&gt;._acquire_compile_lock</span><span class="nt">(*args, **kwargs)</span>
-<span class="g g-Whitespace">     </span><span class="mi">32</span> <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">33</span> <span class="k">def</span><span class="w"> </span><span class="nf">_acquire_compile_lock</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="g g-Whitespace">     </span><span class="mi">34</span>     <span class="k">with</span> <span class="bp">self</span><span class="p">:</span>
-<span class="ne">---&gt; </span><span class="mi">35</span>         <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-<span class="nn">File D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\numba\core\compiler_machinery.py:311,</span> in <span class="ni">PassManager._runPass</span><span class="nt">(self, index, pss, internal_state)</span>
-<span class="g g-Whitespace">    </span><span class="mi">309</span>     <span class="n">mutated</span> <span class="o">|=</span> <span class="n">check</span><span class="p">(</span><span class="n">pss</span><span class="o">.</span><span class="n">run_initialization</span><span class="p">,</span> <span class="n">internal_state</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">310</span> <span class="k">with</span> <span class="n">SimpleTimer</span><span class="p">()</span> <span class="k">as</span> <span class="n">pass_time</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">311</span>     <span class="n">mutated</span> <span class="o">|=</span> <span class="n">check</span><span class="p">(</span><span class="n">pss</span><span class="o">.</span><span class="n">run_pass</span><span class="p">,</span> <span class="n">internal_state</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">312</span> <span class="k">with</span> <span class="n">SimpleTimer</span><span class="p">()</span> <span class="k">as</span> <span class="n">finalize_time</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">313</span>     <span class="n">mutated</span> <span class="o">|=</span> <span class="n">check</span><span class="p">(</span><span class="n">pss</span><span class="o">.</span><span class="n">run_finalizer</span><span class="p">,</span> <span class="n">internal_state</span><span class="p">)</span>
-
-<span class="nn">File D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\numba\core\compiler_machinery.py:272,</span> in <span class="ni">PassManager._runPass.&lt;locals&gt;.check</span><span class="nt">(func, compiler_state)</span>
-<span class="g g-Whitespace">    </span><span class="mi">271</span> <span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">compiler_state</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">272</span>     <span class="n">mangled</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">compiler_state</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">273</span>     <span class="k">if</span> <span class="n">mangled</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">274</span>         <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;CompilerPass implementations should return True/False. &quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">275</span>                <span class="s2">&quot;CompilerPass with name &#39;</span><span class="si">%s</span><span class="s2">&#39; did not.&quot;</span><span class="p">)</span>
-
-<span class="nn">File D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\numba\core\typed_passes.py:247,</span> in <span class="ni">NopythonRewrites.run_pass</span><span class="nt">(self, state)</span>
-<span class="g g-Whitespace">    </span><span class="mi">245</span> <span class="n">pp</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">246</span> <span class="k">with</span> <span class="n">fallback_context</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">247</span>     <span class="n">rewrites</span><span class="o">.</span><span class="n">rewrite_registry</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="s1">&#39;after-inference&#39;</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">248</span> <span class="n">pp</span><span class="o">.</span><span class="n">remove_dels</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">249</span> <span class="k">return</span> <span class="kc">True</span>
-
-<span class="nn">File D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\numba\core\rewrites\registry.py:94,</span> in <span class="ni">RewriteRegistry.apply</span><span class="nt">(self, kind, state)</span>
-<span class="g g-Whitespace">     </span><span class="mi">92</span> <span class="kn">from</span><span class="w"> </span><span class="nn">numba.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">postproc</span>
-<span class="g g-Whitespace">     </span><span class="mi">93</span> <span class="n">post_proc</span> <span class="o">=</span> <span class="n">postproc</span><span class="o">.</span><span class="n">PostProcessor</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">func_ir</span><span class="p">)</span>
-<span class="ne">---&gt; </span><span class="mi">94</span> <span class="n">post_proc</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-
-<span class="nn">File D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\numba\core\postproc.py:84,</span> in <span class="ni">PostProcessor.run</span><span class="nt">(self, emit_dels, extend_lifetimes)</span>
-<span class="g g-Whitespace">     </span><span class="mi">80</span> <span class="n">vlt</span> <span class="o">=</span> <span class="n">VariableLifetime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func_ir</span><span class="o">.</span><span class="n">blocks</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">81</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_ir</span><span class="o">.</span><span class="n">variable_lifetime</span> <span class="o">=</span> <span class="n">vlt</span>
-<span class="g g-Whitespace">     </span><span class="mi">83</span> <span class="n">bev</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">compute_live_variables</span><span class="p">(</span><span class="n">vlt</span><span class="o">.</span><span class="n">cfg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_ir</span><span class="o">.</span><span class="n">blocks</span><span class="p">,</span>
-<span class="ne">---&gt; </span><span class="mi">84</span>                                       <span class="n">vlt</span><span class="o">.</span><span class="n">usedefs</span><span class="o">.</span><span class="n">defmap</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">85</span>                                       <span class="n">vlt</span><span class="o">.</span><span class="n">deadmaps</span><span class="o">.</span><span class="n">combined</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">86</span> <span class="k">for</span> <span class="n">offset</span><span class="p">,</span> <span class="n">ir_block</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_ir</span><span class="o">.</span><span class="n">blocks</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-<span class="g g-Whitespace">     </span><span class="mi">87</span>     <span class="bp">self</span><span class="o">.</span><span class="n">func_ir</span><span class="o">.</span><span class="n">block_entry_vars</span><span class="p">[</span><span class="n">ir_block</span><span class="p">]</span> <span class="o">=</span> <span class="n">bev</span><span class="p">[</span><span class="n">offset</span><span class="p">]</span>
-
-<span class="nn">File D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\functools.py:1026,</span> in <span class="ni">cached_property.__get__</span><span class="nt">(self, instance, owner)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1024</span> <span class="n">val</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attrname</span><span class="p">,</span> <span class="n">_NOT_FOUND</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1025</span> <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="n">_NOT_FOUND</span><span class="p">:</span>
-<span class="ne">-&gt; </span><span class="mi">1026</span>     <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1027</span>     <span class="k">try</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1028</span>         <span class="n">cache</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">attrname</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-
-<span class="nn">File D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\numba\core\postproc.py:44,</span> in <span class="ni">VariableLifetime.usedefs</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">     </span><span class="mi">42</span> <span class="nd">@cached_property</span>
-<span class="g g-Whitespace">     </span><span class="mi">43</span> <span class="k">def</span><span class="w"> </span><span class="nf">usedefs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="ne">---&gt; </span><span class="mi">44</span>     <span class="k">return</span> <span class="n">analysis</span><span class="o">.</span><span class="n">compute_use_defs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_blocks</span><span class="p">)</span>
-
-<span class="nn">File D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\numba\core\analysis.py:52,</span> in <span class="ni">compute_use_defs</span><span class="nt">(blocks)</span>
-<span class="g g-Whitespace">     </span><span class="mi">49</span>     <span class="k">if</span> <span class="n">stmt</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">rhs_set</span><span class="p">:</span>
-<span class="g g-Whitespace">     </span><span class="mi">50</span>         <span class="n">def_set</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">stmt</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-<span class="ne">---&gt; </span><span class="mi">52</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">stmt</span><span class="o">.</span><span class="n">list_vars</span><span class="p">():</span>
-<span class="g g-Whitespace">     </span><span class="mi">53</span>     <span class="c1"># do not include locally defined vars to use-map</span>
-<span class="g g-Whitespace">     </span><span class="mi">54</span>     <span class="k">if</span> <span class="n">var</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">def_set</span><span class="p">:</span>
-<span class="g g-Whitespace">     </span><span class="mi">55</span>         <span class="n">use_set</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">var</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-
-<span class="nn">File D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\numba\core\ir.py:355,</span> in <span class="ni">Stmt.list_vars</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">354</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">355</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rec_list_vars</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
-
-<span class="nn">File D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\numba\core\ir.py:337,</span> in <span class="ni">Inst._rec_list_vars</span><span class="nt">(self, val)</span>
-<span class="g g-Whitespace">    </span><span class="mi">335</span>     <span class="n">lst</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="g g-Whitespace">    </span><span class="mi">336</span>     <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">val</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-<span class="ne">--&gt; </span><span class="mi">337</span>         <span class="n">lst</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rec_list_vars</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
-<span class="g g-Whitespace">    </span><span class="mi">338</span>     <span class="k">return</span> <span class="n">lst</span>
-<span class="g g-Whitespace">    </span><span class="mi">339</span> <span class="k">else</span><span class="p">:</span>
-
-<span class="nn">File D:\a\lulucf-somers\lulucf-somers\.pixi\envs\default\Lib\site-packages\numba\core\ir.py:321,</span> in <span class="ni">Inst._rec_list_vars</span><span class="nt">(self, val)</span>
-<span class="g g-Whitespace">    </span><span class="mi">316</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">317</span><span class="sd">     List the variables used (read or written) by the instruction.</span>
-<span class="g g-Whitespace">    </span><span class="mi">318</span><span class="sd">     &quot;&quot;&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">319</span>     <span class="k">raise</span> <span class="ne">NotImplementedError</span>
-<span class="ne">--&gt; </span><span class="mi">321</span> <span class="k">def</span><span class="w"> </span><span class="nf">_rec_list_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">322</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">323</span><span class="sd">     A recursive helper used to implement list_vars() in subclasses.</span>
-<span class="g g-Whitespace">    </span><span class="mi">324</span><span class="sd">     &quot;&quot;&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">325</span>     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">Var</span><span class="p">):</span>
-
-<span class="ne">KeyboardInterrupt</span>: 
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PolygonGridArea(cell_idx=array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16,
+       17, 18, 19, 20, 21, 22, 23, 24]), nitems=array([ 5,  5,  6,  6,  2, 10,  7,  5,  5,  3,  4,  5, 10,  2,  5,  7,  3,
+        5,  7,  3,  4,  5,  3,  4,  2]), polygon=array([7, 9, 9, 3, 3, 7, 7, 6, 7, 9, 8, 6, 6, 7, 7, 6, 8, 8, 5, 5, 5, 6,
+       8, 8, 7, 7, 7, 9, 9, 4, 4, 3, 3, 3, 7, 7, 6, 4, 7, 4, 4, 5, 5, 6,
+       6, 6, 8, 5, 5, 5, 6, 8, 5, 5, 4, 3, 3, 3, 6, 4, 2, 4, 4, 5, 5, 6,
+       5, 6, 6, 4, 2, 4, 4, 5, 5, 5, 5, 5, 1, 1, 2, 4, 3, 3, 3, 2, 2, 2,
+       4, 2, 5, 2, 2, 2, 0, 5, 1, 1, 2, 2, 2, 0, 5, 1, 1, 3, 2, 2, 2, 2,
+       2, 0, 2, 2, 2, 2, 0, 1, 1, 1, 0, 1, 1]), area=array([1.41629806e-03, 2.90067895e-02, 8.81955013e-03, 6.53842718e-05,
+       6.91978086e-04, 4.94451402e-03, 1.42361908e-02, 1.77869302e-03,
+       6.48457379e-03, 1.25560284e-02, 2.87168464e-03, 1.21155042e-02,
+       1.27129541e-03, 2.64864843e-03, 6.75262556e-03, 1.43402417e-02,
+       7.00978213e-03, 3.01262119e-02, 3.94589069e-05, 4.41217793e-05,
+       2.26987865e-06, 2.77815538e-03, 2.88945865e-02, 1.11054135e-02,
+       3.43778330e-04, 2.33885034e-04, 3.94625898e-03, 7.17316229e-04,
+       6.32953316e-04, 4.69617396e-03, 2.60602003e-04, 8.48726343e-03,
+       4.18703901e-03, 1.64947297e-02, 6.61101453e-03, 1.23195861e-03,
+       1.84687792e-02, 7.91041759e-04, 3.54480255e-04, 6.32333151e-03,
+       6.21939418e-03, 3.73493003e-03, 1.62809195e-03, 1.67520273e-02,
+       6.22506851e-04, 1.72624439e-02, 2.90655634e-03, 2.83349502e-02,
+       6.68941587e-03, 3.34566157e-04, 1.73451141e-03, 1.62237526e-02,
+       2.04839457e-03, 2.17278528e-02, 1.32907092e-02, 6.52781189e-03,
+       1.07134681e-02, 9.46801078e-03, 5.43524197e-04, 7.26955871e-04,
+       1.11126903e-03, 3.58759545e-02, 1.74229641e-03, 1.32118738e-02,
+       2.64332615e-03, 2.03394342e-03, 6.65284161e-03, 6.84900367e-05,
+       4.15541476e-03, 1.51191743e-03, 6.37373040e-03, 2.78145516e-03,
+       5.67007246e-04, 2.60766428e-02, 1.39233572e-02, 1.73577920e-02,
+       8.90906378e-03, 9.01610275e-03, 1.36250528e-03, 3.35453619e-03,
+       2.84418639e-03, 1.00630068e-02, 1.33286772e-03, 1.51285778e-02,
+       1.93320612e-03, 5.99916296e-03, 2.69899226e-03, 1.93805787e-02,
+       5.41539741e-03, 1.52040239e-02, 1.03820885e-03, 2.06646479e-02,
+       2.15776535e-03, 1.57935617e-02, 3.45816272e-04, 1.29489022e-02,
+       1.70781841e-02, 1.38761737e-03, 2.03046264e-03, 2.62208668e-03,
+       1.38579673e-03, 2.54695024e-03, 9.36669523e-04, 1.97131061e-02,
+       1.93502244e-02, 5.10974749e-04, 6.19450415e-03, 1.83519685e-02,
+       1.49425526e-02, 1.63363668e-03, 2.85805644e-02, 9.37522478e-03,
+       1.53683524e-04, 2.56890580e-04, 3.49165159e-03, 4.43290827e-03,
+       3.20754401e-02, 4.71971329e-03, 1.39528615e-02, 1.48789941e-03,
+       1.98395258e-02, 3.84348388e-02, 1.56516121e-03]))
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/runner/work/lulucf-somers/lulucf-somers/.pixi/envs/default/lib/python3.13/site-packages/xugrid/regrid/structured.py:606: FutureWarning: In a future version of xarray the default value for compat will change from compat=&#39;no_conflicts&#39; to compat=&#39;override&#39;. This is likely to lead to different results when combining overlapping variables with the same name. To opt in to new defaults and get rid of these warnings now use `set_options(use_new_combine_kwarg_defaults=True) or set compat explicitly.
+  ds = xr.merge([ds_x, ds_y])
 </pre></div>
 </div>
 </div>
@@ -831,11 +620,11 @@
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PolygonGridArea(cell_idx=array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16,
        17, 18, 19, 20, 21, 22, 23, 24]), nitems=array([ 5,  5,  6,  6,  2, 10,  7,  5,  5,  3,  4,  5, 10,  2,  5,  7,  3,
-        5,  7,  3,  4,  5,  3,  4,  2]), polygon=array([2, 2, 2, 1, 1, 2, 2, 1, 2, 2, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1,
-       1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 1, 1, 2, 1, 1, 1, 1, 1,
-       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1,
-       1, 1, 1, 1, 1, 1, 2, 1, 2, 2, 1, 1, 1, 2, 1, 2, 2, 1, 1, 1, 1, 1,
+        5,  7,  3,  4,  5,  3,  4,  2]), polygon=array([2, 2, 2, 0, 0, 2, 2, 1, 2, 2, 0, 1, 1, 2, 2, 1, 0, 0, 1, 1, 1, 1,
+       0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 2, 2, 1, 0, 2, 0, 0, 1, 1, 1,
+       1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1,
+       1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 2, 2, 1, 0, 0, 0, 0, 1, 1, 1,
+       0, 1, 1, 1, 1, 1, 2, 1, 2, 2, 1, 1, 1, 2, 1, 2, 2, 0, 1, 1, 1, 1,
        1, 2, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2]), area=array([1.41629806e-03, 2.90067895e-02, 8.81955013e-03, 6.53842718e-05,
        6.91978086e-04, 4.94451402e-03, 1.42361908e-02, 1.77869302e-03,
        6.48457379e-03, 1.25560284e-02, 2.87168464e-03, 1.21155042e-02,
@@ -935,28 +724,76 @@ i=1: row_idx=np.int64(0), col_idx=np.int64(1), nitems=np.int64(5), p=array([2, 2
  */
 
 :root {
-  --xr-font-color0: var(--jp-content-font-color0, rgba(0, 0, 0, 1));
-  --xr-font-color2: var(--jp-content-font-color2, rgba(0, 0, 0, 0.54));
-  --xr-font-color3: var(--jp-content-font-color3, rgba(0, 0, 0, 0.38));
-  --xr-border-color: var(--jp-border-color2, #e0e0e0);
-  --xr-disabled-color: var(--jp-layout-color3, #bdbdbd);
-  --xr-background-color: var(--jp-layout-color0, white);
-  --xr-background-color-row-even: var(--jp-layout-color1, white);
-  --xr-background-color-row-odd: var(--jp-layout-color2, #eeeeee);
+  --xr-font-color0: var(
+    --jp-content-font-color0,
+    var(--pst-color-text-base rgba(0, 0, 0, 1))
+  );
+  --xr-font-color2: var(
+    --jp-content-font-color2,
+    var(--pst-color-text-base, rgba(0, 0, 0, 0.54))
+  );
+  --xr-font-color3: var(
+    --jp-content-font-color3,
+    var(--pst-color-text-base, rgba(0, 0, 0, 0.38))
+  );
+  --xr-border-color: var(
+    --jp-border-color2,
+    hsl(from var(--pst-color-on-background, white) h s calc(l - 10))
+  );
+  --xr-disabled-color: var(
+    --jp-layout-color3,
+    hsl(from var(--pst-color-on-background, white) h s calc(l - 40))
+  );
+  --xr-background-color: var(
+    --jp-layout-color0,
+    var(--pst-color-on-background, white)
+  );
+  --xr-background-color-row-even: var(
+    --jp-layout-color1,
+    hsl(from var(--pst-color-on-background, white) h s calc(l - 5))
+  );
+  --xr-background-color-row-odd: var(
+    --jp-layout-color2,
+    hsl(from var(--pst-color-on-background, white) h s calc(l - 15))
+  );
 }
 
 html[theme="dark"],
 html[data-theme="dark"],
 body[data-theme="dark"],
 body.vscode-dark {
-  --xr-font-color0: rgba(255, 255, 255, 1);
-  --xr-font-color2: rgba(255, 255, 255, 0.54);
-  --xr-font-color3: rgba(255, 255, 255, 0.38);
-  --xr-border-color: #1f1f1f;
-  --xr-disabled-color: #515151;
-  --xr-background-color: #111111;
-  --xr-background-color-row-even: #111111;
-  --xr-background-color-row-odd: #313131;
+  --xr-font-color0: var(
+    --jp-content-font-color0,
+    var(--pst-color-text-base, rgba(255, 255, 255, 1))
+  );
+  --xr-font-color2: var(
+    --jp-content-font-color2,
+    var(--pst-color-text-base, rgba(255, 255, 255, 0.54))
+  );
+  --xr-font-color3: var(
+    --jp-content-font-color3,
+    var(--pst-color-text-base, rgba(255, 255, 255, 0.38))
+  );
+  --xr-border-color: var(
+    --jp-border-color2,
+    hsl(from var(--pst-color-on-background, #111111) h s calc(l + 10))
+  );
+  --xr-disabled-color: var(
+    --jp-layout-color3,
+    hsl(from var(--pst-color-on-background, #111111) h s calc(l + 40))
+  );
+  --xr-background-color: var(
+    --jp-layout-color0,
+    var(--pst-color-on-background, #111111)
+  );
+  --xr-background-color-row-even: var(
+    --jp-layout-color1,
+    hsl(from var(--pst-color-on-background, #111111) h s calc(l + 5))
+  );
+  --xr-background-color-row-odd: var(
+    --jp-layout-color2,
+    hsl(from var(--pst-color-on-background, #111111) h s calc(l + 15))
+  );
 }
 
 .xr-wrap {
@@ -1012,6 +849,7 @@ body.vscode-dark {
 
 .xr-section-item input + label {
   color: var(--xr-disabled-color);
+  border: 2px solid transparent !important;
 }
 
 .xr-section-item input:enabled + label {
@@ -1020,7 +858,7 @@ body.vscode-dark {
 }
 
 .xr-section-item input:focus + label {
-  border: 2px solid var(--xr-font-color0);
+  border: 2px solid var(--xr-font-color0) !important;
 }
 
 .xr-section-item input:enabled + label:hover {
@@ -1152,7 +990,9 @@ body.vscode-dark {
 .xr-var-item label,
 .xr-var-item > .xr-var-name span {
   background-color: var(--xr-background-color-row-even);
+  border-color: var(--xr-background-color-row-odd);
   margin-bottom: 0;
+  padding-top: 2px;
 }
 
 .xr-var-item > .xr-var-name:hover span {
@@ -1163,6 +1003,7 @@ body.vscode-dark {
 .xr-var-list > li:nth-child(odd) > label,
 .xr-var-list > li:nth-child(odd) > .xr-var-name span {
   background-color: var(--xr-background-color-row-odd);
+  border-color: var(--xr-background-color-row-even);
 }
 
 .xr-var-name {
@@ -1212,8 +1053,15 @@ body.vscode-dark {
 .xr-var-data,
 .xr-index-data {
   display: none;
-  background-color: var(--xr-background-color) !important;
-  padding-bottom: 5px !important;
+  border-top: 2px dotted var(--xr-background-color);
+  padding-bottom: 20px !important;
+  padding-top: 10px !important;
+}
+
+.xr-var-attrs-in + label,
+.xr-var-data-in + label,
+.xr-index-data-in + label {
+  padding: 0 1px;
 }
 
 .xr-var-attrs-in:checked ~ .xr-var-attrs,
@@ -1224,6 +1072,12 @@ body.vscode-dark {
 
 .xr-var-data > table {
   float: right;
+}
+
+.xr-var-data > pre,
+.xr-index-data > pre,
+.xr-var-data > table > tbody > tr {
+  background-color: transparent !important;
 }
 
 .xr-var-name span,
@@ -1285,6 +1139,14 @@ dl.xr-attrs {
   stroke: currentColor;
   fill: currentColor;
 }
+
+.xr-var-attrs-in:checked + label > .xr-icon-file-text2,
+.xr-var-data-in:checked + label > .xr-icon-database,
+.xr-index-data-in:checked + label > .xr-icon-database {
+  color: var(--xr-font-color0);
+  filter: drop-shadow(1px 1px 5px var(--xr-font-color2));
+  stroke-width: 0.8px;
+}
 </style><pre class='xr-text-repr-fallback'>&lt;xarray.DataArray (y: 5, x: 5, layer: 3)&gt; Size: 300B
 array([[[0.01893406, 0.        , 0.9810659 ],
         [0.        , 0.04446733, 0.95553267],
@@ -1318,7 +1180,7 @@ array([[[0.01893406, 0.        , 0.9810659 ],
 Coordinates:
   * y        (y) float64 40B 0.9 0.7 0.5 0.3 0.1
   * x        (x) float64 40B 0.1 0.3 0.5 0.7 0.9
-  * layer    (layer) int32 12B 0 1 2</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>xarray.DataArray</div><div class='xr-array-name'></div><ul class='xr-dim-list'><li><span class='xr-has-index'>y</span>: 5</li><li><span class='xr-has-index'>x</span>: 5</li><li><span class='xr-has-index'>layer</span>: 3</li></ul></div><ul class='xr-sections'><li class='xr-section-item'><div class='xr-array-wrap'><input id='section-b08632ca-2e90-4542-b7d7-6309b544ac1a' class='xr-array-in' type='checkbox' checked><label for='section-b08632ca-2e90-4542-b7d7-6309b544ac1a' title='Show/hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-array-preview xr-preview'><span>0.01893 0.0 0.9811 0.0 0.04447 0.9555 ... 0.0 0.0 1.0 0.0 0.0 1.0</span></div><div class='xr-array-data'><pre>array([[[0.01893406, 0.        , 0.9810659 ],
+  * layer    (layer) int64 24B 0 1 2</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>xarray.DataArray</div><div class='xr-array-name'></div><ul class='xr-dim-list'><li><span class='xr-has-index'>y</span>: 5</li><li><span class='xr-has-index'>x</span>: 5</li><li><span class='xr-has-index'>layer</span>: 3</li></ul></div><ul class='xr-sections'><li class='xr-section-item'><div class='xr-array-wrap'><input id='section-a1f2a431-057c-4c4d-8a05-030e5eabf7da' class='xr-array-in' type='checkbox' checked><label for='section-a1f2a431-057c-4c4d-8a05-030e5eabf7da' title='Show/hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-array-preview xr-preview'><span>0.01893 0.0 0.9811 0.0 0.04447 0.9555 ... 0.0 0.0 1.0 0.0 0.0 1.0</span></div><div class='xr-array-data'><pre>array([[[0.01893406, 0.        , 0.9810659 ],
         [0.        , 0.04446733, 0.95553267],
         [0.07179212, 0.69317603, 0.23503186],
         [0.9283998 , 0.07160015, 0.        ],
@@ -1346,9 +1208,9 @@ Coordinates:
         [0.        , 0.7656194 , 0.23438063],
         [0.        , 0.198114  , 0.80188596],
         [0.        , 0.        , 1.        ],
-        [0.        , 0.        , 1.        ]]], dtype=float32)</pre></div></div></li><li class='xr-section-item'><input id='section-702a7999-8ea7-44c5-9577-4e6d3d09d4d9' class='xr-section-summary-in' type='checkbox'  checked><label for='section-702a7999-8ea7-44c5-9577-4e6d3d09d4d9' class='xr-section-summary' >Coordinates: <span>(3)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>y</span></div><div class='xr-var-dims'>(y)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>0.9 0.7 0.5 0.3 0.1</div><input id='attrs-62275f97-a765-4058-b5da-e60033243524' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-62275f97-a765-4058-b5da-e60033243524' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-c6a57c7b-0d94-4237-af6d-4a6e61c3d08b' class='xr-var-data-in' type='checkbox'><label for='data-c6a57c7b-0d94-4237-af6d-4a6e61c3d08b' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([0.9, 0.7, 0.5, 0.3, 0.1])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>x</span></div><div class='xr-var-dims'>(x)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>0.1 0.3 0.5 0.7 0.9</div><input id='attrs-241b5237-85a4-4e77-a2a4-0dff6df8c27c' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-241b5237-85a4-4e77-a2a4-0dff6df8c27c' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-b6a04635-6510-45e6-821a-d6a7959f6417' class='xr-var-data-in' type='checkbox'><label for='data-b6a04635-6510-45e6-821a-d6a7959f6417' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([0.1, 0.3, 0.5, 0.7, 0.9])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>layer</span></div><div class='xr-var-dims'>(layer)</div><div class='xr-var-dtype'>int32</div><div class='xr-var-preview xr-preview'>0 1 2</div><input id='attrs-51362973-14b0-4eb3-8ad4-e1a6d563c59e' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-51362973-14b0-4eb3-8ad4-e1a6d563c59e' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-f1c15e38-8333-44af-a7f1-cec376dd2b87' class='xr-var-data-in' type='checkbox'><label for='data-f1c15e38-8333-44af-a7f1-cec376dd2b87' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([0, 1, 2], dtype=int32)</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-efba39e0-f946-44a6-bafc-eb1b41cb96ee' class='xr-section-summary-in' type='checkbox'  ><label for='section-efba39e0-f946-44a6-bafc-eb1b41cb96ee' class='xr-section-summary' >Indexes: <span>(3)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-index-name'><div>y</div></div><div class='xr-index-preview'>PandasIndex</div><input type='checkbox' disabled/><label></label><input id='index-a9743094-fc03-461b-84b4-a0d4e995f8bf' class='xr-index-data-in' type='checkbox'/><label for='index-a9743094-fc03-461b-84b4-a0d4e995f8bf' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(Index([0.9, 0.7, 0.4999999999999999, 0.2999999999999998, 0.09999999999999976], dtype=&#x27;float64&#x27;, name=&#x27;y&#x27;))</pre></div></li><li class='xr-var-item'><div class='xr-index-name'><div>x</div></div><div class='xr-index-preview'>PandasIndex</div><input type='checkbox' disabled/><label></label><input id='index-30dc9f09-53fc-4cfc-b968-f063601d7209' class='xr-index-data-in' type='checkbox'/><label for='index-30dc9f09-53fc-4cfc-b968-f063601d7209' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(Index([                0.1, 0.30000000000000004,  0.5000000000000001,
+        [0.        , 0.        , 1.        ]]], dtype=float32)</pre></div></div></li><li class='xr-section-item'><input id='section-afef6449-ceac-4f59-8c7d-419387c3193e' class='xr-section-summary-in' type='checkbox'  checked><label for='section-afef6449-ceac-4f59-8c7d-419387c3193e' class='xr-section-summary' >Coordinates: <span>(3)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>y</span></div><div class='xr-var-dims'>(y)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>0.9 0.7 0.5 0.3 0.1</div><input id='attrs-829ea7ef-a859-48a0-a853-b3e03b2afd34' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-829ea7ef-a859-48a0-a853-b3e03b2afd34' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-c95383e6-4d16-4dc8-bd33-710fabc1f49d' class='xr-var-data-in' type='checkbox'><label for='data-c95383e6-4d16-4dc8-bd33-710fabc1f49d' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([0.9, 0.7, 0.5, 0.3, 0.1])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>x</span></div><div class='xr-var-dims'>(x)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>0.1 0.3 0.5 0.7 0.9</div><input id='attrs-3c1ec087-0da2-475f-b2fe-2a5b5507b8ce' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-3c1ec087-0da2-475f-b2fe-2a5b5507b8ce' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-05b3bcb3-438c-4ea4-884b-6fce474537ca' class='xr-var-data-in' type='checkbox'><label for='data-05b3bcb3-438c-4ea4-884b-6fce474537ca' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([0.1, 0.3, 0.5, 0.7, 0.9])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>layer</span></div><div class='xr-var-dims'>(layer)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 1 2</div><input id='attrs-5a640da0-92d4-42e1-856b-ed7cec6fc7ef' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-5a640da0-92d4-42e1-856b-ed7cec6fc7ef' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-8814908b-c5c8-4a05-875c-3c95ca3ec846' class='xr-var-data-in' type='checkbox'><label for='data-8814908b-c5c8-4a05-875c-3c95ca3ec846' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([0, 1, 2])</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-0e10ab48-53c2-4fb0-a1e3-6548bd163242' class='xr-section-summary-in' type='checkbox'  ><label for='section-0e10ab48-53c2-4fb0-a1e3-6548bd163242' class='xr-section-summary' >Indexes: <span>(3)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-index-name'><div>y</div></div><div class='xr-index-preview'>PandasIndex</div><input type='checkbox' disabled/><label></label><input id='index-1596741e-3191-4e13-a597-f76ee81349dc' class='xr-index-data-in' type='checkbox'/><label for='index-1596741e-3191-4e13-a597-f76ee81349dc' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(Index([0.9, 0.7, 0.4999999999999999, 0.2999999999999998, 0.09999999999999976], dtype=&#x27;float64&#x27;, name=&#x27;y&#x27;))</pre></div></li><li class='xr-var-item'><div class='xr-index-name'><div>x</div></div><div class='xr-index-preview'>PandasIndex</div><input type='checkbox' disabled/><label></label><input id='index-afb4284b-4b2b-4ed3-9e05-a8dc69f8fd63' class='xr-index-data-in' type='checkbox'/><label for='index-afb4284b-4b2b-4ed3-9e05-a8dc69f8fd63' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(Index([                0.1, 0.30000000000000004,  0.5000000000000001,
         0.7000000000000001,  0.9000000000000001],
-      dtype=&#x27;float64&#x27;, name=&#x27;x&#x27;))</pre></div></li><li class='xr-var-item'><div class='xr-index-name'><div>layer</div></div><div class='xr-index-preview'>PandasIndex</div><input type='checkbox' disabled/><label></label><input id='index-14538561-45ee-45bb-982f-9d0b29550f18' class='xr-index-data-in' type='checkbox'/><label for='index-14538561-45ee-45bb-982f-9d0b29550f18' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(Index([0, 1, 2], dtype=&#x27;int32&#x27;, name=&#x27;layer&#x27;))</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-7f1e697a-4892-44fd-bf42-82ee66566048' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-7f1e697a-4892-44fd-bf42-82ee66566048' class='xr-section-summary'  title='Expand/collapse section'>Attributes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'></dl></div></li></ul></div></div></div></div>
+      dtype=&#x27;float64&#x27;, name=&#x27;x&#x27;))</pre></div></li><li class='xr-var-item'><div class='xr-index-name'><div>layer</div></div><div class='xr-index-preview'>PandasIndex</div><input type='checkbox' disabled/><label></label><input id='index-4e832ef1-b500-4d47-addb-5acb78236620' class='xr-index-data-in' type='checkbox'/><label for='index-4e832ef1-b500-4d47-addb-5acb78236620' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(Index([0, 1, 2], dtype=&#x27;int64&#x27;, name=&#x27;layer&#x27;))</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-1ab3ef3b-b36f-41b2-898e-74f88f68ad3f' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-1ab3ef3b-b36f-41b2-898e-74f88f68ad3f' class='xr-section-summary'  title='Expand/collapse section'>Attributes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'></dl></div></li></ul></div></div></div></div>
 </div>
 <p>Let’s show the polygons again and for instance check the result of the center cell (see highlighted cell). This cell is covered by four different polygons with two unique “nrs”: 0 and 1. We can see, approximately 12% of the cell is covered by nr 0 and approximately 88% is covered by nr 1 which is in agreement with the image.</p>
 <div class="cell docutils container">
@@ -1375,10 +1237,10 @@ array([0.12150949, 0.8784905 , 0.        ], dtype=float32)
 Coordinates:
     y        float64 8B 0.5
     x        float64 8B 0.5
-  * layer    (layer) int32 12B 0 1 2
+  * layer    (layer) int64 24B 0 1 2
 </pre></div>
 </div>
-<img alt="../_images/1296029958be5ca7279bdd878d59c699e4e42358ebe30638cb171c86d8ccf302.png" src="../_images/1296029958be5ca7279bdd878d59c699e4e42358ebe30638cb171c86d8ccf302.png" />
+<img alt="../_images/2019f589cb8cd638e144a7b000a60af71b9bc91c44f4b96c0e9e8960a663f6d7.png" src="../_images/2019f589cb8cd638e144a7b000a60af71b9bc91c44f4b96c0e9e8960a663f6d7.png" />
 </div>
 </div>
 </section>

@@ -1,0 +1,33 @@
+﻿lusos.geometry.ops.PolygonGridArea
+==================================
+
+.. currentmodule:: lusos.geometry.ops
+
+.. autoclass:: PolygonGridArea
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~PolygonGridArea.__init__
+      ~PolygonGridArea.count
+      ~PolygonGridArea.index
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~PolygonGridArea.area
+      ~PolygonGridArea.cell_idx
+      ~PolygonGridArea.nitems
+      ~PolygonGridArea.polygon
+   
+   

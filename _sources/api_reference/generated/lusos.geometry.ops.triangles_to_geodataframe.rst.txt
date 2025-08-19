@@ -1,0 +1,6 @@
+﻿lusos.geometry.ops.triangles\_to\_geodataframe
+==============================================
+
+.. currentmodule:: lusos.geometry.ops
+
+.. autofunction:: triangles_to_geodataframe
