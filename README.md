@@ -10,7 +10,7 @@ Python package to calculate spatial greenhouse gas (GHG) emissions based on [Pea
 
 
 # How to install
-Currently, `lusos` needs be installed in a Python 3.12 environment, install the latest stable release using pip:
+Currently, `lusos` needs be installed in a Python 3.12 environment or higher, install the latest stable release using pip:
 
 ```powershell
 pip install lusos
