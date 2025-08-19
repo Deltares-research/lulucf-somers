@@ -7,5 +7,7 @@ This is the API Reference.
 maxdepth: 2
 ---
 
+LassoGrid <api_reference/lasso_grid>
+
 ```
 

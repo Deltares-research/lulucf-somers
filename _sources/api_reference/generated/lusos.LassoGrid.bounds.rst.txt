@@ -1,0 +1,6 @@
+﻿lusos.LassoGrid.bounds
+======================
+
+.. currentmodule:: lusos
+
+.. autoproperty:: LassoGrid.bounds

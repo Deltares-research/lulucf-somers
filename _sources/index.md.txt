@@ -8,7 +8,7 @@ This page is a work in progress.
 
 
 # How to install
-Currently, `lusos` needs be installed in a Python 3.12 environment, install the latest stable release using pip:
+Currently, `lusos` needs be installed in a Python 3.12 environment or higher, install the latest stable release using pip:
 
 ```powershell
 pip install lusos

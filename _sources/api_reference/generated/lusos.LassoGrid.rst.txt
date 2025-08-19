@@ -1,0 +1,34 @@
+﻿lusos.LassoGrid
+===============
+
+.. currentmodule:: lusos
+
+.. autoclass:: LassoGrid
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~LassoGrid.__init__
+      ~LassoGrid.dataarray
+      ~LassoGrid.empty_array
+      ~LassoGrid.from_dataarray
+      ~LassoGrid.from_raster
+      ~LassoGrid.xcoordinates
+      ~LassoGrid.ycoordinates
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~LassoGrid.bounds
+   
+   

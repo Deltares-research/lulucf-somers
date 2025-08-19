@@ -1,0 +1,6 @@
+﻿lusos.LassoGrid.dataarray
+=========================
+
+.. currentmodule:: lusos
+
+.. automethod:: LassoGrid.dataarray

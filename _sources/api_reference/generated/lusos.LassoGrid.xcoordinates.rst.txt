@@ -1,0 +1,6 @@
+﻿lusos.LassoGrid.xcoordinates
+============================
+
+.. currentmodule:: lusos
+
+.. automethod:: LassoGrid.xcoordinates

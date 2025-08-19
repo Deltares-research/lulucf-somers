@@ -1,0 +1,6 @@
+﻿lusos.LassoGrid.from\_raster
+============================
+
+.. currentmodule:: lusos
+
+.. automethod:: LassoGrid.from_raster

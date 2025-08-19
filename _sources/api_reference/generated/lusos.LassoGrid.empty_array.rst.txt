@@ -1,0 +1,6 @@
+﻿lusos.LassoGrid.empty\_array
+============================
+
+.. currentmodule:: lusos
+
+.. automethod:: LassoGrid.empty_array
