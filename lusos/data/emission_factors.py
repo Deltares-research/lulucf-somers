@@ -12,7 +12,7 @@ REGISTRY = pooch.create(
 REGISTRY.load_registry(resources.files("lusos.data") / "registry.txt")
 
 
-def ef_low_netherlands():
+def ef_low_netherlands() -> pd.DataFrame:
     """
     Emission factors for the western part (low) part of the Netherlands for different BGT
     and soiltype combinations for different greenhouse gasses and flux directions (i.e. "out"
@@ -28,7 +28,7 @@ def ef_low_netherlands():
     return pd.read_csv(filename, index_col="layer")
 
 
-def ef_high_netherlands():
+def ef_high_netherlands() -> pd.DataFrame:
     """
     Emission factors for the eastern part (high) part of the Netherlands for different BGT
     and soiltype combinations for different greenhouse gasses and flux directions (i.e. "out"

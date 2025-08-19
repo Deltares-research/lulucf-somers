@@ -33,7 +33,13 @@ class PolygonGridArea(NamedTuple):
     area: np.ndarray
 
 
-def triangulate(polygons: gpd.GeoDataFrame):
+class Triangles(NamedTuple):
+    triangles: np.ndarray
+    index: np.ndarray
+    coords: np.ndarray
+
+
+def triangulate(polygons: gpd.GeoDataFrame) -> Triangles:
     triangles = []
     index = []
     coords = []
@@ -62,13 +68,15 @@ def triangulate(polygons: gpd.GeoDataFrame):
     triangles = np.concatenate(triangles).reshape((-1, 3))
     index = np.concatenate(index)
     coords = np.concatenate(coords)
-    return triangles, index, coords
+    return Triangles(triangles, index, coords)
 
 
-def polygon_area_in_grid(polygons: gpd.GeoDataFrame, grid: xr.DataArray):
-    triangles, index, coords = triangulate(polygons)
+def polygon_area_in_grid(
+    polygons: gpd.GeoDataFrame, grid: xr.DataArray
+) -> PolygonGridArea:
+    tri = triangulate(polygons)
 
-    ugrid = xu.Ugrid2d(*coords.T, -1, triangles)
+    ugrid = xu.Ugrid2d(*tri.coords.T, -1, tri.triangles)
     regridder = xu.OverlapRegridder(source=ugrid, target=grid)
     ds = regridder.to_dataset()
 
@@ -80,8 +88,10 @@ def polygon_area_in_grid(polygons: gpd.GeoDataFrame, grid: xr.DataArray):
     cell_idx = np.flatnonzero(nonzero_per_row)
     nitems = nonzero_per_row[cell_idx]
 
-    return PolygonGridArea(cell_idx, nitems, index[polygon_idx], area)
+    return PolygonGridArea(cell_idx, nitems, tri.index[polygon_idx], area)
 
 
-def _triangles_to_geodataframe(triangles, coords):  # pragma: no cover
-    return gpd.GeoDataFrame(geometry=shapely.polygons(coords[triangles]), crs=28992)
+def triangles_to_geodataframe(triangles: Triangles) -> gpd.GeoDataFrame:
+    return gpd.GeoDataFrame(
+        geometry=shapely.polygons(triangles.coords[triangles.triangles]), crs=28992
+    )

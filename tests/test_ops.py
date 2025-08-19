@@ -17,9 +17,10 @@ def polygon_gdf():
 
 @pytest.mark.unittest
 def test_triangulate(polygon_gdf):
-    triangles, index, coords = ops.triangulate(polygon_gdf)
+    tri = ops.triangulate(polygon_gdf)
+    assert isinstance(tri, ops.Triangles)
     assert_array_equal(
-        triangles,
+        tri.triangles,
         [
             [3, 0, 1],
             [1, 2, 3],
@@ -33,9 +34,9 @@ def test_triangulate(polygon_gdf):
             [14, 8, 7],
         ],
     )
-    assert_array_equal(index, [0, 0, 1, 1, 1, 1, 1, 1, 1, 1])
+    assert_array_equal(tri.index, [0, 0, 1, 1, 1, 1, 1, 1, 1, 1])
     assert_array_equal(
-        coords,
+        tri.coords,
         [
             [0.7, 0.3],
             [0.7, 0.7],
@@ -66,3 +67,12 @@ def test_polygon_area_in_grid(polygon_gdf, lasso_grid):
         area.area, [0.06, 0.15, 0.15, 0.06, 0.08, 0.08, 0.06, 0.15, 0.06, 0.15]
     )
     assert np.isclose(area.area.sum(), 1)
+
+
+@pytest.mark.unittest
+def test_triangles_to_geodataframe(polygon_gdf):
+    tri = ops.triangulate(polygon_gdf)
+    gdf = ops.triangles_to_geodataframe(tri)
+    assert isinstance(gdf, gpd.GeoDataFrame)
+    assert gdf.crs == 28992
+    assert len(gdf) == 10
