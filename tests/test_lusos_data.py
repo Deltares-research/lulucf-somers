@@ -6,7 +6,6 @@ from numpy.testing import assert_array_equal
 import lusos
 
 
-@pytest.mark.xfail(reason="Updated files in registry")
 @pytest.mark.unittest
 def test_ef_low_netherlands():
     """
@@ -99,8 +98,13 @@ def test_ef_low_netherlands():
         ],
     )
 
+    missing_year = 1900
+    with pytest.raises(
+        ValueError, match="No emission factors available for year: 1900"
+    ):
+        lusos.data.ef_low_netherlands(year=missing_year)
 
-@pytest.mark.xfail(reason="Updated files in registry")
+
 @pytest.mark.unittest
 def test_ef_high_netherlands():
     """
@@ -192,6 +196,11 @@ def test_ef_high_netherlands():
             [0.0, 0.0, 0.0, 0.0],
         ],
     )
+    missing_year = 1900
+    with pytest.raises(
+        ValueError, match="No emission factors available for year: 1900"
+    ):
+        lusos.data.ef_high_netherlands(year=missing_year)
 
 
 @pytest.mark.unittest
