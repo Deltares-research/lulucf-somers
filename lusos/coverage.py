@@ -21,7 +21,7 @@ def bgt_soilmap_coverage(
 
     Parameters
     ----------
-    grid : lulucf.LassoGrid
+    grid : :class:`~lusos.LassoGrid`
         LassoGrid instance containing the raster grid to calculate the percentages for.
     bgt : gpd.GeoDataFrame
         GeoDataFrame containing the BGT data polygons.

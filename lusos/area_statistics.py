@@ -25,7 +25,7 @@ def areal_percentage_bgt_soilmap(
 
     Parameters
     ----------
-    grid : lulucf.LassoGrid
+    grid : lusos.LassoGrid
         LassoGrid instance containing the raster grid to calculate the percentages for.
     bgt : gpd.GeoDataFrame
         GeoDataFrame containing the BGT data polygons.

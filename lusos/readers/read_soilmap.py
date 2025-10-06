@@ -32,7 +32,7 @@ class SoilmapLayers(StrEnum):
 
 class BroSoilmap(Geopackage):
     """
-    Class to handle to the BRO Soilmap geopackage. See lulucf.readers.Geopackage for
+    Class to handle to the BRO Soilmap geopackage. See lusos.readers.Geopackage for
     available methods to query and inspect the tables in the geopackage.
     """
 
