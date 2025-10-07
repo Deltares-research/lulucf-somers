@@ -4,7 +4,7 @@ from pathlib import Path
 import geopandas as gpd
 import pooch
 
-from lusos.readers import read_soilmap_geopackage
+from lusos.io import read_soilmap_geopackage
 
 REGISTRY = pooch.create(
     path=pooch.os_cache("lusos"),

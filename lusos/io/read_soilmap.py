@@ -4,7 +4,7 @@ from pathlib import Path
 import geopandas as gpd
 from shapely.geometry import box
 
-from lusos.readers import Geopackage
+from lusos.io import Geopackage
 
 
 class SoilmapLayers(StrEnum):
@@ -32,7 +32,7 @@ class SoilmapLayers(StrEnum):
 
 class BroSoilmap(Geopackage):
     """
-    Class to handle to the BRO Soilmap geopackage. See lusos.readers.Geopackage for
+    Class to handle to the BRO Soilmap geopackage. See lusos.io.Geopackage for
     available methods to query and inspect the tables in the geopackage.
     """
 

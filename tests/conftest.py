@@ -10,7 +10,7 @@ from shapely.ops import polygonize
 
 from lusos.lasso import LassoGrid
 from lusos.preprocessing.bgt import BGT_LAYERS_FOR_LUSOS
-from lusos.readers import read_soilmap_geopackage
+from lusos.io import read_soilmap_geopackage
 
 
 def create_polygons():
