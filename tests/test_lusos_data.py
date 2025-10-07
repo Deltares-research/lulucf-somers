@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import geopandas as gpd
 import pandas as pd
 import pytest
@@ -207,15 +209,21 @@ def test_ef_high_netherlands():
 def test_sample_bgt():
     bgt = lusos.data.sample_bgt()
     assert isinstance(bgt, gpd.GeoDataFrame)
+    bgt_path = lusos.data.sample_bgt(as_path=True)
+    assert isinstance(bgt_path, Path)
 
 
 @pytest.mark.unittest
 def test_sample_soilmap():
     soilmap = lusos.data.sample_soilmap()
     assert isinstance(soilmap, gpd.GeoDataFrame)
+    soilmap_path = lusos.data.sample_soilmap(as_path=True)
+    assert isinstance(soilmap_path, Path)
 
 
 @pytest.mark.unittest
 def test_sample_emissions():
     emissions = lusos.data.sample_emissions()
     assert isinstance(emissions, gpd.GeoDataFrame)
+    emissions_path = lusos.data.sample_emissions(as_path=True)
+    assert isinstance(emissions_path, Path)

@@ -1,4 +1,5 @@
 from importlib import resources
+from pathlib import Path
 
 import geopandas as gpd
 import pooch
@@ -14,7 +15,7 @@ REGISTRY = pooch.create(
 REGISTRY.load_registry(resources.files("lusos.data") / "registry.txt")
 
 
-def sample_bgt():
+def sample_bgt(as_path: bool = False):
     """
     Sample BGT data for the Netherlands. Fetches the data from a geoparquet file on the
     lulucf-somers repository.
@@ -26,10 +27,13 @@ def sample_bgt():
 
     """
     filename = REGISTRY.fetch("bgt_data.geoparquet")
-    return gpd.read_parquet(filename)
+    if as_path:
+        return Path(filename)
+    else:
+        return gpd.read_parquet(filename)
 
 
-def sample_soilmap():
+def sample_soilmap(as_path: bool = False):
     """
     Sample soil map data for the Netherlands. Fetches the data from a GeoPackage file on
     the lulucf-somers repository.
@@ -41,10 +45,13 @@ def sample_soilmap():
 
     """
     filename = REGISTRY.fetch("bro_soilmap.gpkg")
-    return read_soilmap_geopackage(filename)
+    if as_path:
+        return Path(filename)
+    else:
+        return read_soilmap_geopackage(filename)
 
 
-def sample_emissions():
+def sample_emissions(as_path: bool = False):
     """
     Sample emissions data for the Netherlands. Fetches the data from a geoparquet file on
     the lulucf-somers repository.
@@ -56,4 +63,7 @@ def sample_emissions():
 
     """
     filename = REGISTRY.fetch("emissions.geoparquet")
-    return gpd.read_parquet(filename)
+    if as_path:
+        return Path(filename)
+    else:
+        return gpd.read_parquet(filename)
