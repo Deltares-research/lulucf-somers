@@ -81,10 +81,11 @@ BURRIED_IDS = [
     "AEm9A",
     "AEm9",
     "AEm5",
-    "AEm8",
     "AK",
     "ALu",
 ]
+
+BURIED_DEEP_IDS = ["AEm8"]
 
 
 def group_soilmap_units(soilmap: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
@@ -111,5 +112,6 @@ def group_soilmap_units(soilmap: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
     soilmap.loc[soilmap[id_].isin(PEAT_IDS), "layer"] = "peat"
     soilmap.loc[soilmap[id_].isin(MOER_IDS), "layer"] = "moerig"
     soilmap.loc[soilmap[id_].isin(BURRIED_IDS), "layer"] = "buried"
+    soilmap.loc[soilmap[id_].isin(BURIED_DEEP_IDS), "layer"] = "buried_deep"
 
     return soilmap

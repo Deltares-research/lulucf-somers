@@ -1,4 +1,4 @@
-MAIN_SOILMAP_UNITS = ["peat", "moerig", "buried", "other"]
+MAIN_SOILMAP_UNITS = ["peat", "moerig", "buried", "buried_deep", "other"]
 
 MAIN_BGT_UNITS = [
     "percelen",
