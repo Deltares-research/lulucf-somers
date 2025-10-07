@@ -26,6 +26,15 @@ erven_buried,0.0,0.0,0,0
 overig_buried,0.0,0.0,0,0
 sloten_buried,0.0,0.0,0,0
 stedelijk_groen_buried,0.0,0.0,0,0
+panden_buried_deep,0.0,0.0,0,0
+overig_groen_buried_deep,0.0,0.0,0,0
+percelen_buried_deep,0.0,0.0,0,0
+openbare_ruimte_buried_deep,0.0,0.0,0,0
+grote_wateren_buried_deep,0.0,0.0,0,0
+erven_buried_deep,0.0,0.0,0,0
+overig_buried_deep,0.0,0.0,0,0
+sloten_buried_deep,0.0,0.0,0,0
+stedelijk_groen_buried_deep,0.0,0.0,0,0
 panden_other,0.0,0.0,0,0
 overig_groen_other,0.0,0.0,0,0
 percelen_other,0.0,0.0,0,0
