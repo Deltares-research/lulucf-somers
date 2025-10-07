@@ -407,11 +407,16 @@
 
 <div class="viewcode-block" id="ef_low_netherlands">
 <a class="viewcode-back" href="../../../api_reference/generated/lusos.data.ef_low_netherlands.html#lusos.data.ef_low_netherlands">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">ef_low_netherlands</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ef_low_netherlands</span><span class="p">(</span><span class="n">year</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2024</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Emission factors for the western part (low) part of the Netherlands for different BGT</span>
-<span class="sd">    and soiltype combinations for different greenhouse gasses and flux directions (i.e. &quot;out&quot;</span>
-<span class="sd">    or &quot;in&quot;). Fetches the data from a CSV file on the lulucf-somers repository.</span>
+<span class="sd">    and soiltype combinations for different greenhouse gasses and flux directions (i.e.</span>
+<span class="sd">    &quot;out&quot; or &quot;in&quot;). Fetches the data from a CSV file on the lulucf-somers repository.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    year : int, optional</span>
+<span class="sd">        Year of the emission factors to retrieve. The default is 2024.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -419,18 +424,26 @@
 <span class="sd">        Emission factors with index of BGT-soiltype combinations.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">filename</span> <span class="o">=</span> <span class="n">REGISTRY</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;emission_factors_low_nl.csv&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s2">&quot;layer&quot;</span><span class="p">)</span></div>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">REGISTRY</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;emission_factors_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">_low_nl.csv&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s2">&quot;layer&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No emission factors available for year: </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span></div>
 
 
 
 <div class="viewcode-block" id="ef_high_netherlands">
 <a class="viewcode-back" href="../../../api_reference/generated/lusos.data.ef_high_netherlands.html#lusos.data.ef_high_netherlands">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">ef_high_netherlands</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ef_high_netherlands</span><span class="p">(</span><span class="n">year</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2024</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Emission factors for the eastern part (high) part of the Netherlands for different BGT</span>
-<span class="sd">    and soiltype combinations for different greenhouse gasses and flux directions (i.e. &quot;out&quot;</span>
-<span class="sd">    or &quot;in&quot;). Fetches the data from a CSV file on the lulucf-somers repository.</span>
+<span class="sd">    and soiltype combinations for different greenhouse gasses and flux directions (i.e.</span>
+<span class="sd">    &quot;out&quot; or &quot;in&quot;). Fetches the data from a CSV file on the lulucf-somers repository.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    year : int, optional</span>
+<span class="sd">        Year of the emission factors to retrieve. The default is 2024.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -438,8 +451,11 @@
 <span class="sd">        Emission factors with index of BGT-soiltype combinations.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">filename</span> <span class="o">=</span> <span class="n">REGISTRY</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;emission_factors_high_nl.csv&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s2">&quot;layer&quot;</span><span class="p">)</span></div>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">REGISTRY</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;emission_factors_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">_high_nl.csv&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s2">&quot;layer&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No emission factors available for year: </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span></div>
 
 </pre></div>
 

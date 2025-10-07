@@ -414,21 +414,32 @@
   <section id="calculate-spatial-emissions">
 <h1>Calculate spatial emissions<a class="headerlink" href="#calculate-spatial-emissions" title="Link to this heading">#</a></h1>
 <p>This tutorial is a full example how to calculate spatial emissions for BGT-soilmap combinations based on modelled emission data. We will use the data from the previous <a class="reference internal" href="coverage.html"><span class="std std-doc">coverage</span></a> and <a class="reference internal" href="flux.html"><span class="std std-doc">flux</span></a> examples in the same area.</p>
-<p>First, we will load the data and define the grid.</p>
+<p>Normally, running <code class="docutils literal notranslate"><span class="pre">lusos</span></code> also includes loading the BGT, soilmap and emissions data from files, which
+will also be part of this tutorial. Each function to load lusos sample data also has an option to
+return filepaths instead of the actual data objects. We will set each of them to <code class="docutils literal notranslate"><span class="pre">True</span></code> to show the
+way data is typically loaded to run lusos. Mainly for the soilmap data must be loaded in a specific way. This is normally distributed in a Geopackage format and loading the data requires to combine
+information from several layers. Lusos has a dedicated <code class="docutils literal notranslate"><span class="pre">io</span></code> function to do this. The other data
+sources can be loaded with normal Geopandas <code class="docutils literal notranslate"><span class="pre">read</span></code> functions. First, we will get the filepaths, load the data, and define the grid.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">lusos</span>
 
+<span class="n">bgt_path</span> <span class="o">=</span> <span class="n">lusos</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">sample_bgt</span><span class="p">(</span><span class="n">as_path</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">soilmap_path</span> <span class="o">=</span> <span class="n">lusos</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">sample_soilmap</span><span class="p">(</span><span class="n">as_path</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">emissions_path</span> <span class="o">=</span> <span class="n">lusos</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">sample_emissions</span><span class="p">(</span><span class="n">as_path</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Load data</span>
+<span class="n">soilmap</span> <span class="o">=</span> <span class="n">lusos</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_soilmap_geopackage</span><span class="p">(</span><span class="n">soilmap_path</span><span class="p">)</span>
+<span class="n">bgt</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="n">bgt_path</span><span class="p">)</span>
+<span class="n">emissions</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="n">emissions_path</span><span class="p">)</span>
+
+<span class="c1"># Grid definition</span>
 <span class="n">xresolution</span> <span class="o">=</span> <span class="n">yresolution</span> <span class="o">=</span> <span class="mi">25</span>
 <span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="mi">111_000</span><span class="p">,</span> <span class="mi">455_000</span><span class="p">,</span> <span class="mi">116_000</span><span class="p">,</span> <span class="mi">460_000</span>
-
 <span class="n">grid</span> <span class="o">=</span> <span class="n">lusos</span><span class="o">.</span><span class="n">LassoGrid</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymax</span><span class="p">,</span> <span class="n">xresolution</span><span class="p">,</span> <span class="n">yresolution</span><span class="p">)</span>
-
-<span class="n">bgt</span> <span class="o">=</span> <span class="n">lusos</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">sample_bgt</span><span class="p">()</span>
-<span class="n">soilmap</span> <span class="o">=</span> <span class="n">lusos</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">sample_soilmap</span><span class="p">()</span>
-<span class="n">emissions</span> <span class="o">=</span> <span class="n">lusos</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">sample_emissions</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -471,10 +482,10 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x7fbe7f98c590&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x7fa8c6fe9400&gt;
 </pre></div>
 </div>
-<img alt="../_images/ba73b44774e9cd0d46efcc47bef5de881a093070503737e0ca215ff8e5cb2de2.png" src="../_images/ba73b44774e9cd0d46efcc47bef5de881a093070503737e0ca215ff8e5cb2de2.png" />
+<img alt="../_images/73b6781f0acdd1b4bfa6ee02238f84749531ba1f0b29033d9d1375be701d5427.png" src="../_images/73b6781f0acdd1b4bfa6ee02238f84749531ba1f0b29033d9d1375be701d5427.png" />
 </div>
 </div>
 <p>We need to fill the missing values in another way. For this, lusos has emission factors available for BGT-soilmap combinations that we can use for the missing values. Our example area is situated in the “low-Netherlands”. We can load emission factors for this.</p>
@@ -487,10 +498,10 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Downloading file &#39;emission_factors_low_nl.csv&#39; from &#39;https://github.com/Deltares-research/lulucf-somers/raw/main/data/emission_factors_low_nl.csv&#39; to &#39;/home/runner/.cache/lusos&#39;.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Downloading file &#39;emission_factors_2024_low_nl.csv&#39; from &#39;https://github.com/Deltares-research/lulucf-somers/raw/main/data/emission_factors_2024_low_nl.csv&#39; to &#39;/home/runner/.cache/lusos&#39;.
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(36, 4)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(45, 4)
 </pre></div>
 </div>
 <div class="output text_html"><div>
@@ -595,10 +606,10 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x7fbe7c3bb4d0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x7fa8c5b42d50&gt;
 </pre></div>
 </div>
-<img alt="../_images/a9bbaadaf275ff0f441fba10befe61c1bd5e83cfe64eb67408365d8cb0d2f067.png" src="../_images/a9bbaadaf275ff0f441fba10befe61c1bd5e83cfe64eb67408365d8cb0d2f067.png" />
+<img alt="../_images/1616497fc6b86dac9787851d43c23d885471b53585e60e8731598521fcb13922.png" src="../_images/1616497fc6b86dac9787851d43c23d885471b53585e60e8731598521fcb13922.png" />
 </div>
 </div>
 <p>The resulting grid is now a weighted average greenhouse gas flux based on the contributions of BGT-soilmap combinations and SOMERS modelling results.</p>
