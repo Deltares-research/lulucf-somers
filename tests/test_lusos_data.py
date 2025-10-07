@@ -14,7 +14,6 @@ def test_ef_low_netherlands():
     Test the emission factors for the low part of the Netherlands.
     """
     ef = lusos.data.ef_low_netherlands(year=2024)
-    ef = pd.read_csv(r"c:\src\lulucf-somers\data\emission_factors_2024_low_nl.csv", index_col="layer")
     assert isinstance(ef, pd.DataFrame)
     assert ef.index.name == "layer"
     assert_array_equal(ef.columns, ["co2_uit", "ch4_uit", "n2o_uit", "co2_in"])
