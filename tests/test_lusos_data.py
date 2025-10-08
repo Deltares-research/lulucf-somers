@@ -13,7 +13,7 @@ def test_ef_low_netherlands():
     """
     Test the emission factors for the low part of the Netherlands.
     """
-    ef = lusos.data.ef_low_netherlands(year=2024)
+    ef = lusos.data.ef_low_netherlands(year=2023)
     assert isinstance(ef, pd.DataFrame)
     assert ef.index.name == "layer"
     assert_array_equal(ef.columns, ["co2_uit", "ch4_uit", "n2o_uit", "co2_in"])
@@ -56,15 +56,6 @@ def test_ef_low_netherlands():
             "overig_buried_deep",
             "sloten_buried_deep",
             "stedelijk_groen_buried_deep",
-            "panden_other",
-            "overig_groen_other",
-            "percelen_other",
-            "openbare_ruimte_other",
-            "grote_wateren_other",
-            "erven_other",
-            "overig_other",
-            "sloten_other",
-            "stedelijk_groen_other",
         ],
     )
     assert_array_equal(
@@ -106,15 +97,6 @@ def test_ef_low_netherlands():
             [0.0, 0.0, 0.0, 0.0],
             [0.0, 0.0, 0.0, 0.0],
             [0.0, 0.0, 0.0, 0.0],
-            [0.0, 0.0, 0.0, 0.0],
-            [0.0, 0.0, 0.0, 0.0],
-            [0.0, 0.0, 0.0, 0.0],
-            [0.0, 0.0, 0.0, 0.0],
-            [0.0, 0.0, 0.0, 0.0],
-            [0.0, 0.0, 0.0, 0.0],
-            [0.0, 0.0, 0.0, 0.0],
-            [0.0, 0.0, 0.0, 0.0],
-            [0.0, 0.0, 0.0, 0.0],
         ],
     )
 
@@ -130,7 +112,7 @@ def test_ef_high_netherlands():
     """
     Test the emission factors for the high part of the Netherlands.
     """
-    ef = lusos.data.ef_high_netherlands(year=2024)
+    ef = lusos.data.ef_high_netherlands(year=2023)
     assert isinstance(ef, pd.DataFrame)
     assert ef.index.name == "layer"
     assert_array_equal(ef.columns, ["co2_uit", "ch4_uit", "n2o_uit", "co2_in"])
@@ -173,15 +155,6 @@ def test_ef_high_netherlands():
             "overig_buried_deep",
             "sloten_buried_deep",
             "stedelijk_groen_buried_deep",
-            "panden_other",
-            "overig_groen_other",
-            "percelen_other",
-            "openbare_ruimte_other",
-            "grote_wateren_other",
-            "erven_other",
-            "overig_other",
-            "sloten_other",
-            "stedelijk_groen_other",
         ],
     )
     assert_array_equal(
@@ -205,15 +178,6 @@ def test_ef_high_netherlands():
             [1.3, 0.0, 0.0, 0.0],
             [0.0, 0.0, 0.0, 0.0],
             [1.3, 0.0, 0.0, 0.0],
-            [0.0, 0.0, 0.0, 0.0],
-            [0.0, 0.0, 0.0, 0.0],
-            [0.0, 0.0, 0.0, 0.0],
-            [0.0, 0.0, 0.0, 0.0],
-            [0.0, 0.0, 0.0, 0.0],
-            [0.0, 0.0, 0.0, 0.0],
-            [0.0, 0.0, 0.0, 0.0],
-            [0.0, 0.0, 0.0, 0.0],
-            [0.0, 0.0, 0.0, 0.0],
             [0.0, 0.0, 0.0, 0.0],
             [0.0, 0.0, 0.0, 0.0],
             [0.0, 0.0, 0.0, 0.0],

@@ -12,8 +12,11 @@ def test_bgt_soilmap_coverage(bgt_gdf, simple_soilmap, lasso_grid):
     coverage = bgt_soilmap_coverage(bgt_gdf, simple_soilmap, lasso_grid)
     assert isinstance(coverage, xr.DataArray)
     assert coverage.dims == ("y", "x", "layer")
-    assert coverage.sizes == {"y": 4, "x": 4, "layer": 45}
-    assert np.isclose(coverage.sum(), 16)  # Sum in "layer" must be 1 for each "y", "x"
+    assert coverage.sizes == {"y": 4, "x": 4, "layer": 36}
+
+    # One cell is covered by other and missing from calculation result
+    assert np.isclose(coverage.sum(), 15.875)
+
     assert_array_equal(
         coverage["layer"],
         [
@@ -53,14 +56,5 @@ def test_bgt_soilmap_coverage(bgt_gdf, simple_soilmap, lasso_grid):
             "sloten_buried_deep",
             "grote_wateren_buried_deep",
             "overig_buried_deep",
-            "percelen_other",
-            "overig_groen_other",
-            "stedelijk_groen_other",
-            "openbare_ruimte_other",
-            "panden_other",
-            "erven_other",
-            "sloten_other",
-            "grote_wateren_other",
-            "overig_other",
         ],
     )

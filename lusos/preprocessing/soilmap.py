@@ -93,9 +93,10 @@ BURIED_DEEP_IDS = [
 def group_soilmap_units(soilmap: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
     """
     Add a column to the soilmap GeoDataFrame containing main soil groups (i.e. "peat",
-    "moerig", "buried" and "other") based on the ids of the soil units in the BRO soilmap.
-    The main groups will be the "layer" dimension in the DataArray to calculate areal
-    statistics with.
+    "moerig", "buried" and "buried_deep") based on the ids of the soil units in the BRO
+    soilmap. All rows that cannot be included in any of the main groups will be dropped
+    from the result. The main groups will be the "layer" dimension in the DataArray to
+    calculate areal statistics with.
 
     Parameters
     ----------
@@ -108,12 +109,10 @@ def group_soilmap_units(soilmap: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
         GeoDataFrame of the BRO soilmap with the added column.
 
     """
-    soilmap["layer"] = "other"
-
     id_ = "soilunit_code"
     soilmap.loc[soilmap[id_].isin(PEAT_IDS), "layer"] = "peat"
     soilmap.loc[soilmap[id_].isin(MOER_IDS), "layer"] = "moerig"
     soilmap.loc[soilmap[id_].isin(BURRIED_IDS), "layer"] = "buried"
     soilmap.loc[soilmap[id_].isin(BURIED_DEEP_IDS), "layer"] = "buried_deep"
 
-    return soilmap
+    return soilmap[soilmap["layer"].notna()]

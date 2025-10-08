@@ -23,7 +23,6 @@ def test_group_soilmap_units(simple_soilmap):
         "buried",
         "buried",
         "buried",
-        "other",
     ]
     assert_array_equal(simple_soilmap["layer"], expected_result)
 

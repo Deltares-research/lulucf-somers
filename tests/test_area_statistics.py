@@ -75,8 +75,8 @@ def test_areal_percentage_bgt_soilmap(lasso_grid, grouped_bgt, grouped_soilmap):
     areal = areal_percentage_bgt_soilmap(
         lasso_grid, grouped_bgt, grouped_soilmap, MAIN_BGT_UNITS, MAIN_SOILMAP_UNITS
     )
-    areal = areal.reshape(4, 4, 45)
-    expected_idx0 = [0.0153125, 0, 0.23090196, 0.11647059, 0, 0, 0.63731498] + [0] * 38
+    areal = areal.reshape(4, 4, 36)
+    expected_idx0 = [0.0153125, 0, 0.23090196, 0.11647059, 0, 0, 0.63731498] + [0] * 29
     assert_array_almost_equal(areal[1, 2], expected_idx0)
 
     expected_idx1 = (
@@ -84,7 +84,7 @@ def test_areal_percentage_bgt_soilmap(lasso_grid, grouped_bgt, grouped_soilmap):
         + [0.08722627, 0, 0, 0.01341252, 0, 0.17822795]
         + [0, 0, 0, 0.24631943, 0, 0]
         + [0.01246286, 0, 0.16560862, 0, 0, 0, 0.22887891]
-        + [0] * 20
+        + [0] * 11
     )
     assert_array_almost_equal(areal[2, 1], expected_idx1)
 
