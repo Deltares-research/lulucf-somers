@@ -12,7 +12,7 @@ REGISTRY = pooch.create(
 REGISTRY.load_registry(resources.files("lusos.data") / "registry.txt")
 
 
-def ef_low_netherlands(year: int = 2024) -> pd.DataFrame:
+def ef_low_netherlands(year: int = 2023) -> pd.DataFrame:
     """
     Emission factors for the western part (low) part of the Netherlands for different BGT
     and soiltype combinations for different greenhouse gasses and flux directions (i.e.
@@ -36,7 +36,7 @@ def ef_low_netherlands(year: int = 2024) -> pd.DataFrame:
         raise ValueError(f"No emission factors available for year: {year}.") from e
 
 
-def ef_high_netherlands(year: int = 2024) -> pd.DataFrame:
+def ef_high_netherlands(year: int = 2023) -> pd.DataFrame:
     """
     Emission factors for the eastern part (high) part of the Netherlands for different BGT
     and soiltype combinations for different greenhouse gasses and flux directions (i.e.

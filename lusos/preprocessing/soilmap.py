@@ -68,7 +68,7 @@ MOER_IDS = [
     "ABv",
 ]
 
-BURRIED_IDS = [
+BURIED_IDS = [
     "Rv01A",
     "Rv01C",
     "pRv81",
@@ -112,7 +112,7 @@ def group_soilmap_units(soilmap: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
     id_ = "soilunit_code"
     soilmap.loc[soilmap[id_].isin(PEAT_IDS), "layer"] = "peat"
     soilmap.loc[soilmap[id_].isin(MOER_IDS), "layer"] = "moerig"
-    soilmap.loc[soilmap[id_].isin(BURRIED_IDS), "layer"] = "buried"
+    soilmap.loc[soilmap[id_].isin(BURIED_IDS), "layer"] = "buried"
     soilmap.loc[soilmap[id_].isin(BURIED_DEEP_IDS), "layer"] = "buried_deep"
 
     return soilmap[soilmap["layer"].notna()]
