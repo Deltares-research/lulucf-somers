@@ -78,14 +78,16 @@ BURRIED_IDS = [
     "Mv61C",
     "pMv51",
     "pMv81",
+    "AK",
+]
+
+BURIED_DEEP_IDS = [
+    "AEm8",
     "AEm9A",
     "AEm9",
     "AEm5",
-    "AK",
     "ALu",
 ]
-
-BURIED_DEEP_IDS = ["AEm8"]
 
 
 def group_soilmap_units(soilmap: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
