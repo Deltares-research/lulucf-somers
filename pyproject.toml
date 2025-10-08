@@ -57,6 +57,9 @@ path = "lusos/__init__.py"
 [tool.hatch.build.targets.sdist]
 only-include = ["lusos", "tests"]
 
+[tool.hatch.metadata]
+allow-direct-references = true
+
 [tool.pixi.project]
 channels = ["conda-forge"]
 platforms = ["win-64", "linux-64", "osx-64", "osx-arm64"]
