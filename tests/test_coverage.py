@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 import xarray as xr
-from numpy.testing import assert_array_equal
+from numpy.testing import assert_array_almost_equal, assert_array_equal
 
 from lusos import bgt_soilmap_coverage
 
@@ -58,3 +58,14 @@ def test_bgt_soilmap_coverage(bgt_gdf, simple_soilmap, lasso_grid):
             "overig_buried_deep",
         ],
     )
+    expected_idx0 = [0.0153125, 0, 0.23090196, 0.11647059, 0, 0, 0.63731498] + [0] * 29
+    assert_array_almost_equal(coverage[1, 2], expected_idx0)
+
+    expected_idx1 = (
+        [0.00474962, 0, 0.06311382, 0, 0, 0]
+        + [0.08722627, 0, 0, 0.01341252, 0, 0.17822795]
+        + [0, 0, 0, 0.24631943, 0, 0]
+        + [0.01246286, 0, 0.16560862, 0, 0, 0, 0.22887891]
+        + [0] * 11
+    )
+    assert_array_almost_equal(coverage[2, 1], expected_idx1)

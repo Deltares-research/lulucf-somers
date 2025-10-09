@@ -3,7 +3,7 @@ import itertools
 import geopandas as gpd
 import xarray as xr
 
-from lusos.area_statistics import areal_percentage_bgt_soilmap
+from lusos.area_statistics import calc_areal_percentage_in_cells
 from lusos.constants import MAIN_BGT_UNITS, MAIN_SOILMAP_UNITS
 from lusos.lasso import LassoGrid
 from lusos.preprocessing import group_bgt_units, group_soilmap_units
@@ -37,9 +37,11 @@ def bgt_soilmap_coverage(
     bgt = _prepare_bgt(bgt, MAIN_BGT_UNITS)
     soilmap = _prepare_soilmap(soilmap, MAIN_SOILMAP_UNITS)
 
-    area = areal_percentage_bgt_soilmap(
-        grid, bgt, soilmap, MAIN_BGT_UNITS, MAIN_SOILMAP_UNITS
-    )
+    bgt_area = calc_areal_percentage_in_cells(bgt, grid, MAIN_BGT_UNITS)
+    soilmap_area = calc_areal_percentage_in_cells(soilmap, grid, MAIN_SOILMAP_UNITS)
+
+    area = soilmap_area.values[:, :, :, None] * bgt_area.values[:, :, None, :]
+
     layers_area = _combine_bgt_soilmap_names(MAIN_BGT_UNITS, MAIN_SOILMAP_UNITS)
     xco = grid.xcoordinates()
     yco = grid.ycoordinates()

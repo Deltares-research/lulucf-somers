@@ -10,45 +10,6 @@ from lusos.geometry import ops
 LassoGrid = TypeVar("LassoGrid")
 
 
-def areal_percentage_bgt_soilmap(
-    grid: LassoGrid,
-    bgt: gpd.GeoDataFrame,
-    soilmap: gpd.GeoDataFrame,
-    bgt_units: List[str],
-    soilmap_units: List[str],
-) -> np.ndarray:
-    """
-    Calculate per cell in a grid for each combination of BGT and Soil Map polygons what
-    percentage of a cell is covered by the combination. This returns a 3D output array
-    with dimensions ('y', 'x', 'layer') where the dimension 'layer' (axis=2) contains
-    ordered BGT-Soilmap layer combinations.
-
-    Parameters
-    ----------
-    grid : lusos.LassoGrid
-        LassoGrid instance containing the raster grid to calculate the percentages for.
-    bgt : gpd.GeoDataFrame
-        GeoDataFrame containing the BGT data polygons.
-    soilmap : gpd.GeoDataFrame
-        GeoDataFrame containing the BGT data polygons.
-    bgt_units : List[str]
-        List containing the ordered unique BGT layers. This determines the ordering of the
-        BGT-Soilmap combinations in the output DataArray.
-    soilmap_units : List[str]
-        List containing the ordered unique Soilmap layers. This determines the ordering of
-        the BGT-Soilmap combinations in the output DataArray.
-
-    Returns
-    -------
-    np.ndarray
-        3D array with the areal percentages.
-
-    """
-    bgt_area = calc_areal_percentage_in_cells(bgt, grid, bgt_units)
-    soilmap_area = calc_areal_percentage_in_cells(soilmap, grid, soilmap_units)
-    return soilmap_area.values[:, :, :, None] * bgt_area.values[:, :, None, :]
-
-
 def calc_areal_percentage_in_cells(
     polygons: gpd.GeoDataFrame, lasso_grid: LassoGrid, units: List[str]
 ) -> xr.DataArray:
@@ -59,16 +20,17 @@ def calc_areal_percentage_in_cells(
     Parameters
     ----------
     polygons : gpd.GeoDataFrame
-        _description_
+        GeoDataFrame containing the polygons to calculate the areal percentages for.
     lasso_grid : LassoGrid
-        _description_
+        LassoGrid instance containing the raster grid to calculate the percentages for.
     units : List[str]
-        _description_
+        List of unique units to calculate the areal percentages for.
 
     Returns
     -------
     xr.DataArray
-        _description_
+        3D DataArray with the areal percentages.
+
     """
     # Needs unique polygons, otherwise area calculation goes wrong
     polygons = polygons.explode()
