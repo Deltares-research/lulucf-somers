@@ -8,9 +8,9 @@ from scipy.spatial import Voronoi
 from shapely.geometry import LineString, MultiPolygon, box
 from shapely.ops import polygonize
 
+from lusos.io import read_soilmap_geopackage
 from lusos.lasso import LassoGrid
 from lusos.preprocessing.bgt import BGT_LAYERS_FOR_LUSOS
-from lusos.io import read_soilmap_geopackage
 
 
 def create_polygons():

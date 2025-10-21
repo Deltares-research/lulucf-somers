@@ -50,8 +50,8 @@ def calculate_model_flux(model: gpd.GeoDataFrame, grid: LassoGrid) -> xr.DataArr
 
     Parameters
     ----------
-    somers : gpd.GeoDataFrame
-        GeoDataFrame containing Somers emissions per polygon.
+    model : gpd.GeoDataFrame
+        GeoDataFrame containing model emissions per polygon.
     grid : LassoGrid
         2D grid to calculate the emission fluxes for.
 
