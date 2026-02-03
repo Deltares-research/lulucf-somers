@@ -71,7 +71,7 @@ lusos = { path = ".", editable = true }
 test = "NUMBA_DISABLE_JIT=1 python -m pytest --cov=lusos --cov-report xml --cov-report term"
 test-local = "NUMBA_DISABLE_JIT=1 python -m pytest -v --cov"
 format = "black ."
-lint = "ruff check --fix ./lusos"
+lint = "ruff check --fix ./src/lusos"
 build-docs = "sphinx-build -b html docs ./docs/build"
 rm-jupyter = "rm -r ./docs/jupyter_execute"
 rm-build = "rm -r ./docs/build"

@@ -16075,7 +16075,7 @@ packages:
 - pypi: ./
   name: lusos
   version: 0.2.4
-  sha256: b6a647049ece8e50aabbe6cc9c5b2ff4feed30e289beee039ccd008a7ef091f9
+  sha256: 7c8ca5f5c700c44810ea3a9b032047126d22d165dc09c782cb0448c967a5f142
   requires_dist:
   - dask
   - fiona
