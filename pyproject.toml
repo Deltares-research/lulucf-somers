@@ -52,15 +52,15 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.version]
-path = "lusos/__init__.py"
+path = "src/lusos/__init__.py"
 
 [tool.hatch.build.targets.sdist]
-only-include = ["lusos", "tests"]
+only-include = ["src/lusos", "tests"]
 
 [tool.hatch.metadata]
 allow-direct-references = true
 
-[tool.pixi.project]
+[tool.pixi.workspace]
 channels = ["conda-forge"]
 platforms = ["win-64", "linux-64", "osx-64", "osx-arm64"]
 
@@ -111,12 +111,13 @@ pooch = "*"
 [tool.pixi.feature.py313.dependencies]
 python = "3.13.*"
 
-[tool.pixi.feature.py312.dependencies]
-python = "3.12.*"
+[tool.pixi.feature.py314.dependencies]
+python = "3.14.*"
 
 [tool.pixi.environments]
-py312 = { features = ["py312"] }
-py313 = { features = ["py313"] }
+default = { features = ["py314"], solve-group = "py314" }
+py313 = { features = ["py313"], solve-group = "py313" }
+py314 = { features = ["py314"], solve-group = "py314" }
 
 [tool.pytest.ini_options]
 testpaths = [

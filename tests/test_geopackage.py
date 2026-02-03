@@ -3,6 +3,7 @@ import sqlite3
 import pandas as pd
 import pytest
 from numpy.testing import assert_array_equal
+from pandas.testing import assert_series_equal
 
 from lusos.io import Geopackage
 
@@ -20,7 +21,10 @@ class TestGeopackage:
         layers = gp.layers()
         assert isinstance(layers, pd.DataFrame)
         assert_array_equal(layers["name"], ["soilarea", "soilarea_soilunit"])
-        assert_array_equal(layers["geometry_type"], ["Polygon", None])
+        assert_series_equal(
+            layers["geometry_type"],
+            pd.Series(["Polygon", pd.NA], dtype=str, name="geometry_type"),
+        )
 
     @pytest.mark.unittest
     def test_context_manager(self, simple_soilmap_path):
