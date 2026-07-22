@@ -76,8 +76,11 @@ def polygon_area_in_grid(
 ) -> PolygonGridArea:
     tri = triangulate(polygons)
 
-    ugrid = xu.Ugrid2d(*tri.coords.T, -1, tri.triangles)
-    regridder = xu.OverlapRegridder(source=ugrid, target=grid)
+    cm2 = 1e-4  # cm2 to m2
+    ugrid = xu.Ugrid2d(*tri.coords.T, -1, tri.triangles.astype("int64"))
+    regridder = xu.OverlapRegridder(
+        source=ugrid.topology_subset(ugrid.area > cm2), target=grid
+    )  # Only include triangles with area > 1 cm2 to avoid numerical issues with very small triangles
     ds = regridder.to_dataset()
 
     cell_idx_pointer = ds["__regrid_indptr"].to_numpy()
@@ -93,5 +96,7 @@ def polygon_area_in_grid(
 
 def triangles_to_geodataframe(triangles: Triangles) -> gpd.GeoDataFrame:
     return gpd.GeoDataFrame(
-        geometry=shapely.polygons(triangles.coords[triangles.triangles]), crs=28992
+        {"index": triangles.index},
+        geometry=shapely.polygons(triangles.coords[triangles.triangles]),
+        crs=28992,
     )

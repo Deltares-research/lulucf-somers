@@ -1,4 +1,4 @@
-from typing import List, TypeVar
+from typing import TYPE_CHECKING, List
 
 import geopandas as gpd
 import numba
@@ -7,7 +7,8 @@ import xarray as xr
 
 from lusos.geometry import ops
 
-LassoGrid = TypeVar("LassoGrid")
+if TYPE_CHECKING:
+    from lusos.lasso import LassoGrid
 
 
 def calc_areal_percentage_in_cells(
